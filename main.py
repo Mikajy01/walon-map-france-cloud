@@ -992,23 +992,35 @@ def traiter_commune_complete(
     commune_service: CommuneService,
     wfs: Optional[WfsGeorisquesService] = None, clpa: Optional[WfsClpaService] = None,
     voirie: Optional[VoirieService] = None, on_progress: Optional[ProgressCallback] = None,
+    rues_a_traiter: Optional[List[str]] = None,
 ) -> ResultatLot:
-    """Traite TOUTES les rues d'une commune (découverte automatique, voir
-    `CommuneService.lister_voies` — besoin propre au contexte cloud, le
-    desktop reste "rues tapées à la main", voir le plan). Redécouvre les
-    rues à CHAQUE appel plutôt que de garder une liste "rues restantes"
-    séparée : aucun suivi supplémentaire n'est nécessaire, le
-    dédoublonnage déjà existant par parcelle (`lire_identifiants_deja_
-    ecrits`, dans `traiter_rue`) ignore automatiquement tout ce qui est
-    déjà écrit dans `excel_path`, peu importe à quel run précédent ça
-    remonte.
+    """Traite les rues d'une commune. Deux modes (décision explicite de
+    l'utilisateur, 2026-08-21 : le travail réel fournit presque toujours
+    une liste précise de rues à traiter, pas "toute la commune") :
+
+    - `rues_a_traiter` fourni (non vide) : traite EXACTEMENT cette liste,
+      dans l'ordre donné — jamais de découverte automatique dans ce cas.
+    - `rues_a_traiter` absent/vide : repli sur la découverte automatique
+      complète (voir `CommuneService.lister_voies`), pour le cas où on
+      veut vraiment couvrir toute la commune.
+
+    Redécouvre/relit la liste à CHAQUE appel plutôt que de garder un
+    suivi "rues restantes" séparé : aucun suivi supplémentaire n'est
+    nécessaire, le dédoublonnage déjà existant par parcelle
+    (`lire_identifiants_deja_ecrits`, dans `traiter_rue`) ignore
+    automatiquement tout ce qui est déjà écrit dans `excel_path`, peu
+    importe à quel run précédent ça remonte.
 
     `ws` est rechargé en interne (voir `traiter_rue`) — comme pour
     `traiter_rue`, l'appelant doit recharger son propre `ws` après le
     retour, jamais réutiliser l'objet passé en argument."""
     code_insee = commune_service.resolve_code_insee(commune, departement, code_postal)
-    rues = commune_service.lister_voies(code_insee)
-    _logger.info("Commune '%s' (%s) : %d rue(s) découverte(s) à traiter.", commune, code_insee, len(rues))
+    if rues_a_traiter:
+        rues = rues_a_traiter
+        _logger.info("Commune '%s' (%s) : %d rue(s) fournie(s) à traiter.", commune, code_insee, len(rues))
+    else:
+        rues = commune_service.lister_voies(code_insee)
+        _logger.info("Commune '%s' (%s) : %d rue(s) découverte(s) à traiter.", commune, code_insee, len(rues))
 
     lot = ResultatLot()
     for idx, rue in enumerate(rues):
@@ -1327,9 +1339,22 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     parser.add_argument("--departement", required=True, help="Département (code '01' ou nom 'Ain', les deux marchent).")
     parser.add_argument("--code-postal", required=True, help="Code postal.")
     parser.add_argument(
+        "--rues", default="",
+        help="Rues à traiter, séparées par des virgules ET/OU des retours à la ligne (les deux acceptés — "
+             "un retour à la ligne n'est pas saisissable dans le champ texte d'un workflow_dispatch GitHub, "
+             "d'où la virgule comme séparateur pratique côté Actions ; les deux marchent en CLI direct). "
+             "Décision explicite de l'utilisateur (2026-08-21) : le travail réel fournit presque toujours "
+             "une liste précise de rues, pas 'toute la commune'. Si vide (défaut), repli sur la découverte "
+             "automatique de toutes les rues de la commune (voir CommuneService.lister_voies) — utile pour "
+             "couvrir une commune en entier quand on le veut vraiment.",
+    )
+    parser.add_argument(
         "--mode", choices=["traiter_commune", "retenter_erreurs"], default="traiter_commune",
-        help="'traiter_commune' : découvre et traite toutes les rues. 'retenter_erreurs' : ne fait QUE "
-             "retenter les cellules WFS Géorisques déjà trackées pour cette commune (voir reessayer_cellules_wfs).",
+        help="'traiter_commune' : découvre et traite toutes les rues (retente aussi automatiquement les "
+             "cellules ERREUR en fin de run si la commune est allée jusqu'au bout). 'retenter_erreurs' : "
+             "ne fait QUE retenter les cellules ERREUR déjà trackées pour cette commune (WFS Géorisques + "
+             "bloc H→HV, voir reessayer_cellules_wfs/reessayer_cellules_gpu_du) — jamais les cellules "
+             "Manuellement, qui n'ont aucune règle à retenter.",
     )
     parser.add_argument(
         "--traitement", choices=["continuer", "nouveau"], default="continuer",
@@ -1445,13 +1470,24 @@ def main(argv: Optional[List[str]] = None) -> int:
 
     deadline = datetime.now(timezone.utc) + timedelta(hours=args.budget_heures)
 
+    # Rues fournies explicitement (une par ligne) ou repli sur la
+    # découverte automatique complète — voir --rues et la docstring de
+    # `traiter_commune_complete`. Résolu UNE SEULE FOIS ici et réutilisé
+    # tel quel pour Phase A ET pour le traitement, pour ne jamais risquer
+    # une liste différente entre les deux (ex: la commune a changé de
+    # voirie entre les deux appels — improbable mais jamais une source
+    # de désynchronisation possible).
+    rues_fournies = [r.strip() for r in re.split(r"[,\n]+", args.rues) if r.strip()]
+    if rues_fournies:
+        rues = rues_fournies
+        _logger.info("%d rue(s) fournie(s) explicitement pour '%s'.", len(rues), args.commune)
+    else:
+        rues = commune_service.lister_voies(code_insee)
+        _logger.info("Aucune rue fournie : %d rue(s) découverte(s) pour '%s'.", len(rues), args.commune)
+
     # Phase A doit tourner AVANT toute écriture de données, sur TOUTES
-    # les rues de la commune (pas seulement les premières) — même
-    # invariant qu'en desktop (voir `executer_phase_a`), donc on liste
-    # les voies ICI pour construire les `ElementTravail`, avant d'appeler
-    # `traiter_commune_complete` (qui reliste les voies pour son propre
-    # usage — 2e appel, mais servi par le cache HTTP, coût négligeable).
-    rues = commune_service.lister_voies(code_insee)
+    # les rues à traiter (pas seulement les premières) — même invariant
+    # qu'en desktop (voir `executer_phase_a`).
     elements = [
         ElementTravail(
             pays="France", commune=args.commune, departement=args.departement,
@@ -1474,6 +1510,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         cadastre=cadastre, urbanisme=urbanisme, georisques=georisques,
         geocodage=geocodage, traversal=traversal, registry=registry,
         commune_service=commune_service, wfs=wfs, clpa=clpa, voirie=voirie,
+        rues_a_traiter=rues,
     )
     lot.colonnes_creees = codes_crees
 

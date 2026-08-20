@@ -15,8 +15,12 @@ on:
         description: "Code postal"
         required: true
         type: string
+      rues:
+        description: "Rues à traiter, séparées par des virgules (ex: Rue du Lardon, Montée du Mollard). Vide = découvre et traite TOUTE la commune."
+        required: false
+        type: string
       mode:
-        description: "traiter_commune : découvre et traite toutes les rues. retenter_erreurs : ne retente que les cellules WFS Géorisques déjà trackées."
+        description: "traiter_commune : découvre et traite toutes les rues (retente aussi les cellules ERREUR en fin de run si complet). retenter_erreurs : ne retente QUE les cellules ERREUR déjà trackées (WFS Géorisques + bloc H→HV), jamais les cellules Manuellement."
         required: true
         type: choice
         default: traiter_commune
@@ -87,6 +91,7 @@ jobs:
             --commune "${{ inputs.commune }}" \
             --departement "${{ inputs.departement }}" \
             --code-postal "${{ inputs.code_postal }}" \
+            --rues "${{ inputs.rues }}" \
             --mode "${{ inputs.mode }}" \
             --traitement "${{ inputs.traitement }}" \
             --budget-heures 5.5
