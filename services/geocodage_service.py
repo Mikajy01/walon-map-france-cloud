@@ -17,6 +17,8 @@ from __future__ import annotations
 
 from typing import List, Optional
 
+import requests
+
 import config
 from models.adresse import AdressePoint
 from services.http_client import HttpClient
@@ -42,7 +44,27 @@ class GeocodageService:
         introuvable. Renvoie `{"voie_id": str, "lon": float, "lat": float}`."""
         url = f"{config.GEOCODAGE_BASE}/search"
         params = {"q": rue, "citycode": code_insee, "type": "street", "limit": 1}
-        data = self._http.get_json(url, params, service_key="geocodage")
+        try:
+            data = self._http.get_json(url, params, service_key="geocodage")
+        except requests.exceptions.HTTPError as exc:
+            # Une "voie" mal formée (guillemets littéraux dans le nom
+            # lui-même, ex: `Zone artisanale "les Prés d'ARGIS"`, un vrai
+            # nom trouvé en investigation live via `CommuneService.
+            # lister_voies` sur Argis) fait renvoyer HTTP 400 par l'API de
+            # recherche — jamais transitoire, jamais résolu par un
+            # réessai. Sans ce garde-fou, une SEULE voie mal formée
+            # plantait tout `traiter_commune_complete` en découverte
+            # automatique (aucun try/except autour de l'appel par rue),
+            # perdant le traitement de toutes les rues restantes de la
+            # liste alors que le budget de temps était loin d'être atteint.
+            # Traité comme "introuvable", jamais deviné.
+            if exc.response is not None and 400 <= exc.response.status_code < 500:
+                _logger.warning(
+                    "Rue introuvable dans la BAN (requête rejetée, HTTP %d) : '%s' (code_insee=%s)",
+                    exc.response.status_code, rue, code_insee,
+                )
+                return None
+            raise
         features = data.get("features", [])
         if not features:
             _logger.warning("Rue introuvable dans la BAN : '%s' (code_insee=%s)", rue, code_insee)
