@@ -1,0 +1,109 @@
+name: Traiter une commune
+
+on:
+  workflow_dispatch:
+    inputs:
+      commune:
+        description: "Nom de la commune"
+        required: true
+        type: string
+      departement:
+        description: "Département (code '01' ou nom 'Ain')"
+        required: true
+        type: string
+      code_postal:
+        description: "Code postal"
+        required: true
+        type: string
+      mode:
+        description: "traiter_commune : découvre et traite toutes les rues. retenter_erreurs : ne retente que les cellules WFS Géorisques déjà trackées."
+        required: true
+        type: choice
+        default: traiter_commune
+        options:
+          - traiter_commune
+          - retenter_erreurs
+      traitement:
+        description: "continuer (sûr, défaut) reprend l'état existant. nouveau réinitialise le fichier de cette commune depuis le gabarit officiel — DESTRUCTIF."
+        required: true
+        type: choice
+        default: continuer
+        options:
+          - continuer
+          - nouveau
+
+# Nécessaire pour committer l'état (Excel + registre) à la fin du run —
+# voir le plan cloud (2026-08-20) : l'Excel EST la source de vérité de
+# progression, il doit être commité pour que le run suivant puisse
+# "continuer" dessus.
+permissions:
+  contents: write
+
+jobs:
+  traiter:
+    runs-on: ubuntu-latest
+    # Garde-fou DUR, légèrement au-dessus du budget interne de
+    # --budget-heures (5.5h par défaut, voir main.py::parse_args) — le
+    # budget interne doit TOUJOURS déclencher l'arrêt propre avant que
+    # GitHub ne tue le job de force (ce qui pourrait corrompre l'Excel
+    # en plein `.save()`, incident déjà rencontré sur ce projet).
+    timeout-minutes: 355
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installer les dépendances
+        run: pip install -r requirements.txt
+
+      # Cache HTTP : PERFORMANCE uniquement, jamais une source de
+      # vérité (voir .gitignore) — accélère les runs répétés sur la
+      # même commune, sans jamais être commité dans le repo.
+      - name: Restaurer le cache HTTP
+        uses: actions/cache@v4
+        with:
+          path: cache
+          key: http-cache-${{ inputs.commune }}-${{ github.run_id }}
+          restore-keys: |
+            http-cache-${{ inputs.commune }}-
+
+      # `continue-on-error` : le code de sortie 75 (voir main.py::main)
+      # signale un run INCOMPLET (budget atteint) — pas un échec, l'état
+      # déjà sauvegardé doit quand même être commité, jamais perdu.
+      # Volontairement pas plus fin qu'un simple "continue" même pour un
+      # VRAI crash (exit non-zéro inattendu) : la durabilité par
+      # parcelle (voir main.py::traiter_rue) garantit que l'état sur
+      # disque reste toujours cohérent, donc committer tel quel est
+      # toujours sûr, peu importe la cause de l'arrêt.
+      - name: Lancer le traitement
+        id: traitement
+        continue-on-error: true
+        run: |
+          python main.py \
+            --commune "${{ inputs.commune }}" \
+            --departement "${{ inputs.departement }}" \
+            --code-postal "${{ inputs.code_postal }}" \
+            --mode "${{ inputs.mode }}" \
+            --traitement "${{ inputs.traitement }}" \
+            --budget-heures 5.5
+
+      - name: Signaler un run incomplet ou en erreur
+        if: steps.traitement.outcome == 'failure'
+        run: echo "::warning::Le traitement de '${{ inputs.commune }}' s'est arrêté avant la fin (budget de temps atteint, ou erreur — voir les logs ci-dessus). L'état déjà calculé est commité normalement ; relance le workflow en mode 'continuer' pour reprendre."
+
+      # Le cache HTTP (voir "Restaurer le cache HTTP" plus haut) se
+      # sauvegarde automatiquement en fin de job via le post-step natif
+      # d'`actions/cache@v4` (la clé exacte incluant `github.run_id` ne
+      # matche jamais au restore, donc la sauvegarde finale a toujours
+      # lieu) — pas besoin d'un step `actions/cache/save` séparé.
+      - name: Committer l'état (Excel + registre) si modifié
+        run: |
+          git config user.name "walon-map-france-cloud bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add state/ registry_data/column_registry.sqlite3 registry_data/cellules_a_revisiter.csv
+          git diff --staged --quiet || git commit -m "Traitement automatique : ${{ inputs.commune }} (${{ inputs.mode }}/${{ inputs.traitement }})"
+          git push
