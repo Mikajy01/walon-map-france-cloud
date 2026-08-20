@@ -126,6 +126,33 @@ def _distance_min_polygone_a_positionneur(
     return min(distances) if distances else None
 
 
+def _positionneur_distance_polyligne_reelle(
+    polyligne: List[Tuple[float, float]], traversal: TraversalService,
+) -> Callable[[float, float], Optional[PositionParcours]]:
+    """Positionneur MINIMAL sur la polyligne réelle de la rue : calcule
+    uniquement une distance perpendiculaire, jamais un côté/chaînage
+    fiable (`cote="indetermine"`, jamais utilisé pour trier — voir
+    `positionneur_ordre` dans `decouvrir_parcelles`, seul responsable de
+    l'ORDRE de parcours). Contrairement à `_calibrer_positionneur_
+    polyligne_reelle`, ne nécessite PAS d'adresses des deux parités :
+    décision explicite de l'utilisateur (2026-08-21, écart trouvé sur
+    Argis/"Chemin de la Morandière", adresses toutes impaires) — la
+    question "cette parcelle borde-t-elle la rue" est une question de
+    DISTANCE, jamais de côté, donc ne doit jamais dépendre d'un
+    calibrage pair/impair qui peut légitimement échouer sur une rue à
+    adressage asymétrique ou clairsemé."""
+    lat_ref = polyligne[0][1]
+
+    def positionneur(lon: float, lat: float) -> Optional[PositionParcours]:
+        proj = traversal.positionner_sur_polyligne_reelle(lon, lat, polyligne, lat_ref)
+        if proj is None:
+            return None
+        chainage, dist_perp, _cross = proj
+        return PositionParcours(cote="indetermine", chainage=chainage, distance_segment=dist_perp)
+
+    return positionneur
+
+
 def _calibrer_positionneur_polyligne_reelle(
     adresses: List[AdressePoint], polyligne: List[Tuple[float, float]], traversal: TraversalService,
 ) -> Optional[Callable[[float, float], Optional[PositionParcours]]]:
@@ -238,20 +265,46 @@ def decouvrir_parcelles(
     cotes = traversal.construire_cotes(adresses)
     ordre_cotes = traversal.ordre_cotes(cotes)
 
-    positionneur: Optional[Callable[[float, float], Optional[PositionParcours]]] = None
+    # Deux positionneurs bien distincts, décision explicite de
+    # l'utilisateur (2026-08-21, écart trouvé sur Argis/"Chemin de la
+    # Morandière" : parcelles 0034/0035/0036 bien réelles, à 7-8m de la
+    # vraie route, mais à 300+m de la reconstruction grossière) :
+    #   - `positionneur_distance` : sert UNIQUEMENT à décider si une
+    #     parcelle SANS adresse propre borde la rue (une question de
+    #     DISTANCE, jamais de côté) — utilise la géométrie réelle BDTOPO
+    #     dès qu'elle est trouvée, MÊME si le calibrage pair/impair
+    #     échoue (voir plus bas), puisque ce calibrage n'a de sens que
+    #     pour l'ORDRE de parcours, jamais pour la distance elle-même.
+    #   - `positionneur_ordre` : sert à déterminer côté + chaînage pour
+    #     le TRI final (voir `traversal.trier`) — nécessite le calibrage
+    #     pair/impair pour utiliser la géométrie réelle ; retombe sur la
+    #     reconstruction par adresses si ce calibrage échoue (ordre
+    #     approximatif dans ce cas, mais jamais une parcelle perdue pour
+    #     autant, voir la boucle de tri plus bas).
+    polyligne_reelle: Optional[List[Tuple[float, float]]] = None
     if voirie is not None:
         polyligne_reelle = voirie.get_polyligne_voie(element.code_insee, element.rue)
-        if polyligne_reelle is not None:
-            positionneur = _calibrer_positionneur_polyligne_reelle(adresses, polyligne_reelle, traversal)
-            if positionneur is None:
-                _logger.warning(
-                    "Rue '%s' (%s) : géométrie BDTOPO trouvée mais calibration pair/impair "
-                    "impossible (adresses insuffisantes) — repli sur la méthode par adresses.",
-                    element.rue, element.commune,
-                )
-    utilise_polyligne_reelle = positionneur is not None
-    if positionneur is None:
-        positionneur = lambda lon, lat: traversal.positionner_parcelle(lon, lat, cotes)  # noqa: E731
+
+    positionneur_ordre: Optional[Callable[[float, float], Optional[PositionParcours]]] = None
+    if polyligne_reelle is not None:
+        positionneur_ordre = _calibrer_positionneur_polyligne_reelle(adresses, polyligne_reelle, traversal)
+        if positionneur_ordre is None:
+            _logger.info(
+                "Rue '%s' (%s) : géométrie BDTOPO trouvée mais calibration pair/impair "
+                "impossible (adresses insuffisantes) — ordre de parcours approximatif "
+                "(adresses seules), mais la géométrie réelle reste utilisée pour décider "
+                "quelles parcelles bordent la rue.",
+                element.rue, element.commune,
+            )
+    if positionneur_ordre is None:
+        positionneur_ordre = lambda lon, lat: traversal.positionner_parcelle(lon, lat, cotes)  # noqa: E731
+
+    if polyligne_reelle is not None:
+        positionneur_distance = _positionneur_distance_polyligne_reelle(polyligne_reelle, traversal)
+        utilise_polyligne_reelle = True
+    else:
+        positionneur_distance = positionneur_ordre
+        utilise_polyligne_reelle = False
 
     parcelles: Dict[str, Parcelle] = {}
     adresses_par_parcelle: Dict[str, List[AdressePoint]] = {}
@@ -303,7 +356,7 @@ def decouvrir_parcelles(
             if identifiant in parcelles:
                 continue
             centroide = centroide_geometrie(feature["geometry"])
-            position = positionneur(centroide[0], centroide[1])
+            position = positionneur_distance(centroide[0], centroide[1])
             if position is None:
                 continue
             if utilise_polyligne_reelle:
@@ -312,7 +365,7 @@ def decouvrir_parcelles(
                 # `_distance_min_polygone_a_positionneur`. Repli sur la
                 # distance du centroïde seul si le polygone n'a, pour une
                 # raison quelconque, aucun sommet projetable.
-                distance_reelle = _distance_min_polygone_a_positionneur(feature["geometry"], positionneur)
+                distance_reelle = _distance_min_polygone_a_positionneur(feature["geometry"], positionneur_distance)
                 if distance_reelle is None:
                     distance_reelle = position.distance_segment
                 if distance_reelle > _DISTANCE_MAX_BORDURE_POLYGONE_M:
@@ -329,7 +382,7 @@ def decouvrir_parcelles(
     positionnees: List[Tuple[Parcelle, PositionParcours]] = []
     for parcelle in parcelles.values():
         cx, cy = centroide_geometrie(parcelle.geometry)
-        position = positionneur(cx, cy)
+        position = positionneur_ordre(cx, cy)
         if position is None:
             adresses_associees = adresses_par_parcelle.get(parcelle.identifiant)
             if adresses_associees:
