@@ -46,6 +46,15 @@ permissions:
 jobs:
   traiter:
     runs-on: ubuntu-latest
+    # Empêche deux runs sur la MÊME commune de tourner en parallèle — le
+    # step de commit final touche le même fichier state/{code_insee}_
+    # {commune}.xlsx pour les deux, un vrai conflit de fusion sur un
+    # binaire n'étant pas auto-résolvable (contrairement au cas "push de
+    # code pendant le run", voir plus bas). Des communes différentes
+    # restent traitées en parallèle sans souci (fichiers distincts).
+    concurrency:
+      group: traiter-commune-${{ inputs.commune }}-${{ inputs.code_postal }}
+      cancel-in-progress: false
     # Garde-fou DUR, légèrement au-dessus du budget interne de
     # --budget-heures (5.5h par défaut, voir main.py::parse_args) — le
     # budget interne doit TOUJOURS déclencher l'arrêt propre avant que
@@ -105,10 +114,34 @@ jobs:
       # d'`actions/cache@v4` (la clé exacte incluant `github.run_id` ne
       # matche jamais au restore, donc la sauvegarde finale a toujours
       # lieu) — pas besoin d'un step `actions/cache/save` séparé.
+      # `git push` seul, sans re-synchro avec origin, se fait rejeter dès
+      # que main a avancé depuis le checkout (ex: un push de code pendant
+      # le run, un run précédent pas encore mergé) — incident réel vécu
+      # le 2026-08-21 : un run entier (334 lignes traitées) perdu, le
+      # commit local existant seulement sur la VM éphémère du runner,
+      # jamais récupérable une fois le job terminé en erreur. `git pull
+      # --rebase` avant de pousser rejoue notre commit par-dessus les
+      # commits distants ; boucle de réessai (3 tentatives) pour couvrir
+      # le cas où un AUTRE push arrive pendant cette resynchronisation
+      # elle-même — jamais un simple `push --force`, qui écraserait le
+      # travail distant au lieu de le préserver.
       - name: Committer l'état (Excel + registre) si modifié
         run: |
           git config user.name "walon-map-france-cloud bot"
           git config user.email "actions@users.noreply.github.com"
           git add state/ registry_data/column_registry.sqlite3 registry_data/cellules_a_revisiter.csv
-          git diff --staged --quiet || git commit -m "Traitement automatique : ${{ inputs.commune }} (${{ inputs.mode }}/${{ inputs.traitement }})"
-          git push
+          if git diff --staged --quiet; then
+            echo "Rien à committer."
+            exit 0
+          fi
+          git commit -m "Traitement automatique : ${{ inputs.commune }} (${{ inputs.mode }}/${{ inputs.traitement }})"
+          for tentative in 1 2 3; do
+            if git push; then
+              exit 0
+            fi
+            echo "Push rejeté (tentative $tentative/3) — resynchronisation avec origin/main avant nouvel essai."
+            git fetch origin main
+            git rebase origin/main
+          done
+          echo "::error::Échec du push après 3 tentatives — état local NON perdu sur ce runner (voir logs), mais non commité côté dépôt. Relancer le workflow."
+          exit 1
