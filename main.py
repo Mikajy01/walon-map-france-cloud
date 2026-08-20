@@ -331,11 +331,30 @@ def decouvrir_parcelles(
         cx, cy = centroide_geometrie(parcelle.geometry)
         position = positionneur(cx, cy)
         if position is None:
-            _logger.warning(
-                "Parcelle %s non positionnable par rapport à la rue '%s' — exclue de l'ordre de parcours.",
-                parcelle.identifiant, element.rue,
-            )
-            continue
+            adresses_associees = adresses_par_parcelle.get(parcelle.identifiant)
+            if adresses_associees:
+                # Repli "best effort" : une parcelle directement liée à
+                # une adresse BAN connue ne doit JAMAIS être perdue faute
+                # d'ordre de parcours calculable — écart réel trouvé en
+                # investigation live (Argis, "Chemin de la Combe" : une
+                # SEULE adresse connue sur toute la rue, donc aucun
+                # segment possible sur aucun côté) : le résultat était
+                # ZÉRO parcelle pour cette rue, alors que l'adresse ET sa
+                # parcelle sont parfaitement identifiées. Le côté se
+                # déduit directement de la parité du numéro (pas besoin
+                # d'un segment pour ça) ; seul le CHAÎNAGE (ordre exact au
+                # sein du côté) reste indéterminable sans au moins 2
+                # adresses du même côté — mis à 0.0, jamais deviné plus
+                # finement.
+                position = PositionParcours(
+                    cote=adresses_associees[0].numero_parite, chainage=0.0, distance_segment=0.0,
+                )
+            else:
+                _logger.warning(
+                    "Parcelle %s non positionnable par rapport à la rue '%s' — exclue de l'ordre de parcours.",
+                    parcelle.identifiant, element.rue,
+                )
+                continue
         positionnees.append((parcelle, position))
 
     ordre_final = traversal.trier(positionnees, ordre_cotes)
