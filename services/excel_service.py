@@ -21,7 +21,7 @@ from services.gpu_mappings import DU_MAPPING, ROLES_PERSONNALISES_PAR_ICONE
 from utils.color import copier_remplissage, rgb_de_cellule
 from utils.image_hash import extraire_icones_par_colonne
 from utils.logger import get_logger
-from utils.text_normalize import normaliser
+from utils.text_normalize import normaliser_code_zone
 
 _logger = get_logger("services.excel_service")
 
@@ -296,8 +296,12 @@ def bootstrap_from_template(
         rgb = rgb_de_cellule(header_cell)
         famille = registry.classer_famille_couleur(rgb) if rgb else None
         if famille and _ressemble_a_un_code(header_text):
+            # Sensible à la casse (décision explicite de l'utilisateur,
+            # 2026-08-21) : "Ua" et "UA" sont des zones réellement
+            # différentes, jamais fusionnées sous le même role_code —
+            # voir normaliser_code_zone.
             registry.enregistrer_code(
-                header_text, role_code=normaliser(header_text),
+                header_text, role_code=normaliser_code_zone(header_text),
                 canonical_label=header_text, color_family_id=famille,
             )
             n_codes += 1
@@ -408,7 +412,9 @@ def ensure_columns_for_codes(
         cellule = ws.cell(row=HEADER_ROW, column=col_insertion)
         cellule.value = code
         copier_remplissage(config.COLOR_FAMILY_ANCHORS[family_id], cellule)
-        role_code = normaliser(code)
+        # Sensible à la casse (voir normaliser_code_zone, 2026-08-21) :
+        # "Ua" et "UA" sont des zones réellement différentes.
+        role_code = normaliser_code_zone(code)
         registry.enregistrer_code(code, role_code=role_code, canonical_label=code, color_family_id=family_id)
         lettre = get_column_letter(col_insertion)
         lettre_apres = get_column_letter(col_insertion + 1)

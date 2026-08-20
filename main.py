@@ -75,7 +75,7 @@ from services.wfs_georisques_service import WfsGeorisquesService
 from utils.geometrie import centroide_geometrie
 from utils.logger import get_logger, setup_logging
 from utils.rate_limiter import RateLimiter
-from utils.text_normalize import normaliser
+from utils.text_normalize import normaliser_code_zone
 
 _logger = get_logger("main")
 
@@ -479,10 +479,14 @@ def decouvrir_codes_zone_manquants(
     (`code_connu` -> True) alors qu'aucune colonne n'existe réellement
     ici, et `write_ligne` n'aurait nulle part où écrire la valeur
     calculée. `role_code` d'un code de zonage est toujours son texte
-    normalisé (convention appliquée aussi bien par `bootstrap_from_
-    template` que par `excel_service.ensure_columns_for_codes`), donc
-    vérifier `layout.lettre_pour_role(normaliser(libelle))` suffit, sans
-    dépendre du registre pour cette décision.
+    normalisé SENSIBLE À LA CASSE (voir `utils.text_normalize.
+    normaliser_code_zone`, décision explicite de l'utilisateur du
+    2026-08-21 : "Ua" et "UA" sont des zones réellement différentes,
+    jamais fusionnées — convention appliquée aussi bien par
+    `bootstrap_from_template` que par `excel_service.ensure_columns_
+    for_codes`), donc vérifier `layout.lettre_pour_role(normaliser_
+    code_zone(libelle))` suffit, sans dépendre du registre pour cette
+    décision.
 
     NE crée JAMAIS de colonne depuis `libelong` (texte long du zonage,
     ex "Secteur urbanisé à vocation dominante d'habitat de faible
@@ -509,7 +513,7 @@ def decouvrir_codes_zone_manquants(
                 typezone = f["properties"].get("typezone")
                 if not libelle or libelle in codes_nouveaux:
                     continue
-                if layout.lettre_pour_role(normaliser(libelle)) is not None:
+                if layout.lettre_pour_role(normaliser_code_zone(libelle)) is not None:
                     continue
                 famille = _famille_pour_typezone(typezone)
                 if famille:

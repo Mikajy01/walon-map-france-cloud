@@ -12,18 +12,42 @@ from rapidfuzz import fuzz
 
 
 def normaliser(texte: Optional[str]) -> str:
-    """Normalise un texte pour comparaison : supprime les accents, passe
-    en minuscules, réduit tout séparateur (espaces, espaces insécables,
-    ponctuation) à un simple espace. Confirmé nécessaire en
-    investigation live : casse différente d'un même code entre deux
-    fichiers réels (`"UA3"` vs `"Ua3"`, `"Uxa"` vs `"UXa"`), espaces
-    insécables (`\\xa0`) en fin de plusieurs noms de rue."""
+    """Normalise un TEXTE LIBRE (en-tête de colonne, alias) pour
+    comparaison : supprime les accents, passe en minuscules, réduit tout
+    séparateur (espaces, espaces insécables, ponctuation) à un simple
+    espace. Utilisé pour les en-têtes/alias, où la casse n'a jamais de
+    sens métier (une même colonne peut légitimement varier en casse
+    d'un fichier à l'autre sans changer de nature).
+
+    JAMAIS utilisé pour un CODE DE ZONE — voir `normaliser_code_zone`,
+    où au contraire la casse EST significative (décision explicite de
+    l'utilisateur, 2026-08-21 : "Ua" et "UA" sont des zones réellement
+    différentes, jamais fusionnées)."""
     if not texte:
         return ""
     t = unicodedata.normalize("NFKD", texte)
     t = "".join(c for c in t if not unicodedata.combining(c))
     t = t.lower()
     t = re.sub(r"[^a-z0-9]+", " ", t)
+    return t.strip()
+
+
+def normaliser_code_zone(code: Optional[str]) -> str:
+    """Normalise un CODE DE ZONE (PLU/PLUi, ex "1AUd", "Ua3", "UXa") pour
+    comparaison/stockage — CONTRAIREMENT à `normaliser()` (texte libre),
+    la CASSE EST SIGNIFICATIVE ici et n'est JAMAIS modifiée : décision
+    explicite de l'utilisateur (2026-08-21) — "Ua" et "UA" désignent des
+    zones réellement différentes dans la pratique observée, jamais la
+    même colonne, même si le principe général de ce projet privilégie
+    l'insensibilité à la casse pour le texte libre. Seuls les accents et
+    les espaces parasites (espaces insécables notamment, même écart réel
+    déjà rencontré sur les noms de rue) sont retirés — jamais la casse,
+    jamais les caractères eux-mêmes."""
+    if not code:
+        return ""
+    t = unicodedata.normalize("NFKD", code)
+    t = "".join(c for c in t if not unicodedata.combining(c))
+    t = re.sub(r"\s+", "", t)
     return t.strip()
 
 

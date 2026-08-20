@@ -7,8 +7,12 @@ Algorithme en couches, jamais de devinette silencieuse (voir
 `resolve_column`) :
     1. Icône (hash exact connu) — signal le plus fiable, prioritaire
        sur le texte pour les colonnes qui en ont une (bloc H→HV).
-    2. Code normalisé (insensible à la casse) — pour le bloc de zonage.
-    3. Alias texte déjà promu manuellement par un humain.
+    2. Code normalisé (SENSIBLE à la casse depuis le 2026-08-21 — voir
+       `utils.text_normalize.normaliser_code_zone` : "Ua" et "UA" sont
+       des zones réellement différentes, jamais fusionnées) — pour le
+       bloc de zonage.
+    3. Alias texte déjà promu manuellement par un humain (texte libre,
+       toujours insensible à la casse, voir `normaliser`).
     4. Correspondance floue texte — SUGGESTION SEULEMENT, jamais
        appliquée, journalisée pour revue humaine dans le GUI.
     5. Non résolu — laissé vide, journalisé avec tout le contexte utile
@@ -25,7 +29,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import config
 from models.colonne import ColumnResolution, MethodeResolution
 from utils.logger import get_logger
-from utils.text_normalize import meilleure_correspondance, normaliser
+from utils.text_normalize import meilleure_correspondance, normaliser, normaliser_code_zone
 
 _logger = get_logger("services.column_registry_service")
 
@@ -203,9 +207,10 @@ class ColumnRegistryService:
             # Pas de retour ici : on tente les couches suivantes plutôt
             # que d'abandonner immédiatement (voir commentaire ci-dessus).
 
-        # Couche 2 : code normalisé (insensible à la casse/espaces)
+        # Couche 2 : code normalisé (sensible à la casse, insensible aux
+        # accents/espaces parasites — voir normaliser_code_zone)
         if code_candidate:
-            norm = normaliser(code_candidate)
+            norm = normaliser_code_zone(code_candidate)
             role_code = self._code_role(norm)
             if role_code is not None:
                 self._toucher_code(norm, column_letter)
@@ -222,7 +227,7 @@ class ColumnRegistryService:
             return ColumnResolution(
                 column_letter=column_letter, header_text=header_text,
                 role_code=alias_role, method=MethodeResolution.ALIAS,
-                confidence=1.0, normalized_code=code_candidate and normaliser(code_candidate),
+                confidence=1.0, normalized_code=code_candidate and normaliser_code_zone(code_candidate),
             )
 
         # Couche 4 : suggestion floue — jamais appliquée
@@ -256,7 +261,7 @@ class ColumnRegistryService:
                 (
                     run_id, file_path, commune, rue, resolution.column_letter,
                     resolution.header_text, resolution.icon_hash,
-                    normaliser(code_candidate) if code_candidate else None,
+                    normaliser_code_zone(code_candidate) if code_candidate else None,
                     resolution.role_code, resolution.method.value, resolution.confidence,
                 ),
             )
@@ -349,12 +354,13 @@ class ColumnRegistryService:
     # -- codes ------------------------------------------------------
 
     def code_connu(self, code_brut: str) -> bool:
-        """True si ce code (normalisé) est déjà enregistré `known` —
-        utilisé par la Phase A (`excel_service.ensure_columns_for_codes`,
+        """True si ce code (normalisé, SENSIBLE à la casse — voir
+        `normaliser_code_zone`) est déjà enregistré `known` — utilisé
+        par la Phase A (`excel_service.ensure_columns_for_codes`,
         `main.py::decouvrir_codes_zone_manquants`) pour ne considérer
         que les codes VRAIMENT nouveaux, jamais recréer une colonne déjà
         gérée."""
-        return self._code_role(normaliser(code_brut)) is not None
+        return self._code_role(normaliser_code_zone(code_brut)) is not None
 
     def _code_role(self, normalized_code: str) -> Optional[str]:
         with self._lock, self._connect() as conn:
@@ -379,8 +385,9 @@ class ColumnRegistryService:
         """Enregistre un code de zonage connu (ex: lors du scan initial
         du gabarit, où chaque colonne du bloc KL→RR est déjà un code
         connu par construction, ou lors de la création d'une nouvelle
-        colonne — voir `ensure_columns_for_codes` côté ExcelService)."""
-        norm = normaliser(code_brut)
+        colonne — voir `ensure_columns_for_codes` côté ExcelService).
+        SENSIBLE à la casse (voir `normaliser_code_zone`)."""
+        norm = normaliser_code_zone(code_brut)
         with self._lock, self._connect() as conn:
             conn.execute(
                 "INSERT OR REPLACE INTO code_registry "
