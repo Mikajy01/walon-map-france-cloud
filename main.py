@@ -830,6 +830,30 @@ def _forcer_valeurs_manquantes_en_n(
     return n_manuel, n_erreur
 
 
+def compter_cellules_forcees_fichier(ws) -> Tuple[int, int]:
+    """Compte les cellules "ERREUR"/"Manuellement" actuellement présentes
+    dans TOUT le fichier — pas seulement celles touchées par CE run
+    précis. Décision explicite de l'utilisateur (2026-08-21) : le résumé
+    final doit donner une vision d'ensemble du travail restant, peu
+    importe le mode (`traiter_commune` ou `retenter_erreurs`) ni depuis
+    combien de runs une cellule traîne — lecture directe des cellules
+    (vérité terrain), pas une addition des compteurs par-run qui
+    manquerait tout ce qui vient d'AVANT ce run précis.
+
+    Renvoie `(n_erreur, n_manuel)`."""
+    n_erreur = 0
+    n_manuel = 0
+    derniere = trouver_premiere_ligne_vide(ws) - 1
+    for r in range(FIRST_DATA_ROW, derniere + 1):
+        for c in range(1, ws.max_column + 1):
+            v = ws.cell(row=r, column=c).value
+            if v == "ERREUR":
+                n_erreur += 1
+            elif v == "Manuellement":
+                n_manuel += 1
+    return n_erreur, n_manuel
+
+
 def construire_lignes(
     parcelle: Parcelle, adresses: List[AdressePoint], valeurs_par_role: Dict[str, str],
 ) -> List[LigneResultat]:
@@ -1462,9 +1486,16 @@ def main(argv: Optional[List[str]] = None) -> int:
         n_repare_gpu = reessayer_cellules_gpu_du(
             excel_path, config.CELLULES_A_REVISITER_PATH, cadastre=cadastre, urbanisme=urbanisme, registry=registry,
         )
+        # Rechargement OBLIGATOIRE : les deux retries sauvegardent en
+        # interne, `ws` (chargé avant elles) est déjà périmé.
+        ws = charger_feuille(excel_path)
+        n_erreur_restant, n_manuel_restant = compter_cellules_forcees_fichier(ws)
         _logger.info(
-            "Mode retenter_erreurs (%s) : %d cellule(s) WFS + %d cellule(s) GPU réparée(s).",
-            args.commune, n_repare_wfs, n_repare_gpu,
+            "Résumé final (retenter_erreurs, %s) :\n"
+            "%d cellule(s) WFS + %d cellule(s) GPU réparée(s) lors de ce run.\n"
+            "%d cellule(s) \"ERREUR\" restante(s) dans le fichier (récupérables plus tard).\n"
+            "%d cellule(s) \"Manuellement\" restante(s) (jamais récupérables automatiquement).",
+            args.commune, n_repare_wfs, n_repare_gpu, n_erreur_restant, n_manuel_restant,
         )
         return 0
 
@@ -1495,11 +1526,17 @@ def main(argv: Optional[List[str]] = None) -> int:
         )
         for rue in rues
     ]
+    colonnes_creees_events: List[ColonneCreeeEvent] = []
+
+    def on_colonne_creee(ev: ColonneCreeeEvent) -> None:
+        colonnes_creees_events.append(ev)
+        _notifier_colonne_creee_cli(ev, config.COLONNES_CREEES_LOG_PATH)
+
     layout, codes_crees = executer_phase_a(
         ws, layout, elements,
         cadastre=cadastre, geocodage=geocodage, traversal=traversal,
         urbanisme=urbanisme, registry=registry, excel_path=excel_path, voirie=voirie,
-        on_colonne_creee=lambda ev: _notifier_colonne_creee_cli(ev, config.COLONNES_CREEES_LOG_PATH),
+        on_colonne_creee=on_colonne_creee,
     )
     # Rechargement OBLIGATOIRE après Phase A — voir traiter_rue/preparer_lot.
     ws = charger_feuille(excel_path)
@@ -1513,6 +1550,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         rues_a_traiter=rues,
     )
     lot.colonnes_creees = codes_crees
+    lot.colonnes_creees_detail = colonnes_creees_events
 
     if not lot.incomplet:
         # Passe automatique de retry (WFS + GPU) en fin de commune
@@ -1529,6 +1567,13 @@ def main(argv: Optional[List[str]] = None) -> int:
         )
         if n_repare:
             _logger.info("Retry automatique de fin de commune : %d cellule(s) réparée(s).", n_repare)
+
+    # Rechargement pour lire l'état RÉEL du fichier (les retries
+    # ci-dessus, s'ils ont eu lieu, ont sauvegardé en interne — `ws` est
+    # potentiellement périmé) avant de compter les cellules ERREUR/
+    # Manuellement encore présentes dans TOUT le fichier.
+    ws = charger_feuille(excel_path)
+    lot.cellules_erreur_fichier, lot.cellules_manuelles_fichier = compter_cellules_forcees_fichier(ws)
 
     # Résumé final logué, PAS imprimé en double — décision utilisateur
     # explicite (2026-08-19) : même si chaque colonne créée a déjà son

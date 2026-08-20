@@ -28,6 +28,17 @@ def setup_logging(logs_dir: Path, debug: bool = False) -> None:
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
+    # sys.stdout est en cp1252 par défaut sur console Windows — tout
+    # caractère hors de cette page (ex. "→") fait planter l'emit du
+    # handler (UnicodeEncodeError, vu en direct le 2026-08-20 sur un
+    # message contenant "H→HV"). errors="backslashreplace" pour ne
+    # plus jamais perdre un run entier à cause d'un seul caractère de
+    # log — reconfigure() est un no-op inoffensif sur un flux déjà en
+    # UTF-8 (ex. Ubuntu/GitHub Actions).
+    try:
+        sys.stdout.reconfigure(encoding="utf-8", errors="backslashreplace")
+    except (AttributeError, ValueError):
+        pass
     console = logging.StreamHandler(sys.stdout)
     console.setFormatter(fmt)
     console.setLevel(level)

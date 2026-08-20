@@ -5,7 +5,9 @@ propriété `.termine`, lues aussi bien par le CLI que par gui.py)."""
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Dict, List
+from typing import Dict, List, Optional
+
+from models.colonne import ColonneCreeeEvent
 
 
 @dataclass
@@ -64,6 +66,26 @@ class ResultatLot:
 
     resultats_par_rue: List[ResultatRue] = field(default_factory=list)
     colonnes_creees: List[str] = field(default_factory=list)
+    # Détail complet (position + voisins) de chaque colonne créée durant
+    # ce run — décision explicite de l'utilisateur (2026-08-21) : le
+    # résumé final (log, GitHub Actions comme desktop) doit lister CHAQUE
+    # colonne avec sa place exacte, pas seulement son code, pour que le
+    # relais manuel (Teams) n'ait pas besoin d'aller rouvrir le fichier.
+    # Même évènement que celui déjà notifié en direct au moment de la
+    # création (voir main.py::_notifier_colonne_creee_cli) — accumulé
+    # ici en plus, jamais à la place.
+    colonnes_creees_detail: List[ColonneCreeeEvent] = field(default_factory=list)
+    # Compte GLOBAL des cellules "ERREUR"/"Manuellement" actuellement
+    # dans le fichier, lu directement (voir main.py::
+    # compter_cellules_forcees_fichier), PAS seulement celles produites
+    # par ce run précis — décision explicite de l'utilisateur
+    # (2026-08-21) : le résumé final doit donner une vision d'ensemble du
+    # travail restant, peu importe depuis combien de runs une cellule
+    # traîne. `None` (défaut) = non renseigné par l'appelant, `resume()`
+    # retombe alors sur les compteurs par-run (`total_cellules_erreur`/
+    # `total_cellules_manuelles`) pour rester rétrocompatible.
+    cellules_erreur_fichier: Optional[int] = None
+    cellules_manuelles_fichier: Optional[int] = None
     # True si `traiter_commune_complete` a dû s'arrêter avant la fin de
     # la commune (budget de temps atteint, voir `ResultatRue.
     # arrete_par_budget`) OU avant même d'avoir pu traiter toutes les
@@ -101,7 +123,17 @@ class ResultatLot:
             f"{self.total_lignes_ecrites} ligne(s) écrite(s), "
             f"{self.total_echecs} échec(s).",
         ]
-        if self.colonnes_creees:
+        if self.colonnes_creees_detail:
+            lignes.append(f"{len(self.colonnes_creees_detail)} nouvelle(s) colonne(s) créée(s) — à relayer manuellement (Teams) :")
+            for ev in self.colonnes_creees_detail:
+                lignes.append(
+                    f"  - {ev.column_letter} : code '{ev.code}' (famille '{ev.color_family_id}'), "
+                    f"entre {ev.lettre_avant} ('{ev.entete_avant}') et {ev.lettre_apres} ('{ev.entete_apres}')"
+                )
+        elif self.colonnes_creees:
+            # Repli si seuls les codes sont connus (pas d'évènement
+            # détaillé disponible) — ne devrait plus arriver en pratique
+            # une fois tous les appelants à jour, gardé pour compatibilité.
             lignes.append(
                 f"{len(self.colonnes_creees)} nouvelle(s) colonne(s) créée(s) : "
                 + ", ".join(self.colonnes_creees)
@@ -114,14 +146,21 @@ class ResultatLot:
                 + ", ".join(sorted(non_resolues))
                 + " — à classer dans le registre de colonnes."
             )
-        if self.total_cellules_erreur:
+        # Compte GLOBAL (tout le fichier, tous runs confondus) si connu
+        # (voir cellules_erreur_fichier) — sinon repli sur le compte de
+        # CE run seulement, pour rester rétrocompatible avec un appelant
+        # qui ne le renseigne pas.
+        n_erreur = self.cellules_erreur_fichier if self.cellules_erreur_fichier is not None else self.total_cellules_erreur
+        n_manuel = self.cellules_manuelles_fichier if self.cellules_manuelles_fichier is not None else self.total_cellules_manuelles
+        portee = "dans le fichier" if self.cellules_erreur_fichier is not None else "lors de ce run"
+        if n_erreur:
             lignes.append(
-                f"{self.total_cellules_erreur} cellule(s) en \"ERREUR\" (règle existante, échec "
+                f"{n_erreur} cellule(s) en \"ERREUR\" {portee} (règle existante, échec "
                 "ponctuel) — récupérables via le bouton \"Retraiter les erreurs\"."
             )
-        if self.total_cellules_manuelles:
+        if n_manuel:
             lignes.append(
-                f"{self.total_cellules_manuelles} cellule(s) marquée(s) \"Manuellement\" (aucune "
+                f"{n_manuel} cellule(s) marquée(s) \"Manuellement\" {portee} (aucune "
                 "règle de calcul possible) — à remplir à la main, jamais récupérables automatiquement."
             )
         if self.incomplet:

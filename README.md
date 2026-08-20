@@ -12,12 +12,20 @@ workflow**, avec :
 
 - **commune**, **departement** (code `01` ou nom `Ain`, les deux
   marchent), **code_postal**
+- **rues** (optionnel) — liste de rues à traiter, séparées par des
+  virgules (ex : `Rue du Lardon, Montée du Mollard`). Utile quand le
+  travail est fourni sous forme d'une liste de rues précise plutôt que
+  "toute la commune". Laissé vide (défaut) : découvre et traite TOUTES
+  les rues de la commune (`CommuneService.lister_voies`).
 - **mode** :
-  - `traiter_commune` (défaut) — découvre automatiquement toutes les
-    rues de la commune et les traite.
-  - `retenter_erreurs` — ne retente que les cellules d'inondation WFS
-    Géorisques déjà en échec pour cette commune (voir
-    `registry_data/cellules_a_revisiter.csv`), sans redécouverte.
+  - `traiter_commune` (défaut) — traite les rues ci-dessus (ou toutes,
+    si `rues` est vide). Retente aussi automatiquement les cellules
+    ERREUR en fin de run si la commune a été traitée en entier.
+  - `retenter_erreurs` — ne retente QUE les cellules déjà trackées en
+    échec pour cette commune (WFS Géorisques + bloc GPU H→HV, voir
+    `registry_data/cellules_a_revisiter.csv`), sans redécouverte de
+    rues ni de parcelles. Ne touche jamais les cellules "Manuellement"
+    (aucune règle de calcul possible, voir `config.ROLES_SANS_REGLE`).
 - **traitement** :
   - `continuer` (défaut, sûr) — reprend le fichier d'état existant de
     cette commune (`state/{code_insee}_{commune}.xlsx`) là où il en
