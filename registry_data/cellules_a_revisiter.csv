@@ -197,3 +197,201 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-08-20T16:18:18+00:00,Argis,01017,Chemin de la Morandière,ZD,0070,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-20T16:18:18+00:00,Argis,01017,Chemin de la Morandière,ZD,0070,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
 2026-08-20T16:18:18+00:00,Argis,01017,Chemin de la Morandière,ZD,0070,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:36+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0069,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:36+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0069,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:36+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0069,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:36+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0069,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:36+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0069,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:36+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0069,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:37+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0058,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:37+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0058,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:37+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0058,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:37+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0058,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:37+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0058,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:37+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0058,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:37+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0059,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:37+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0059,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:37+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0059,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:37+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0059,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:37+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0059,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:37+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0059,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:38+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0083,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:38+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0083,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:38+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0083,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:38+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0083,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:38+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0083,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:38+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0083,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:38+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0024,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:38+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0024,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:38+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0024,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:38+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0024,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:38+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0024,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:38+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0024,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0037,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0037,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0037,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0037,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0037,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0037,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0038,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0038,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0038,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0038,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0038,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0038,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0041,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0041,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0041,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0041,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0041,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:39+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0041,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:40+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0044,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:40+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0044,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:40+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0044,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:40+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0044,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:40+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0044,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:40+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0044,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:40+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0040,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:40+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0040,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:40+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0040,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:40+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0040,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:40+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0040,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:40+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0040,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:41+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0039,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:41+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0039,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:41+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0039,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:41+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0039,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:41+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0039,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:41+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0039,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:41+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0036,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:41+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0036,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:41+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0036,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:41+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0036,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:41+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0036,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:41+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0036,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:42+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0045,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:42+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0045,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:42+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0045,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:42+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0045,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:42+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0045,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:42+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0045,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:42+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0046,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:42+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0046,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:42+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0046,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:42+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0046,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:42+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0046,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:42+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0046,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:43+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0047,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:43+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0047,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:43+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0047,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:43+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0047,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:43+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0047,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:43+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0047,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:44+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0096,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:44+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0096,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:44+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0096,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:44+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0096,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:44+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0096,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:44+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0096,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:44+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0095,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:44+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0095,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:44+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0095,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:44+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0095,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:44+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0095,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:44+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0095,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:45+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0094,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:45+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0094,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:45+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0094,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:45+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0094,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:45+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0094,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:45+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0094,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:45+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0093,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:45+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0093,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:45+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0093,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:45+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0093,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:45+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0093,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:45+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0093,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:46+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0092,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:46+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0092,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:46+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0092,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:46+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0092,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:46+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0092,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:46+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0092,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:46+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0090,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:46+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0090,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:46+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0090,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:46+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0090,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:46+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0090,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:46+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0090,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:47+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0089,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:47+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0089,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:47+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0089,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:47+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0089,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:47+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0089,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:47+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0089,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:48+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0086,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:48+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0086,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:48+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0086,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:48+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0086,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:48+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0086,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:48+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0086,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:48+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0056,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:48+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0056,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:48+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0056,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:48+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0056,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:48+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0056,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:48+00:00,Argis,01017,Chemin Voie des Prés d'Argis,ZD,0056,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:49+00:00,Argis,01017,Chemin de la Morandière,ZD,0072,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:49+00:00,Argis,01017,Chemin de la Morandière,ZD,0072,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:49+00:00,Argis,01017,Chemin de la Morandière,ZD,0072,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:49+00:00,Argis,01017,Chemin de la Morandière,ZD,0072,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:49+00:00,Argis,01017,Chemin de la Morandière,ZD,0072,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:49+00:00,Argis,01017,Chemin de la Morandière,ZD,0072,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:50+00:00,Argis,01017,Chemin de la Morandière,ZD,0076,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:50+00:00,Argis,01017,Chemin de la Morandière,ZD,0076,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:50+00:00,Argis,01017,Chemin de la Morandière,ZD,0076,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:50+00:00,Argis,01017,Chemin de la Morandière,ZD,0076,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:50+00:00,Argis,01017,Chemin de la Morandière,ZD,0076,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:50+00:00,Argis,01017,Chemin de la Morandière,ZD,0076,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:51+00:00,Argis,01017,Chemin de la Morandière,ZD,0074,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:51+00:00,Argis,01017,Chemin de la Morandière,ZD,0074,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:51+00:00,Argis,01017,Chemin de la Morandière,ZD,0074,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:51+00:00,Argis,01017,Chemin de la Morandière,ZD,0074,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:51+00:00,Argis,01017,Chemin de la Morandière,ZD,0074,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:51+00:00,Argis,01017,Chemin de la Morandière,ZD,0074,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:51+00:00,Argis,01017,Chemin de la Morandière,ZD,0071,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:51+00:00,Argis,01017,Chemin de la Morandière,ZD,0071,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:51+00:00,Argis,01017,Chemin de la Morandière,ZD,0071,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:51+00:00,Argis,01017,Chemin de la Morandière,ZD,0071,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:51+00:00,Argis,01017,Chemin de la Morandière,ZD,0071,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:51+00:00,Argis,01017,Chemin de la Morandière,ZD,0071,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:52+00:00,Argis,01017,Chemin de la Morandière,ZD,0064,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:52+00:00,Argis,01017,Chemin de la Morandière,ZD,0064,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:52+00:00,Argis,01017,Chemin de la Morandière,ZD,0064,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:52+00:00,Argis,01017,Chemin de la Morandière,ZD,0064,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:52+00:00,Argis,01017,Chemin de la Morandière,ZD,0064,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:52+00:00,Argis,01017,Chemin de la Morandière,ZD,0064,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:53+00:00,Argis,01017,Chemin de la Morandière,ZD,0070,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:53+00:00,Argis,01017,Chemin de la Morandière,ZD,0070,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:53+00:00,Argis,01017,Chemin de la Morandière,ZD,0070,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:53+00:00,Argis,01017,Chemin de la Morandière,ZD,0070,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:53+00:00,Argis,01017,Chemin de la Morandière,ZD,0070,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:53+00:00,Argis,01017,Chemin de la Morandière,ZD,0070,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:54+00:00,Argis,01017,Chemin de la Morandière,ZD,0068,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:54+00:00,Argis,01017,Chemin de la Morandière,ZD,0068,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:54+00:00,Argis,01017,Chemin de la Morandière,ZD,0068,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:54+00:00,Argis,01017,Chemin de la Morandière,ZD,0068,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:54+00:00,Argis,01017,Chemin de la Morandière,ZD,0068,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:54+00:00,Argis,01017,Chemin de la Morandière,ZD,0068,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:54+00:00,Argis,01017,Chemin de la Morandière,ZD,0066,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:54+00:00,Argis,01017,Chemin de la Morandière,ZD,0066,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:54+00:00,Argis,01017,Chemin de la Morandière,ZD,0066,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:54+00:00,Argis,01017,Chemin de la Morandière,ZD,0066,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:54+00:00,Argis,01017,Chemin de la Morandière,ZD,0066,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:54+00:00,Argis,01017,Chemin de la Morandière,ZD,0066,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
+2026-08-20T23:21:55+00:00,Argis,01017,Chemin de la Morandière,ZD,0067,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
+2026-08-20T23:21:55+00:00,Argis,01017,Chemin de la Morandière,ZD,0067,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
+2026-08-20T23:21:55+00:00,Argis,01017,Chemin de la Morandière,ZD,0067,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
+2026-08-20T23:21:55+00:00,Argis,01017,Chemin de la Morandière,ZD,0067,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
+2026-08-20T23:21:55+00:00,Argis,01017,Chemin de la Morandière,ZD,0067,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
+2026-08-20T23:21:55+00:00,Argis,01017,Chemin de la Morandière,ZD,0067,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
