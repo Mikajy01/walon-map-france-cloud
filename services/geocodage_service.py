@@ -20,6 +20,7 @@ from typing import List, Optional
 import config
 from models.adresse import AdressePoint
 from services.http_client import HttpClient
+from utils.geometrie import point_dans_geometrie
 from utils.logger import get_logger
 
 _logger = get_logger("services.geocodage_service")
@@ -89,29 +90,6 @@ class GeocodageService:
         seul anneau extérieur)."""
         resultat = []
         for point in points:
-            if _point_dans_geometrie(point.lon, point.lat, polygon):
+            if point_dans_geometrie(point.lon, point.lat, polygon):
                 resultat.append(point)
         return resultat
-
-
-def _point_dans_anneau(x: float, y: float, anneau: list) -> bool:
-    """Ray casting standard sur un anneau de polygone (liste de [lon, lat])."""
-    dedans = False
-    n = len(anneau)
-    x1, y1 = anneau[0]
-    for i in range(1, n + 1):
-        x2, y2 = anneau[i % n]
-        if ((y1 > y) != (y2 > y)) and (x < (x2 - x1) * (y - y1) / (y2 - y1) + x1):
-            dedans = not dedans
-        x1, y1 = x2, y2
-    return dedans
-
-
-def _point_dans_geometrie(lon: float, lat: float, geometry: dict) -> bool:
-    gtype = geometry.get("type")
-    coords = geometry.get("coordinates")
-    if gtype == "Polygon":
-        return _point_dans_anneau(lon, lat, coords[0])
-    if gtype == "MultiPolygon":
-        return any(_point_dans_anneau(lon, lat, polygone[0]) for polygone in coords)
-    return False

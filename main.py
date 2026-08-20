@@ -72,7 +72,7 @@ from services.urbanisme_service import UrbanismeService
 from services.voirie_service import VoirieService
 from services.wfs_clpa_service import WfsClpaService
 from services.wfs_georisques_service import WfsGeorisquesService
-from utils.geometrie import centroide_geometrie
+from utils.geometrie import centroide_geometrie, point_dans_geometrie
 from utils.logger import get_logger, setup_logging
 from utils.rate_limiter import RateLimiter
 from utils.text_normalize import normaliser_code_zone
@@ -271,8 +271,21 @@ def decouvrir_parcelles(
                 point.housenumber, point.street,
             )
             continue
+        # Priorité au test géométrique EXACT (le point tombe-t-il DANS le
+        # polygone) sur la distance au centroïde — écart réel trouvé en
+        # investigation live (Argis, adresse "41 Chemin de la
+        # Morandière") : pour une parcelle allongée/en lanière (fréquent
+        # en zone rurale), le centroïde peut être bien plus loin du point
+        # que celui d'une parcelle VOISINE, même quand le point est
+        # géométriquement dans la première — voir `utils/geometrie.
+        # point_dans_geometrie`. Repli sur le centroïde le plus proche
+        # UNIQUEMENT si le point ne tombe dans AUCUN candidat (écart
+        # BAN/PCI déjà documenté ci-dessus, jamais résolu par un simple
+        # point-in-polygon dans ce cas).
+        contenantes = [p for p in candidates if point_dans_geometrie(point.lon, point.lat, p.geometry)]
+        bassin = contenantes or candidates
         meilleure = min(
-            candidates,
+            bassin,
             key=lambda p: _distance_m(centroide_geometrie(p.geometry), (point.lon, point.lat)),
         )
         parcelles.setdefault(meilleure.identifiant, meilleure)
