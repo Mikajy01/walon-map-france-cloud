@@ -21,6 +21,7 @@ from typing import Any, Dict, List, Optional, Tuple
 
 from services.http_client import HttpClient
 from utils.logger import get_logger
+from utils.text_normalize import normaliser
 
 _logger = get_logger("services.voirie_service")
 
@@ -74,30 +75,48 @@ class VoirieService:
         """Polyligne réelle (liste de `(lon, lat)`) d'une rue nommée,
         reconstruite depuis `BDTOPO_V3:voie_nommee` — `None` si la voie
         n'est pas répertoriée dans BDTOPO (chemin privé, sentier non
-        officiellement nommé, faute de frappe entre le nom BAN et le nom
-        utilisé dans le fichier de travail) : dans ce cas l'appelant doit
-        retomber sur la reconstruction par adresses BAN, jamais deviné."""
-        nom_echappe = nom_voie.replace("'", "''")
+        officiellement nommé) : dans ce cas l'appelant doit retomber sur
+        la reconstruction par adresses BAN, jamais deviné.
+
+        Filtre `insee_commune` UNIQUEMENT côté serveur (CQL_FILTER), puis
+        `nom_voie_ban` normalisé côté client — écart réel trouvé en
+        investigation live (Argis, "Chemin de la Morandière") : le champ
+        `nom_voie_ban` de BDTOPO stocke la partie odonyme en MAJUSCULES
+        SANS ACCENT ("Chemin de la MORANDIERE"), alors que le nom transmis
+        ici garde la casse/accentuation BAN d'origine ("Chemin de la
+        Morandière") — un `CQL_FILTER` en égalité exacte ne matchait donc
+        JAMAIS, faisant retomber silencieusement sur la reconstruction par
+        adresses (bien moins fiable, voir plus haut) pour la quasi-totalité
+        des rues à toponyme accentué/composé. `normaliser()` (déjà utilisé
+        pour tout texte libre insensible à la casse dans ce projet) évite
+        cet écart. Le nombre de voies par commune (quelques dizaines à
+        quelques centaines) rend un filtrage client-side négligeable."""
         params: Dict[str, Any] = {
             "SERVICE": "WFS", "VERSION": "2.0.0", "REQUEST": "GetFeature",
             "TYPENAME": "BDTOPO_V3:voie_nommee", "OUTPUTFORMAT": "application/json",
-            "CQL_FILTER": f"insee_commune='{code_insee}' AND nom_voie_ban='{nom_echappe}'",
+            "CQL_FILTER": f"insee_commune='{code_insee}'",
         }
         data = self._http.get_json(_WFS_BASE, params, service_key="ign_bdtopo")
-        features = data.get("features", [])
+        nom_norm = normaliser(nom_voie)
+        features = [
+            f for f in data.get("features", [])
+            if normaliser(f["properties"].get("nom_voie_ban")) == nom_norm
+        ]
         if not features:
             _logger.info(
                 "Aucune géométrie BDTOPO pour '%s' (%s) — repli sur la reconstruction par adresses BAN.",
                 nom_voie, code_insee,
             )
             return None
-        geom = features[0]["geometry"]
-        if geom["type"] == "LineString":
-            parties = [geom["coordinates"]]
-        elif geom["type"] == "MultiLineString":
-            parties = geom["coordinates"]
-        else:
-            return None
-        parties_tuples = [[(pt[0], pt[1]) for pt in partie] for partie in parties]
+        parties_tuples: List[List[Tuple[float, float]]] = []
+        for feature in features:
+            geom = feature["geometry"]
+            if geom["type"] == "LineString":
+                parties = [geom["coordinates"]]
+            elif geom["type"] == "MultiLineString":
+                parties = geom["coordinates"]
+            else:
+                continue
+            parties_tuples.extend([(pt[0], pt[1]) for pt in partie] for partie in parties)
         chaine = _chainer_parties(parties_tuples)
         return chaine if len(chaine) >= 2 else None
