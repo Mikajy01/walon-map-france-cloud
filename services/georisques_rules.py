@@ -199,10 +199,19 @@ def _rapport_risque_champ(categorie: str, cle: str) -> RegleGeorisques:
 
 
 # -- PPR/SUP "sur la commune" — existence d'un PPR d'un type donné,
-# filtré par mot-clé dans le libellé de la procédure (STRUCTUREL : les
-# communes testées cette session n'ont aucun PPR actif, donc ces règles
-# n'ont jamais pu être confirmées contre un vrai "O") --
-
+# filtré par mot-clé dans le libellé de la procédure.
+#
+# CONFIRMÉ en direct (Argis, 01017, 2026-08-21) contre un vrai "O" — et
+# un vrai faux négatif trouvé au passage : le PPRN "PPRi et PPRmt
+# _Argis" (modeleProcedure "PPRN-Multi", supExists=True, vu sur
+# https://www.geoportail-urbanisme.gouv.fr/map/parcel-info/
+# 01_017_000_000_ZD_0071/, catégorie SUP combinée "PM1") utilise les
+# abréviations officielles "PPRi"/"PPRmt", jamais les mots complets
+# "inondation"/"mouvement" — "ppri" ne contient pas "inond", "pprmt" ne
+# contient ni "mvt" ni "mouvement", donc `ppr_inondation`/`sup_inondation`
+# et `ppr_mouvement_terrain`/`sup_mouvement_terrain` (+ leurs variantes
+# "_commune") renvoyaient "N" pour un cas pourtant confirmé "O" sur le
+# site officiel. Ces deux abréviations ajoutées aux mots-clés concernés.
 def _correspond(rec: dict, mots_cles: Optional[tuple]) -> bool:
     """`mots_cles=None` : aucun filtre, tout enregistrement de la liste
     compte (cas `get_gaspar_pprm`/`pprt`, déjà scopés par nature — un
@@ -291,18 +300,18 @@ REGLES_GEORISQUES: Dict[str, RegleGeorisques] = {
     # `longitude`/`latitude` fait une vraie intersection géométrique
     # (voir `_ppr_parcelle_existe`), pas approximé depuis le niveau
     # commune.
-    "ppr_inondation": _ppr_parcelle_existe("get_gaspar_pprn", ("inond",)),
+    "ppr_inondation": _ppr_parcelle_existe("get_gaspar_pprn", ("inond", "ppri")),
     "ppr_littoraux": _ppr_parcelle_existe("get_gaspar_pprn", ("submersion", "littora")),
-    "ppr_mouvement_terrain": _ppr_parcelle_existe("get_gaspar_pprn", ("mvt", "mouvement")),
+    "ppr_mouvement_terrain": _ppr_parcelle_existe("get_gaspar_pprn", ("mvt", "mouvement", "pprmt")),
     "ppr_feu_foret": _ppr_parcelle_existe("get_gaspar_pprn", ("feu de foret", "feu de forêt")),
     "ppr_avalanche": _ppr_parcelle_existe("get_gaspar_pprn", ("avalanche",)),
     "ppr_seisme": _ppr_parcelle_existe("get_gaspar_pprn", ("seisme", "séisme")),
     "ppr_risque_minier": _ppr_parcelle_existe("get_gaspar_pprm", None),
     "ppr_risque_industriel": _ppr_parcelle_existe("get_gaspar_pprt", None),
 
-    "ppr_inondation_commune": _ppr_commune_existe("get_gaspar_pprn", ("inond",)),
+    "ppr_inondation_commune": _ppr_commune_existe("get_gaspar_pprn", ("inond", "ppri")),
     "ppr_submersion_marine_commune": _ppr_commune_existe("get_gaspar_pprn", ("submersion", "littora")),
-    "ppr_mouvement_terrain_commune": _ppr_commune_existe("get_gaspar_pprn", ("mvt", "mouvement")),
+    "ppr_mouvement_terrain_commune": _ppr_commune_existe("get_gaspar_pprn", ("mvt", "mouvement", "pprmt")),
     "ppr_mouvement_terrain_affaissement_commune": _ppr_commune_existe("get_gaspar_pprn", ("affaissement",)),
     "ppr_mouvement_terrain_tassement_commune": _ppr_commune_existe("get_gaspar_pprn", ("tassement",)),
     "ppr_feu_foret_commune": _ppr_commune_existe("get_gaspar_pprn", ("feu de foret", "feu de forêt")),
@@ -314,8 +323,8 @@ REGLES_GEORISQUES: Dict[str, RegleGeorisques] = {
     # Pas de "ppr_risque_minier_commune" : voir config.ROLES_CANONIQUES_VALIDES,
     # aucune colonne "sur la commune" correspondante dans le vrai gabarit.
 
-    "sup_inondation": _sup_existe_pour_type("get_gaspar_pprn", ("inond",)),
-    "sup_mouvement_terrain": _sup_existe_pour_type("get_gaspar_pprn", ("mvt", "mouvement")),
+    "sup_inondation": _sup_existe_pour_type("get_gaspar_pprn", ("inond", "ppri")),
+    "sup_mouvement_terrain": _sup_existe_pour_type("get_gaspar_pprn", ("mvt", "mouvement", "pprmt")),
     "sup_feu_foret": _sup_existe_pour_type("get_gaspar_pprn", ("feu de foret", "feu de forêt")),
     "sup_avalanche": _sup_existe_pour_type("get_gaspar_pprn", ("avalanche",)),
     "sup_risque_minier": _sup_existe_pour_type("get_gaspar_pprm", None),
