@@ -72,7 +72,18 @@ class GeocodageService:
         feat = features[0]
         ban_id = feat["properties"]["id"]  # "{code_insee}_{voie_id}"
         parts = ban_id.split("_")
-        voie_id = parts[1] if len(parts) >= 2 else ""
+        # .lower() : écart réel trouvé en investigation live (Argis,
+        # "Lotissement le Mollet") — la BAN renvoie ce même voie_id en
+        # MAJUSCULE via `search?type=street` ("A080") mais en minuscule
+        # via `reverse?type=housenumber` ("a080"), une incohérence de
+        # LEUR côté, pas une erreur d'appel. La comparaison stricte dans
+        # `adresses_pour_rue` (`p.voie_id == rue_info["voie_id"]`)
+        # rejetait donc TOUTES les adresses de ces rues, silencieusement
+        # — la rue semblait n'avoir "aucune adresse" alors qu'elle en a
+        # (18 trouvées pour ce lotissement une fois corrigé). Normalisé
+        # ici ET dans `AdressePoint.voie_id` pour que l'invariant "toujours
+        # en minuscule" tienne, peu importe le point de comparaison.
+        voie_id = (parts[1] if len(parts) >= 2 else "").lower()
         lon, lat = feat["geometry"]["coordinates"]
         return {"voie_id": voie_id, "lon": lon, "lat": lat}
 

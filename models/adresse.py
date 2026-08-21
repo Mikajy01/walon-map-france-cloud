@@ -31,9 +31,17 @@ class AdressePoint:
         Renvoie une chaîne vide si `id` ne suit pas le format attendu
         (3 segments séparés par `_`) plutôt que de lever une exception —
         un identifiant BAN inattendu ne doit jamais faire échouer tout
-        le traitement, seulement dégrader le regroupement par tronçon."""
+        le traitement, seulement dégrader le regroupement par tronçon.
+
+        `.lower()` : la BAN renvoie ce même identifiant en MAJUSCULE via
+        `search?type=street` mais en minuscule via `reverse?type=
+        housenumber` pour certaines voies (écart réel trouvé en
+        investigation live, Argis "Lotissement le Mollet" : "A080" vs
+        "a080") — normalisé pour que toute comparaison de `voie_id`
+        (voir `services/geocodage_service.py::adresses_pour_rue`) reste
+        fiable peu importe l'endpoint d'origine."""
         parts = self.id.split("_")
-        return parts[1] if len(parts) >= 3 else ""
+        return parts[1].lower() if len(parts) >= 3 else ""
 
     @property
     def numero_parite(self) -> str:
