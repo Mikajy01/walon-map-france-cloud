@@ -117,14 +117,30 @@ jobs:
       # `git push` seul, sans re-synchro avec origin, se fait rejeter dès
       # que main a avancé depuis le checkout (ex: un push de code pendant
       # le run, un run précédent pas encore mergé) — incident réel vécu
-      # le 2026-08-21 : un run entier (334 lignes traitées) perdu, le
-      # commit local existant seulement sur la VM éphémère du runner,
-      # jamais récupérable une fois le job terminé en erreur. `git pull
-      # --rebase` avant de pousser rejoue notre commit par-dessus les
-      # commits distants ; boucle de réessai (3 tentatives) pour couvrir
-      # le cas où un AUTRE push arrive pendant cette resynchronisation
-      # elle-même — jamais un simple `push --force`, qui écraserait le
-      # travail distant au lieu de le préserver.
+      # le 2026-08-21 : un run entier perdu, le commit local existant
+      # seulement sur la VM éphémère du runner, jamais récupérable une
+      # fois le job terminé en erreur. `git fetch` + `git rebase` avant
+      # de pousser rejoue notre commit par-dessus les commits distants —
+      # jamais un simple `push --force`, qui écraserait le travail
+      # distant au lieu de le préserver.
+      #
+      # DEUX cas bien distincts pour l'échec du rebase (distinction
+      # ajoutée après un second incident réel, 2026-08-21, où le run
+      # précédent a laissé le job planté en boucle sur un VRAI conflit) :
+      #   - Rejet SIMPLE (pas de conflit, juste un retard de
+      #     synchronisation) : le rebase réussit, on retente le push —
+      #     boucle de 3 tentatives pour couvrir le cas où un AUTRE push
+      #     arrive pendant cette resynchronisation elle-même.
+      #   - CONFLIT réel (`git rebase` échoue, contenu qui se recouvre) :
+      #     seul signe possible d'un DEUXIÈME run sur la MÊME commune
+      #     ayant tourné en parallèle malgré le groupe de concurrence
+      #     ci-dessus (cause exacte non confirmée, voir la conversation).
+      #     Aucune tentative de fusion automatique sur des fichiers
+      #     binaires (Excel, sqlite3) — un openpyxl mal fusionné peut
+      #     corrompre silencieusement le fichier. On abandonne le rebase
+      #     proprement (`--abort`) et on échoue tout de suite, sans
+      #     boucler pour rien sur un conflit qui ne se résoudra jamais
+      #     tout seul.
       - name: Committer l'état (Excel + registre) si modifié
         run: |
           git config user.name "walon-map-france-cloud bot"
@@ -141,7 +157,11 @@ jobs:
             fi
             echo "Push rejeté (tentative $tentative/3) — resynchronisation avec origin/main avant nouvel essai."
             git fetch origin main
-            git rebase origin/main
+            if ! git rebase origin/main; then
+              echo "::error::Conflit de fusion réel sur state/ ou registry_data/ (pas juste un retard de synchronisation) — probablement un DEUXIÈME run sur la MÊME commune ayant tourné en parallèle malgré le groupe de concurrence. Aucune fusion automatique tentée sur des fichiers binaires. État de CE run non commité (perdu) ; relancer le workflow en mode 'continuer' pour reprendre depuis l'état déjà sur origin/main."
+              git rebase --abort
+              exit 1
+            fi
           done
-          echo "::error::Échec du push après 3 tentatives — état local NON perdu sur ce runner (voir logs), mais non commité côté dépôt. Relancer le workflow."
+          echo "::error::Échec du push après 3 tentatives (rejets répétés sans conflit) — état local NON perdu sur ce runner (voir logs), mais non commité côté dépôt. Relancer le workflow."
           exit 1

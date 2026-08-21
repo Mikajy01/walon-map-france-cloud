@@ -40,6 +40,7 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Callable, Dict, List, Optional, Tuple
 
+import requests
 from openpyxl.utils import column_index_from_string
 
 import config
@@ -53,6 +54,7 @@ from services.cache_service import HttpCache
 from services.cadastre_service import CadastreService
 from services.column_registry_service import ColumnRegistryService
 from services.commune_service import CommuneService
+from services.exceptions import ApiServiceError
 from services.excel_service import (
     COL_PARCELLE, COL_SECTION, FIRST_DATA_ROW,
     TYPE_DOCUMENT_VERS_COLONNE, bootstrap_from_template, charger_feuille, ensure_columns_for_codes,
@@ -812,6 +814,33 @@ def resoudre_zonage(
     return valeurs, doc_type
 
 
+def _resoudre_resilient(nom_regle: str, parcelle: Parcelle, fn: Callable[[], object], valeur_secours: object) -> object:
+    """Exécute un résolveur `resoudre_*` avec un filet de sécurité réseau
+    — écart réel trouvé en investigation live (GitHub Actions, panne
+    Géorisques prolongée) : `http_retry` (5 tentatives, backoff
+    exponentiel, voir `utils/retry.py`) protège déjà chaque appel HTTP
+    individuel, mais rien n'empêchait une panne prolongée (au-delà des 5
+    tentatives) de remonter telle quelle et de tuer TOUT le run —
+    perdant le travail de toutes les parcelles restantes, alors que ces
+    rôles précis auraient dû simplement finir "ERREUR" (voir
+    `_forcer_valeurs_manquantes_en_n`), récupérables via le bouton
+    "Retraiter les erreurs", exactement comme prévu pour ce cas.
+
+    Catch volontairement RESTREINT aux erreurs réseau/API connues
+    (`requests.exceptions.RequestException`, `ApiServiceError`) — jamais
+    une exception de programmation (ex `TypeError`), qui doit continuer
+    à faire planter le run : un bug reste un bug, jamais masqué."""
+    try:
+        return fn()
+    except (requests.exceptions.RequestException, ApiServiceError) as exc:
+        _logger.warning(
+            "Parcelle %s : échec réseau/API sur la règle '%s' (%s) — laissée sans valeur pour "
+            "cette parcelle, marquée ERREUR (récupérable via le bouton \"Retraiter les erreurs\").",
+            parcelle.identifiant, nom_regle, exc,
+        )
+        return valeur_secours
+
+
 def resoudre_georisques(parcelle: Parcelle, georisques: GeorisquesService) -> Dict[str, str]:
     """Applique `services.georisques_rules.REGLES_GEORISQUES` — table
     déclarative (role_code -> règle), voir ce module pour le détail de
@@ -1063,16 +1092,40 @@ def traiter_rue(
         if on_progress:
             on_progress(f"Traitement {element.rue}", i + 1, len(a_traiter))
 
-        valeurs_zonage, doc_type = resoudre_zonage(parcelle, urbanisme, registry, layout)
-        valeurs_risques = resoudre_georisques(parcelle, georisques)
-        valeurs_gpu_detaille = resoudre_gpu_detaille(parcelle, urbanisme, layout)
-        valeurs_scot = resoudre_scot(parcelle, urbanisme, layout)
-        valeurs_secteur_cc = resoudre_secteur_cc(parcelle, urbanisme, layout)
-        valeurs_zone_humide = resoudre_zone_humide_ou_littoral(parcelle, urbanisme, layout)
-        valeurs_natura2000 = resoudre_natura2000(parcelle, urbanisme, layout)
-        valeurs_urbaine_patrimoniale = resoudre_zone_urbaine_patrimoniale(parcelle, urbanisme, layout)
-        valeurs_wfs = resoudre_wfs_inondation(parcelle, wfs) if wfs is not None else {}
-        valeurs_clpa = resoudre_clpa_avalanche(parcelle, clpa) if clpa is not None else {}
+        # Chaque résolveur passe par `_resoudre_resilient` — voir sa
+        # docstring (panne réseau prolongée sur UNE règle ne doit jamais
+        # coûter que CETTE règle, jamais tout le run ni les autres
+        # valeurs déjà obtenues pour cette même parcelle).
+        valeurs_zonage, doc_type = _resoudre_resilient(
+            "zonage", parcelle, lambda: resoudre_zonage(parcelle, urbanisme, registry, layout), ({}, None),
+        )
+        valeurs_risques = _resoudre_resilient(
+            "georisques", parcelle, lambda: resoudre_georisques(parcelle, georisques), {},
+        )
+        valeurs_gpu_detaille = _resoudre_resilient(
+            "gpu_detaille", parcelle, lambda: resoudre_gpu_detaille(parcelle, urbanisme, layout), {},
+        )
+        valeurs_scot = _resoudre_resilient(
+            "scot", parcelle, lambda: resoudre_scot(parcelle, urbanisme, layout), {},
+        )
+        valeurs_secteur_cc = _resoudre_resilient(
+            "secteur_cc", parcelle, lambda: resoudre_secteur_cc(parcelle, urbanisme, layout), {},
+        )
+        valeurs_zone_humide = _resoudre_resilient(
+            "zone_humide_ou_littoral", parcelle, lambda: resoudre_zone_humide_ou_littoral(parcelle, urbanisme, layout), {},
+        )
+        valeurs_natura2000 = _resoudre_resilient(
+            "natura2000", parcelle, lambda: resoudre_natura2000(parcelle, urbanisme, layout), {},
+        )
+        valeurs_urbaine_patrimoniale = _resoudre_resilient(
+            "zone_urbaine_patrimoniale", parcelle, lambda: resoudre_zone_urbaine_patrimoniale(parcelle, urbanisme, layout), {},
+        )
+        valeurs_wfs = _resoudre_resilient(
+            "wfs_inondation", parcelle, lambda: resoudre_wfs_inondation(parcelle, wfs), {},
+        ) if wfs is not None else {}
+        valeurs_clpa = _resoudre_resilient(
+            "clpa_avalanche", parcelle, lambda: resoudre_clpa_avalanche(parcelle, clpa), {},
+        ) if clpa is not None else {}
         valeurs = {
             **valeurs_zonage, **valeurs_risques, **valeurs_gpu_detaille,
             **valeurs_scot, **valeurs_secteur_cc, **valeurs_zone_humide,
