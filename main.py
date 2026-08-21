@@ -1142,6 +1142,18 @@ def traiter_commune_complete(
             lot.rues_restantes = rues[idx:]
             return lot
 
+        # Progression au niveau COMMUNE (quelle rue sur combien) —
+        # décision explicite de l'utilisateur (2026-08-21) : sans ça,
+        # un run de plusieurs heures sur GitHub Actions n'affiche aucune
+        # vue d'ensemble, seulement les logs détaillés rue par rue déjà
+        # émis par `traiter_rue`. Branché sur le callback `on_progress`
+        # déjà existant (voir sa docstring) mais jusqu'ici jamais utilisé
+        # par l'appelant CLI (`main()`) — pas de nouvelle dépendance
+        # (tqdm, utilisé côté walon-map-public, écarté : rendu peu utile
+        # dans des logs GitHub Actions non-interactifs).
+        if on_progress:
+            on_progress(f"Commune {commune}", idx + 1, len(rues))
+
         element = ElementTravail(
             pays="France", commune=commune, departement=departement,
             rue=rue, code_postal=code_postal, code_insee=code_insee,
@@ -1617,6 +1629,17 @@ def main(argv: Optional[List[str]] = None) -> int:
         colonnes_creees_events.append(ev)
         _notifier_colonne_creee_cli(ev, config.COLONNES_CREEES_LOG_PATH)
 
+    # Callback déjà présent dans `traiter_rue`/`traiter_commune_complete`
+    # (voir leur docstring) mais jusqu'ici jamais branché par ce CLI —
+    # décision explicite de l'utilisateur (2026-08-21) : un run de
+    # plusieurs heures sur GitHub Actions n'affichait aucune vue
+    # d'ensemble de la progression. Un simple `_logger.info`, pas une
+    # vraie barre (tqdm, utilisé côté walon-map-public) : son rendu par
+    # réécriture de ligne ne sert à rien dans des logs GitHub Actions
+    # non-interactifs, une ligne périodique suffit.
+    def on_progress(phase: str, actuel: int, total: int) -> None:
+        _logger.info("Progression : %s — %d/%d.", phase, actuel, total)
+
     layout, codes_crees = executer_phase_a(
         ws, layout, elements,
         cadastre=cadastre, geocodage=geocodage, traversal=traversal,
@@ -1632,7 +1655,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         cadastre=cadastre, urbanisme=urbanisme, georisques=georisques,
         geocodage=geocodage, traversal=traversal, registry=registry,
         commune_service=commune_service, wfs=wfs, clpa=clpa, voirie=voirie,
-        rues_a_traiter=rues,
+        rues_a_traiter=rues, on_progress=on_progress,
     )
     lot.colonnes_creees = codes_crees
     lot.colonnes_creees_detail = colonnes_creees_events
