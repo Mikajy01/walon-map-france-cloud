@@ -2099,45 +2099,17 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-08-21T14:44:48+00:00,Argis,01017,Chemin de la Combe,0B,0539,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T14:44:48+00:00,Argis,01017,Chemin de la Combe,0B,0539,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
 2026-08-21T14:44:48+00:00,Argis,01017,Chemin de la Combe,0B,0539,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T14:46:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0607,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T14:48:22+00:00,Argis,01017,Lotissement l'Ecartary,AB,0620,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
 2026-08-21T14:48:53+00:00,Argis,01017,Lotissement l'Ecartary,AB,0619,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
 2026-08-21T14:48:53+00:00,Argis,01017,Lotissement l'Ecartary,AB,0619,HW,argiles_exposition_faible,Argiles Exposition Faible
@@ -2475,25 +2447,11 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-08-21T14:51:24+00:00,Argis,01017,Lotissement l'Ecartary,AB,0621,JV,sup_risque_industriel,SUP Risque industriels
 2026-08-21T14:51:24+00:00,Argis,01017,Lotissement l'Ecartary,AB,0621,JS,sup_risque_minier,SUP Risque Minier
 2026-08-21T14:51:24+00:00,Argis,01017,Lotissement l'Ecartary,AB,0621,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T14:53:05+00:00,Argis,01017,Lotissement l'Ecartary,AB,0608,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
 2026-08-21T14:53:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0622,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
 2026-08-21T14:53:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0622,HW,argiles_exposition_faible,Argiles Exposition Faible
@@ -2551,105 +2509,35 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-08-21T14:53:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0622,JV,sup_risque_industriel,SUP Risque industriels
 2026-08-21T14:53:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0622,JS,sup_risque_minier,SUP Risque Minier
 2026-08-21T14:53:35+00:00,Argis,01017,Lotissement l'Ecartary,AB,0622,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T14:55:21+00:00,Argis,01017,Lotissement le Mollet,AC,0262,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T14:57:10+00:00,Argis,01017,Lotissement le Mollet,AC,0263,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T14:58:57+00:00,Argis,01017,Lotissement le Mollet,AC,0264,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T15:00:39+00:00,Argis,01017,Lotissement le Mollet,AC,0265,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T15:02:21+00:00,Argis,01017,Lotissement le Mollet,AC,0266,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
 2026-08-21T15:02:52+00:00,Argis,01017,Lotissement le Mollet,AC,0429,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
 2026-08-21T15:02:52+00:00,Argis,01017,Lotissement le Mollet,AC,0429,HW,argiles_exposition_faible,Argiles Exposition Faible
@@ -2763,105 +2651,35 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-08-21T15:03:21+00:00,Argis,01017,Lotissement le Mollet,AC,0428,JV,sup_risque_industriel,SUP Risque industriels
 2026-08-21T15:03:21+00:00,Argis,01017,Lotissement le Mollet,AC,0428,JS,sup_risque_minier,SUP Risque Minier
 2026-08-21T15:03:21+00:00,Argis,01017,Lotissement le Mollet,AC,0428,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T15:05:11+00:00,Argis,01017,Lotissement le Mollet,AC,0031,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T15:06:54+00:00,Argis,01017,Lotissement le Mollet,AC,0272,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T15:08:56+00:00,Argis,01017,Lotissement le Mollet,AC,0270,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T15:10:56+00:00,Argis,01017,Lotissement le Mollet,AC,0420,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T15:12:45+00:00,Argis,01017,Lotissement le Mollet,AC,0421,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
 2026-08-21T15:13:19+00:00,Argis,01017,Lotissement le Mollet,AC,0269,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
 2026-08-21T15:13:19+00:00,Argis,01017,Lotissement le Mollet,AC,0269,HW,argiles_exposition_faible,Argiles Exposition Faible
@@ -2919,25 +2737,11 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-08-21T15:13:19+00:00,Argis,01017,Lotissement le Mollet,AC,0269,JV,sup_risque_industriel,SUP Risque industriels
 2026-08-21T15:13:19+00:00,Argis,01017,Lotissement le Mollet,AC,0269,JS,sup_risque_minier,SUP Risque Minier
 2026-08-21T15:13:19+00:00,Argis,01017,Lotissement le Mollet,AC,0269,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-21T15:15:01+00:00,Argis,01017,Lotissement le Mollet,AC,0422,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
 2026-08-21T15:15:05+00:00,Argis,01017,Route de Plomb,WA,0235,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-21T15:15:05+00:00,Argis,01017,Route de Plomb,WA,0235,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
