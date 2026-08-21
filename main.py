@@ -297,7 +297,33 @@ def decouvrir_parcelles(
                 element.rue, element.commune,
             )
     if positionneur_ordre is None:
-        positionneur_ordre = lambda lon, lat: traversal.positionner_parcelle(lon, lat, cotes)  # noqa: E731
+        if polyligne_reelle is not None:
+            # Repli AMÉLIORÉ (pas juste la reconstruction grossière) —
+            # décision explicite de l'utilisateur (2026-08-21) : le côté
+            # (pair/impair) reste déduit des adresses seules (aucun autre
+            # moyen sans calibrage réussi), mais le CHAÎNAGE (position le
+            # long de la rue, ce qui détermine l'ordre relatif au sein
+            # d'un même côté) réutilise la géométrie réelle BDTOPO déjà
+            # disponible — bien plus précis que la reconstruction
+            # grossière, qui projetait toute parcelle loin des adresses
+            # connues sur le MÊME point d'extrémité (ordre indifférencié
+            # entre elles, écart réel trouvé sur Argis/"Chemin de la
+            # Morandière" : 0034/0035/0036 tombaient toutes au même
+            # chaînage grossier alors qu'elles se suivent réellement le
+            # long de la route).
+            lat_ref_ordre = polyligne_reelle[0][1]
+
+            def positionneur_ordre(lon: float, lat: float) -> Optional[PositionParcours]:
+                position_brute = traversal.positionner_parcelle(lon, lat, cotes)
+                if position_brute is None:
+                    return None
+                proj = traversal.positionner_sur_polyligne_reelle(lon, lat, polyligne_reelle, lat_ref_ordre)
+                if proj is None:
+                    return position_brute
+                chainage_reel, dist_perp_reel, _cross = proj
+                return PositionParcours(cote=position_brute.cote, chainage=chainage_reel, distance_segment=dist_perp_reel)
+        else:
+            positionneur_ordre = lambda lon, lat: traversal.positionner_parcelle(lon, lat, cotes)  # noqa: E731
 
     if polyligne_reelle is not None:
         positionneur_distance = _positionneur_distance_polyligne_reelle(polyligne_reelle, traversal)
