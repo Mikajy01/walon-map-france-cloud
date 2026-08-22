@@ -22,10 +22,13 @@ workflow**, avec :
     si `rues` est vide). Retente aussi automatiquement les cellules
     ERREUR en fin de run si la commune a été traitée en entier.
   - `retenter_erreurs` — ne retente QUE les cellules déjà trackées en
-    échec pour cette commune (WFS Géorisques + bloc GPU H→HV, voir
-    `registry_data/cellules_a_revisiter.csv`), sans redécouverte de
-    rues ni de parcelles. Ne touche jamais les cellules "Manuellement"
-    (aucune règle de calcul possible, voir `config.ROLES_SANS_REGLE`).
+    échec pour cette commune (WFS Géorisques + bloc GPU H→HV +
+    `REGLES_GEORISQUES` : argiles, PPR *, radon, sismicité, cavités,
+    sites industriels, canalisations, installations nucléaires,
+    débroussaillement..., voir `registry_data/cellules_a_revisiter.csv`),
+    sans redécouverte de rues ni de parcelles. Ne touche jamais les
+    cellules "Manuellement" (aucune règle de calcul possible, voir
+    `config.ROLES_SANS_REGLE`).
 - **traitement** :
   - `continuer` (défaut, sûr) — reprend le fichier d'état existant de
     cette commune (`state/{code_insee}_{commune}.xlsx`) là où il en

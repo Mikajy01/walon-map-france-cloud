@@ -20,7 +20,7 @@ on:
         required: false
         type: string
       mode:
-        description: "traiter_commune : découvre et traite toutes les rues (retente aussi les cellules ERREUR en fin de run si complet). retenter_erreurs : ne retente QUE les cellules ERREUR déjà trackées (WFS Géorisques + bloc H→HV), jamais les cellules Manuellement."
+        description: "traiter_commune : découvre et traite toutes les rues (retente aussi les cellules ERREUR en fin de run si complet). retenter_erreurs : ne retente QUE les cellules ERREUR déjà trackées (WFS Géorisques + bloc H→HV + REGLES_GEORISQUES : argiles, PPR, radon, sismicité...), jamais les cellules Manuellement."
         required: true
         type: choice
         default: traiter_commune

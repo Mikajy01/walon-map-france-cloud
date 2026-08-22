@@ -1379,6 +1379,113 @@ def reessayer_cellules_wfs(
     return n_repare
 
 
+def reessayer_cellules_georisques(
+    excel_path: Path, chemin_revisite: Path, *,
+    cadastre: CadastreService, georisques: GeorisquesService, registry: ColumnRegistryService,
+) -> int:
+    """Même motif que `reessayer_cellules_wfs`, pour les cellules issues
+    de `REGLES_GEORISQUES` (`resoudre_georisques` — argiles, PPR *,
+    radon, sismicité, cavités, sites industriels, canalisations,
+    installations nucléaires, débroussaillement...).
+
+    Écart réel trouvé en investigation live (Argis, 2026-08-21) : ni
+    `reessayer_cellules_wfs` (limité aux 14 rôles `REGLES_WFS`) ni
+    `reessayer_cellules_gpu_du` (limité aux rôles `gpu_du_*`/`gpu_sup_*`)
+    ne couvrent cette catégorie — sur 3146 lignes trackées pour Argis,
+    500 étaient des rôles `REGLES_GEORISQUES` en "ERREUR" (une panne
+    réseau ponctuelle sur `resoudre_georisques`, voir
+    `_resoudre_resilient`), sans AUCUN chemin de récupération
+    automatique existant avant cette fonction — le bouton "Retraiter les
+    erreurs" ne les touchait jamais, quel que soit le nombre de fois où
+    on le relançait.
+
+    Renvoie le nombre de cellules réparées."""
+    if not chemin_revisite.exists():
+        return 0
+
+    with chemin_revisite.open(newline="", encoding="utf-8") as f:
+        lignes = list(csv.DictReader(f))
+    a_retenter_brut = [l for l in lignes if l["role_code"] in REGLES_GEORISQUES]
+    autres = [l for l in lignes if l["role_code"] not in REGLES_GEORISQUES]
+    if not a_retenter_brut:
+        return 0
+
+    ws = charger_feuille(excel_path)
+    derniere = trouver_premiere_ligne_vide(ws) - 1
+    parcelles_du_fichier = set()
+    for r in range(FIRST_DATA_ROW, derniere + 1):
+        section = ws.cell(row=r, column=COL_SECTION).value
+        numero = ws.cell(row=r, column=COL_PARCELLE).value
+        if section is not None and numero is not None:
+            parcelles_du_fichier.add((str(section).strip(), str(numero).strip()))
+
+    def _dans_ce_fichier(l: dict) -> bool:
+        return (l["section"].strip(), l["numero"].strip()) in parcelles_du_fichier
+
+    a_retenter = [l for l in a_retenter_brut if _dans_ce_fichier(l)]
+    hors_fichier = [l for l in a_retenter_brut if not _dans_ce_fichier(l)]
+    if not a_retenter:
+        _logger.info(
+            "Reessai des cellules Géorisques : aucune des %d ligne(s) trackée(s) n'appartient à "
+            "ce fichier précis (%s), rien à retenter ici.",
+            len(a_retenter_brut), excel_path.name,
+        )
+        return 0
+
+    parcelles_uniques = {(l["code_insee"], l["section"], l["numero"]) for l in a_retenter}
+    nouvelles_valeurs: Dict[Tuple[str, str, str], Dict[str, str]] = {}
+    for code_insee, section, numero in parcelles_uniques:
+        candidats = cadastre.get_parcelle(code_insee, section, numero)
+        if not candidats or not candidats[0].geometry:
+            continue
+        valeurs = _resoudre_resilient(
+            "georisques", candidats[0], lambda: resoudre_georisques(candidats[0], georisques), {},
+        )
+        if valeurs:
+            nouvelles_valeurs[(code_insee, section, numero)] = valeurs
+
+    if not nouvelles_valeurs:
+        _logger.info("Reessai des cellules Géorisques : toujours aucune réponse exploitable, rien réparé.")
+        return 0
+
+    n_repare = 0
+    lignes_restantes = list(autres) + hors_fichier
+    for l in a_retenter:
+        cle = (l["code_insee"], l["section"], l["numero"])
+        valeurs_trouvees = nouvelles_valeurs.get(cle, {})
+        valeur = valeurs_trouvees.get(l["role_code"])
+        if valeur is None:
+            lignes_restantes.append(l)
+            continue
+        col = column_index_from_string(l["colonne"])
+        ecrit = False
+        for r in range(FIRST_DATA_ROW, derniere + 1):
+            if (
+                str(ws.cell(row=r, column=COL_SECTION).value).strip() == l["section"].strip()
+                and str(ws.cell(row=r, column=COL_PARCELLE).value).strip() == l["numero"].strip()
+            ):
+                ws.cell(row=r, column=col).value = valeur
+                n_repare += 1
+                ecrit = True
+        if not ecrit:
+            lignes_restantes.append(l)
+
+    with chemin_revisite.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=[
+            "date", "commune", "code_insee", "rue", "section", "numero",
+            "colonne", "role_code", "en_tete",
+        ])
+        writer.writeheader()
+        writer.writerows(lignes_restantes)
+
+    ws.parent.save(excel_path)
+    _logger.info(
+        "Reessai des cellules Géorisques (%s) : %d cellule(s) réparée(s), %d reste(nt) trackée(s) au total.",
+        excel_path.name, n_repare, len(lignes_restantes),
+    )
+    return n_repare
+
+
 def reessayer_cellules_gpu_du(
     excel_path: Path, chemin_revisite: Path, *,
     cadastre: CadastreService, urbanisme: UrbanismeService, registry: ColumnRegistryService,
@@ -1662,16 +1769,19 @@ def main(argv: Optional[List[str]] = None) -> int:
         n_repare_gpu = reessayer_cellules_gpu_du(
             excel_path, config.CELLULES_A_REVISITER_PATH, cadastre=cadastre, urbanisme=urbanisme, registry=registry,
         )
-        # Rechargement OBLIGATOIRE : les deux retries sauvegardent en
+        n_repare_georisques = reessayer_cellules_georisques(
+            excel_path, config.CELLULES_A_REVISITER_PATH, cadastre=cadastre, georisques=georisques, registry=registry,
+        )
+        # Rechargement OBLIGATOIRE : les trois retries sauvegardent en
         # interne, `ws` (chargé avant elles) est déjà périmé.
         ws = charger_feuille(excel_path)
         n_erreur_restant, n_manuel_restant = compter_cellules_forcees_fichier(ws)
         _logger.info(
             "Résumé final (retenter_erreurs, %s) :\n"
-            "%d cellule(s) WFS + %d cellule(s) GPU réparée(s) lors de ce run.\n"
+            "%d cellule(s) WFS + %d cellule(s) GPU + %d cellule(s) Géorisques réparée(s) lors de ce run.\n"
             "%d cellule(s) \"ERREUR\" restante(s) dans le fichier (récupérables plus tard).\n"
             "%d cellule(s) \"Manuellement\" restante(s) (jamais récupérables automatiquement).",
-            args.commune, n_repare_wfs, n_repare_gpu, n_erreur_restant, n_manuel_restant,
+            args.commune, n_repare_wfs, n_repare_gpu, n_repare_georisques, n_erreur_restant, n_manuel_restant,
         )
         return 0
 
@@ -1740,10 +1850,10 @@ def main(argv: Optional[List[str]] = None) -> int:
     lot.colonnes_creees_detail = colonnes_creees_events
 
     if not lot.incomplet:
-        # Passe automatique de retry (WFS + GPU) en fin de commune
-        # COMPLÈTE — voir le plan : couvre le besoin "retenter les
-        # échecs" sans mode séparé à déclencher manuellement à chaque
-        # fois. Jamais faite si `incomplet` (le budget a déjà été
+        # Passe automatique de retry (WFS + GPU + Géorisques) en fin de
+        # commune COMPLÈTE — voir le plan : couvre le besoin "retenter
+        # les échecs" sans mode séparé à déclencher manuellement à
+        # chaque fois. Jamais faite si `incomplet` (le budget a déjà été
         # consommé, mieux vaut committer tel quel et laisser le prochain
         # run s'en charger).
         n_repare = reessayer_cellules_wfs(
@@ -1751,6 +1861,9 @@ def main(argv: Optional[List[str]] = None) -> int:
         )
         n_repare += reessayer_cellules_gpu_du(
             excel_path, config.CELLULES_A_REVISITER_PATH, cadastre=cadastre, urbanisme=urbanisme, registry=registry,
+        )
+        n_repare += reessayer_cellules_georisques(
+            excel_path, config.CELLULES_A_REVISITER_PATH, cadastre=cadastre, georisques=georisques, registry=registry,
         )
         if n_repare:
             _logger.info("Retry automatique de fin de commune : %d cellule(s) réparée(s).", n_repare)
