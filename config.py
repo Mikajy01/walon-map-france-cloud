@@ -319,7 +319,22 @@ ROLES_SANS_REGLE: frozenset = frozenset({
     # qu'à l'échelle communale ou intercommunale." — la précision
     # PARCELLE requise ici n'est donc jamais accessible, quel que soit
     # l'effort mis dans une règle : pas un problème technique, une
-    # restriction officielle assumée par l'administration.
+    # restriction officielle assumée par l'administration. VÉRIFIÉ EN
+    # DIRECT (2026-08-22) : requête réelle sur une parcelle collée à la
+    # piste de la base aérienne militaire d'Ambérieu-en-Bugey (01004, AB
+    # 0001) — l'API renvoie bien d'autres SUP (PM1, T1) mais JAMAIS T5,
+    # confirmant que l'omission est systématique, pas aléatoire.
+    #
+    # Piste alternative explorée et ÉCARTÉE (décision explicite de
+    # l'utilisateur, 2026-08-22) : certains départements (Meurthe-et-
+    # Moselle, Corrèze, Seine-et-Marne, Hautes-Alpes, Haute-Loire, Aude...)
+    # publient VOLONTAIREMENT leurs propres zones T5 en open data
+    # (data.gouv.fr), hors du GPU — mais aucun jeu trouvé pour l'Ain (01),
+    # dont l'aérodrome le plus proche d'Argis (BA278 Ambérieu-en-Bugey)
+    # est justement militaire. Bâtir une règle dessus ne couvrirait donc
+    # jamais Argis, et demanderait une maintenance fragile département
+    # par département (jeux hétérogènes, pas de standard national) pour
+    # un bénéfice partiel ailleurs — jugé non rentable.
     "degagement_zone_primaire",
     "degagement_zone_secondaire",
     "degagement_zone_speciale",
