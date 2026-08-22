@@ -281,6 +281,14 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
         "Immeuble bâti dont les parties intérieures sont protégées en totalité, "
         "à conserver, restaurer et mettre en valeur",
     ],
+    # "T8" dans ces 4 libellés n'existe PAS dans la liste officielle des
+    # 66 codes SUP (confirmé en direct via `/standard/sup-categories`) —
+    # coquille du gabarit, le vrai code est "T5" ("Servitudes
+    # aéronautiques de dégagement (civile)"). Voir `ROLES_SANS_REGLE`
+    # plus bas pour pourquoi ça ne change rien : la donnée T5 est
+    # officiellement à restriction défense, jamais disponible à la
+    # précision parcelle.
+    "degagement_zone_primaire": ["Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8"],
     "degagement_zone_secondaire": ["Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8"],
     "degagement_zone_speciale": ["Installations de navigation et d'atterrissage-Zone spéciale de dégagement"],
     "degagement_secteur": ["Installations de navigation et d'atterrissage-Secteur de dégagement-T8"],
@@ -298,6 +306,21 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
 ROLES_SANS_REGLE: frozenset = frozenset({
     "secteur_urbanise_dense",
     "immeuble_interieur_protege_totalite",
+    # degagement_zone_primaire/_secondaire/_speciale/_secteur (bloc
+    # "Installations de navigation et d'atterrissage") : CONCLUSION
+    # DÉFINITIVE (2026-08-22, pas juste "pas encore trouvé") — le "T8"
+    # du gabarit est bien une coquille, le vrai code officiel SUP est
+    # "T5" ("Servitudes aéronautiques de dégagement (civile)", confirmé
+    # en direct via `/standard/sup-categories`, 66 catégories, T8
+    # absent). MAIS la fiche officielle T5 (geoportail-urbanisme.gouv.fr/
+    # image/fiche_SUP_T5.pdf, §1.4) précise explicitement : "Cette
+    # catégorie de servitude fait l'objet de restriction défense. Les
+    # données ne sont pas téléchargeables et ne peuvent être consultées
+    # qu'à l'échelle communale ou intercommunale." — la précision
+    # PARCELLE requise ici n'est donc jamais accessible, quel que soit
+    # l'effort mis dans une règle : pas un problème technique, une
+    # restriction officielle assumée par l'administration.
+    "degagement_zone_primaire",
     "degagement_zone_secondaire",
     "degagement_zone_speciale",
     "degagement_secteur",
