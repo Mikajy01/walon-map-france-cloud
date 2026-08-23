@@ -94,6 +94,31 @@ class CadastreService:
             for f in features
         ]
 
+    def get_parcelles_dans_geometrie(
+        self, code_insee: str, geometry: dict, *,
+        commune: str = "", departement: str = "", code_postal: str = "", rue: str = "",
+    ) -> List[Parcelle]:
+        """Parcelle(s) intersectant une géométrie GeoJSON arbitraire
+        (polygone ou multipolygone) — contrairement à `get_parcelles_
+        pres_du_point`, qui construit lui-même un petit tampon carré
+        autour d'un POINT, ici l'appelant fournit directement sa propre
+        géométrie (ex: le polygone d'un lieu-dit BDTOPO, voir
+        `main.py::_parcelles_depuis_lieu_dit`)."""
+        url = f"{config.APICARTO_BASE}/cadastre/parcelle"
+        import json
+        params = {"code_insee": code_insee, "geom": json.dumps(geometry)}
+        data = self._http.get_json(url, params, service_key="cadastre")
+        features = data.get("features", [])
+        return [
+            Parcelle(
+                code_insee=code_insee, section=f["properties"]["section"],
+                numero=f["properties"]["numero"],
+                commune=commune, departement=departement, code_postal=code_postal, rue=rue,
+                geometry=f["geometry"],
+            )
+            for f in features
+        ]
+
     def get_parcelles_section(self, code_insee: str, section: str, *, limit: int = 1000) -> List[dict]:
         """Toutes les parcelles brutes (features GeoJSON, pas encore de
         `Parcelle`) d'une section — utile pour la découverte le long

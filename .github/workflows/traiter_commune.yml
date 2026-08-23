@@ -16,7 +16,7 @@ on:
         required: true
         type: string
       rues:
-        description: "Rues à traiter, séparées par des virgules (ex: Rue du Lardon, Montée du Mollard). Vide = découvre et traite TOUTE la commune."
+        description: "Rues à traiter, séparées par des virgules (ex: Rue du Lardon, Montée du Mollard). Un lieu-dit absent de la BAN (ex: un hameau) est détecté automatiquement en repli. Pour cibler une parcelle précise directement (ex: lieu-dit introuvable même en repli), utilisez 'parcelle:SECTION:NUMERO' (ex: parcelle:ZL:0002). Vide = découvre et traite TOUTE la commune."
         required: false
         type: string
       mode:

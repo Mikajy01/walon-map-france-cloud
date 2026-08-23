@@ -24,6 +24,7 @@ from models.adresse import AdressePoint
 from services.http_client import HttpClient
 from utils.geometrie import point_dans_geometrie
 from utils.logger import get_logger
+from utils.text_normalize import normaliser
 
 _logger = get_logger("services.geocodage_service")
 
@@ -70,6 +71,25 @@ class GeocodageService:
             _logger.warning("Rue introuvable dans la BAN : '%s' (code_insee=%s)", rue, code_insee)
             return None
         feat = features[0]
+        # Vérification du nom renvoyé, PAS juste "y a-t-il un résultat" —
+        # écart réel trouvé en investigation live (Arbigny, 01016,
+        # 2026-08-23) : `search?type=street` est un moteur de recherche
+        # FLOU (scoring de pertinence), pas une correspondance exacte —
+        # `q="les Blaises"` renvoie `features[0]` = "Chemin des Blaises"
+        # (`score=0.44`, une correspondance FAIBLE), une rue RÉELLEMENT
+        # DIFFÉRENTE (à 289m, confirmé par ailleurs) qu'un simple "un
+        # résultat existe" prenait pour argent comptant. Sans ce contrôle,
+        # `decouvrir_parcelles` traitait silencieusement la mauvaise rue
+        # au lieu de déclencher le repli lieu-dit (voir `main.py::
+        # _parcelles_depuis_lieu_dit`) ou de signaler "introuvable"."""
+        nom_renvoye = feat["properties"].get("name", "")
+        if normaliser(nom_renvoye) != normaliser(rue):
+            _logger.info(
+                "BAN : correspondance floue rejetée pour '%s' (%s) — meilleur résultat '%s' "
+                "(score %.2f) n'est pas le même nom, traité comme introuvable.",
+                rue, code_insee, nom_renvoye, feat["properties"].get("score", 0.0),
+            )
+            return None
         ban_id = feat["properties"]["id"]  # "{code_insee}_{voie_id}"
         parts = ban_id.split("_")
         # .lower() : écart réel trouvé en investigation live (Argis,

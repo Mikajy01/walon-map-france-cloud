@@ -120,3 +120,34 @@ class VoirieService:
             parties_tuples.extend([(pt[0], pt[1]) for pt in partie] for partie in parties)
         chaine = _chainer_parties(parties_tuples)
         return chaine if len(chaine) >= 2 else None
+
+    def get_lieu_dit(self, code_insee: str, nom: str) -> Optional[Dict[str, Any]]:
+        """Géométrie GeoJSON (Polygon/MultiPolygon) d'un lieu-dit habité
+        nommé, ou `None` s'il n'existe pas — décision explicite de
+        l'utilisateur (2026-08-23) : repli utilisé par `main.py::
+        decouvrir_parcelles` quand une "rue" tapée ne correspond à AUCUNE
+        voie BAN, avant de conclure "introuvable".
+
+        Source confirmée en direct (Arbigny, 01016) : `BDTOPO_V3:
+        zone_d_habitation`, champ `toponyme` — couche SÉPARÉE de la BAN
+        (adresses/voies uniquement) et de `voie_nommee` (routes), dédiée
+        aux lieux-dits/hameaux. Champ `identifiant_voie_ban` (souvent
+        vide en pratique) confirme qu'un lieu-dit n'est PAS forcément
+        rattaché à une voie BAN, même quand leurs noms se ressemblent
+        (écart réel trouvé : "les Blaises" à 289m de "Chemin des
+        Blaises", deux entités différentes malgré le nom commun).
+
+        Comparaison par texte normalisé (accents/casse insensibles,
+        comme pour `get_polyligne_voie`) — jamais de correspondance
+        floue à seuil, jamais deviné."""
+        params: Dict[str, Any] = {
+            "SERVICE": "WFS", "VERSION": "2.0.0", "REQUEST": "GetFeature",
+            "TYPENAME": "BDTOPO_V3:zone_d_habitation", "OUTPUTFORMAT": "application/json",
+            "CQL_FILTER": f"insee_commune='{code_insee}'",
+        }
+        data = self._http.get_json(_WFS_BASE, params, service_key="ign_bdtopo")
+        nom_norm = normaliser(nom)
+        for feature in data.get("features", []):
+            if normaliser(feature["properties"].get("toponyme")) == nom_norm:
+                return feature["geometry"]
+        return None

@@ -235,6 +235,90 @@ def _numero_entier_pour_calibration(housenumber: str) -> int:
     return int(m.group()) if m else 0
 
 
+_RE_PARCELLE_EXPLICITE = re.compile(r"^parcelle:([A-Za-z0-9]+):(\d+)$", re.IGNORECASE)
+
+
+def _parcelles_depuis_identifiants_explicites(
+    element: ElementTravail, identifiants: List[Tuple[str, str]], cadastre: CadastreService,
+) -> List[Tuple[Parcelle, List[AdressePoint]]]:
+    """Cible directement une ou plusieurs parcelles par (section, numéro),
+    en contournant complètement la découverte par nom de rue — décision
+    explicite de l'utilisateur (2026-08-23) : certains lieux (ex: un
+    lieu-dit trop informel pour apparaître dans la BAN ou dans BDTOPO,
+    voir `_parcelles_depuis_lieu_dit`) n'ont aucun moyen d'être retrouvés
+    automatiquement ; l'utilisateur fournit alors directement
+    l'identifiant cadastral, syntaxe `parcelle:SECTION:NUMERO` dans
+    `--rues` (voir `_RE_PARCELLE_EXPLICITE`).
+
+    Aucune adresse associée (pas de position dans une rue), `cote`/
+    `ordre` neutres — le tri par `traversal.trier` n'a pas de sens ici,
+    ces parcelles sont simplement écrites dans l'ordre demandé."""
+    resultat: List[Tuple[Parcelle, List[AdressePoint]]] = []
+    for section, numero in identifiants:
+        candidats = cadastre.get_parcelle(
+            element.code_insee, section, numero,
+            commune=element.commune, departement=element.departement,
+            code_postal=element.code_postal, rue=element.rue,
+        )
+        if not candidats:
+            _logger.warning(
+                "Parcelle explicite %s %s introuvable au cadastre (%s) — ignorée.",
+                section, numero, element.code_insee,
+            )
+            continue
+        parcelle = candidats[0]
+        parcelle.cote = "indetermine"
+        parcelle.ordre = 0.0
+        resultat.append((parcelle, []))
+    return resultat
+
+
+def _parcelles_depuis_lieu_dit(
+    element: ElementTravail, cadastre: CadastreService, voirie: Optional[VoirieService],
+) -> Optional[List[Tuple[Parcelle, List[AdressePoint]]]]:
+    """Repli quand `element.rue` ne correspond à AUCUNE voie BAN — teste
+    si c'est en fait un LIEU-DIT (voir `VoirieService.get_lieu_dit`,
+    couche BDTOPO séparée de la BAN) avant de conclure "introuvable".
+    Renvoie `None` (jamais une liste vide) si ce n'est pas non plus un
+    lieu-dit connu, pour que l'appelant distingue "vraiment introuvable"
+    de "trouvé, mais aucune parcelle cadastrale n'intersecte sa zone".
+
+    Décision explicite de l'utilisateur (2026-08-23), après un écart réel
+    trouvé en investigation live (Arbigny, 01016) : "les Blaises" est un
+    vrai lieu-dit habité, mais absent de la BAN et à 289m de "Chemin des
+    Blaises" (une rue au nom proche mais sans rapport) — sans ce repli,
+    le pipeline concluait "introuvable" pour un lieu qui existe
+    réellement et a une parcelle cadastrale précise."""
+    if voirie is None:
+        return None
+    geometrie = voirie.get_lieu_dit(element.code_insee, element.rue)
+    if geometrie is None:
+        return None
+    parcelles = cadastre.get_parcelles_dans_geometrie(
+        element.code_insee, geometrie,
+        commune=element.commune, departement=element.departement,
+        code_postal=element.code_postal, rue=element.rue,
+    )
+    if not parcelles:
+        _logger.warning(
+            "Lieu-dit '%s' (%s) trouvé dans BDTOPO, mais aucune parcelle cadastrale n'intersecte "
+            "sa zone — rien à traiter.", element.rue, element.commune,
+        )
+        return []
+    _logger.info(
+        "Rue '%s' (%s) : introuvable comme voie BAN, mais reconnue comme LIEU-DIT — "
+        "%d parcelle(s) trouvée(s) par intersection géométrique directe (pas d'ordre de parcours, "
+        "pas de rattachement à une adresse).",
+        element.rue, element.commune, len(parcelles),
+    )
+    resultat = []
+    for parcelle in parcelles:
+        parcelle.cote = "indetermine"
+        parcelle.ordre = 0.0
+        resultat.append((parcelle, []))
+    return resultat
+
+
 def decouvrir_parcelles(
     element: ElementTravail,
     cadastre: CadastreService,
@@ -255,9 +339,28 @@ def decouvrir_parcelles(
     parcours ET l'inclusion des parcelles sans adresse. Retombe sur
     l'ancienne méthode (polyligne reconstruite depuis les adresses
     seules) si la voie n'est pas dans BDTOPO ou si la calibration
-    pair/impair échoue faute d'adresses des deux parités."""
+    pair/impair échoue faute d'adresses des deux parités.
+
+    Deux replis, dans l'ordre, AVANT toute recherche BAN — décision
+    explicite de l'utilisateur (2026-08-23) :
+      1. `element.rue` au format `parcelle:SECTION:NUMERO` (répétable
+         via `;`) : ciblage direct, voir `_parcelles_depuis_identifiants_
+         explicites` — jamais de recherche par nom dans ce cas.
+      2. Sinon, si la recherche BAN ne trouve aucune adresse : tente un
+         lieu-dit (voir `_parcelles_depuis_lieu_dit`) avant de conclure
+         "introuvable"."""
+    identifiants_explicites = [
+        m.groups() for token in element.rue.split(";")
+        if (m := _RE_PARCELLE_EXPLICITE.match(token.strip()))
+    ]
+    if identifiants_explicites:
+        return _parcelles_depuis_identifiants_explicites(element, identifiants_explicites, cadastre)
+
     adresses = geocodage.adresses_pour_rue(element.rue, element.code_insee)
     if not adresses:
+        repli = _parcelles_depuis_lieu_dit(element, cadastre, voirie)
+        if repli is not None:
+            return repli
         _logger.warning(
             "Aucune adresse BAN trouvée pour '%s' (%s) — rue introuvable ou vraiment sans adresse, "
             "impossible de construire un ordre de parcours.", element.rue, element.commune,
