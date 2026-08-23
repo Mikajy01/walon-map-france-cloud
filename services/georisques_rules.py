@@ -57,7 +57,20 @@ def _rga_expose(mot_cle: str) -> RegleGeorisques:
     def regle(cx: float, cy: float, code_insee: str, g: GeorisquesService) -> Optional[str]:
         rga = g.get_rga(cy, cx)
         if not rga:
-            return None
+            # "N", pas `None` — décision explicite de l'utilisateur
+            # (2026-08-23) : la cartographie RGA du BRGM couvre TOUT le
+            # territoire français, y compris les zones sans exposition
+            # ("exposition nulle") — l'API renvoie alors un corps VIDE
+            # plutôt qu'un enregistrement explicite `{"exposition":
+            # "nulle"}` (écart réel trouvé en investigation live, Arbigny
+            # 01016, 2026-08-22 : HTTP 200, corps vide, à des points
+            # réels). C'est une réponse structurelle, jamais une panne :
+            # une VRAIE panne réseau/API lève une exception AVANT ce
+            # point (dans `HttpClient`/`get_rga`), rattrapée séparément
+            # par `_resoudre_resilient` (voir main.py) — donc arriver
+            # ici avec `rga` falsy sans exception signifie toujours
+            # "zone cartographiée comme non exposée", jamais deviné.
+            return "N"
         exposition = (rga.get("exposition") or "").lower()
         return "O" if mot_cle in exposition else "N"
     return regle
