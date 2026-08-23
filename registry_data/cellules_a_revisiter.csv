@@ -2819,173 +2819,23 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-08-22T18:38:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0204,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T18:38:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0204,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
 2026-08-22T18:38:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0204,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,IV,ppr_inondation,PPR INONDATION
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JA,ppr_seisme,PPR Seisme
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JW,radon_categorie_1,Catégorie 1
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JX,radon_categorie_2,Catégorie 2
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JY,radon_categorie_3,Catégorie 3
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,IR,remontee_nappes,Remontée de nappes
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,KF,sismicite_faible,Sismicité faible
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,KI,sismicite_forte,Sismicité forte
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JR,sup_avalanche,SUP Avalanche
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JO,sup_inondation,SUP inondation
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T18:39:56+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0050,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,IV,ppr_inondation,PPR INONDATION
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JA,ppr_seisme,PPR Seisme
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JW,radon_categorie_1,Catégorie 1
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JX,radon_categorie_2,Catégorie 2
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JY,radon_categorie_3,Catégorie 3
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,IR,remontee_nappes,Remontée de nappes
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,KF,sismicite_faible,Sismicité faible
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,KI,sismicite_forte,Sismicité forte
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JR,sup_avalanche,SUP Avalanche
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JO,sup_inondation,SUP inondation
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T18:41:29+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0047,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,IV,ppr_inondation,PPR INONDATION
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JA,ppr_seisme,PPR Seisme
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JW,radon_categorie_1,Catégorie 1
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JX,radon_categorie_2,Catégorie 2
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JY,radon_categorie_3,Catégorie 3
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,IR,remontee_nappes,Remontée de nappes
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,KF,sismicite_faible,Sismicité faible
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,KI,sismicite_forte,Sismicité forte
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JR,sup_avalanche,SUP Avalanche
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JO,sup_inondation,SUP inondation
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T18:43:04+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0211,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
 2026-08-22T18:44:42+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0210,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T18:44:42+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0210,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
@@ -3011,285 +2861,35 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-08-22T18:49:33+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0029,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T18:49:33+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0029,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
 2026-08-22T18:49:33+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0029,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,IV,ppr_inondation,PPR INONDATION
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JA,ppr_seisme,PPR Seisme
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JW,radon_categorie_1,Catégorie 1
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JX,radon_categorie_2,Catégorie 2
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JY,radon_categorie_3,Catégorie 3
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,IR,remontee_nappes,Remontée de nappes
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,KF,sismicite_faible,Sismicité faible
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,KI,sismicite_forte,Sismicité forte
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JR,sup_avalanche,SUP Avalanche
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JO,sup_inondation,SUP inondation
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T18:51:07+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0030,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,IV,ppr_inondation,PPR INONDATION
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JA,ppr_seisme,PPR Seisme
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JW,radon_categorie_1,Catégorie 1
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JX,radon_categorie_2,Catégorie 2
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JY,radon_categorie_3,Catégorie 3
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,IR,remontee_nappes,Remontée de nappes
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,KF,sismicite_faible,Sismicité faible
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,KI,sismicite_forte,Sismicité forte
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JR,sup_avalanche,SUP Avalanche
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JO,sup_inondation,SUP inondation
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T18:52:41+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0031,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,IV,ppr_inondation,PPR INONDATION
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JA,ppr_seisme,PPR Seisme
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JW,radon_categorie_1,Catégorie 1
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JX,radon_categorie_2,Catégorie 2
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JY,radon_categorie_3,Catégorie 3
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,IR,remontee_nappes,Remontée de nappes
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,KF,sismicite_faible,Sismicité faible
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,KI,sismicite_forte,Sismicité forte
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JR,sup_avalanche,SUP Avalanche
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JO,sup_inondation,SUP inondation
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T18:54:15+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0032,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,IV,ppr_inondation,PPR INONDATION
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JA,ppr_seisme,PPR Seisme
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JW,radon_categorie_1,Catégorie 1
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JX,radon_categorie_2,Catégorie 2
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JY,radon_categorie_3,Catégorie 3
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,IR,remontee_nappes,Remontée de nappes
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,KF,sismicite_faible,Sismicité faible
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,KI,sismicite_forte,Sismicité forte
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JR,sup_avalanche,SUP Avalanche
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JO,sup_inondation,SUP inondation
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T18:55:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0174,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,IV,ppr_inondation,PPR INONDATION
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JA,ppr_seisme,PPR Seisme
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JW,radon_categorie_1,Catégorie 1
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JX,radon_categorie_2,Catégorie 2
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JY,radon_categorie_3,Catégorie 3
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,IR,remontee_nappes,Remontée de nappes
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,KF,sismicite_faible,Sismicité faible
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,KI,sismicite_forte,Sismicité forte
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JR,sup_avalanche,SUP Avalanche
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JO,sup_inondation,SUP inondation
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T18:57:22+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0209,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
 2026-08-22T18:59:02+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0034,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T18:59:02+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0034,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
@@ -3303,61 +2903,11 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-08-22T19:00:39+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0151,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T19:00:39+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0151,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
 2026-08-22T19:00:39+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0151,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,IV,ppr_inondation,PPR INONDATION
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JA,ppr_seisme,PPR Seisme
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JW,radon_categorie_1,Catégorie 1
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JX,radon_categorie_2,Catégorie 2
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JY,radon_categorie_3,Catégorie 3
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,IR,remontee_nappes,Remontée de nappes
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,KF,sismicite_faible,Sismicité faible
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,KI,sismicite_forte,Sismicité forte
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JR,sup_avalanche,SUP Avalanche
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JO,sup_inondation,SUP inondation
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T19:02:13+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0208,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
 2026-08-22T19:03:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0035,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T19:03:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0035,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
@@ -3365,173 +2915,23 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-08-22T19:03:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0035,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T19:03:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0035,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
 2026-08-22T19:03:49+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0035,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,IV,ppr_inondation,PPR INONDATION
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JA,ppr_seisme,PPR Seisme
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JW,radon_categorie_1,Catégorie 1
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JX,radon_categorie_2,Catégorie 2
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JY,radon_categorie_3,Catégorie 3
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,IR,remontee_nappes,Remontée de nappes
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,KF,sismicite_faible,Sismicité faible
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,KI,sismicite_forte,Sismicité forte
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JR,sup_avalanche,SUP Avalanche
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JO,sup_inondation,SUP inondation
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T19:05:24+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0172,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,IV,ppr_inondation,PPR INONDATION
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JA,ppr_seisme,PPR Seisme
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JW,radon_categorie_1,Catégorie 1
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JX,radon_categorie_2,Catégorie 2
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JY,radon_categorie_3,Catégorie 3
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,IR,remontee_nappes,Remontée de nappes
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,KF,sismicite_faible,Sismicité faible
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,KI,sismicite_forte,Sismicité forte
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JR,sup_avalanche,SUP Avalanche
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JO,sup_inondation,SUP inondation
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T19:06:58+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0184,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,IV,ppr_inondation,PPR INONDATION
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JA,ppr_seisme,PPR Seisme
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JW,radon_categorie_1,Catégorie 1
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JX,radon_categorie_2,Catégorie 2
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JY,radon_categorie_3,Catégorie 3
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,IR,remontee_nappes,Remontée de nappes
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,KF,sismicite_faible,Sismicité faible
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,KI,sismicite_forte,Sismicité forte
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JR,sup_avalanche,SUP Avalanche
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JO,sup_inondation,SUP inondation
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T19:08:32+00:00,Arbigny,01016,Chemin des Bruyeres,ZK,0183,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
 2026-08-22T19:10:10+00:00,Arbigny,01016,Chemin des Bruyeres,AB,0022,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T19:10:10+00:00,Arbigny,01016,Chemin des Bruyeres,AB,0022,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
@@ -3719,117 +3119,17 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-08-22T19:58:12+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0187,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T19:58:12+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0187,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
 2026-08-22T19:58:12+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0187,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,IV,ppr_inondation,PPR INONDATION
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JA,ppr_seisme,PPR Seisme
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JW,radon_categorie_1,Catégorie 1
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JX,radon_categorie_2,Catégorie 2
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JY,radon_categorie_3,Catégorie 3
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,IR,remontee_nappes,Remontée de nappes
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,KF,sismicite_faible,Sismicité faible
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,KI,sismicite_forte,Sismicité forte
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JR,sup_avalanche,SUP Avalanche
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JO,sup_inondation,SUP inondation
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T19:59:46+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0186,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,KA,anciens_sites_industriels,Anciens sites industriels et activités de service
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,HW,argiles_exposition_faible,Argiles Exposition Faible
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,HU,argiles_exposition_forte,Argiles Exposition Forte
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,HV,argiles_exposition_moyenne,Argiles Exposition Moayen
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JZ,canalisations_matieres_dangereuses,"Réseaux et canalisation (Canalisations de transport de matières dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,IA,cavites_non_minieres,Cavités souterraines d'origine non minière
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,IB,cavites_non_minieres_non_localisees,Cavités souterraine non minières abandonnées non localisée
 2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,IS,installations_nucleaires,Installation Industrielles (Installation nucléaire de base (INB))
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,IT,mouvements_de_terrain,Mouvements de terrain
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,IU,mouvements_de_terrain_non_localises,Mouvements de terrain non localisés
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,IC,obligation_legale_debroussaillement,(Zonage informatif des obligation légales de debroussaillement
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,IZ,ppr_avalanche,PPR Avalanche
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JJ,ppr_avalanche_commune,PPR Avalanche sur la commune
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JL,ppr_eruption_volcanique_commune,PPR eruption volcanique sur la commune
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,IY,ppr_feu_foret,PPR Feu de forêt
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JI,ppr_feu_foret_commune,PPR Feu de forêt sur lma commune
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,IV,ppr_inondation,PPR INONDATION
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JD,ppr_inondation_commune,PPR Inondation sur la commune
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,IW,ppr_littoraux,PPR LITTORAUX
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,IX,ppr_mouvement_terrain,PPR Mouvement de terrain
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JG,ppr_mouvement_terrain_affaissement_commune,PPR Mouvement de terrain affaissements et effondrements sur la commune
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JF,ppr_mouvement_terrain_commune,PPR Mouvement de terrain sur la commune
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JH,ppr_mouvement_terrain_tassement_commune,PPR Mouvement de terrain tassement differentiels sur la commune
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JM,ppr_phenomenes_meteorologiques_commune,PPR phénomènes météorologiques sur la commune
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JC,ppr_risque_industriel,PPR Risque Industriel
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JN,ppr_risque_industriel_commune,PPR Risque Industriel sur la commune
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JB,ppr_risque_minier,PPR Risque Minier
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JA,ppr_seisme,PPR Seisme
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JK,ppr_seisme_commune,PPR Seisme sur la commune
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JE,ppr_submersion_marine_commune,PPR Inondation par submension marine sur la commune
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JW,radon_categorie_1,Catégorie 1
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JX,radon_categorie_2,Catégorie 2
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JY,radon_categorie_3,Catégorie 3
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,IR,remontee_nappes,Remontée de nappes
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,KC,secteur_information_sols,Secteur d'information sur les sols
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,KD,servitude_utilite_publique_sols,Servitudes d'utilité Publique
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,KF,sismicite_faible,Sismicité faible
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,KI,sismicite_forte,Sismicité forte
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,KG,sismicite_moderee,Sismicité modorée
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,KH,sismicite_moyenne,Sismicité moyenne
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,KE,sismicite_tres_faible,Sismicité très faible
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,KB,sites_pollues_basol,"Site pollués ou potentiellement pollués appelant une action de pouvoir publics, à titre preventif ou curatif (BASOL)"
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JR,sup_avalanche,SUP Avalanche
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JT,sup_eruption_volcanique,SUP Eruption Volcanique
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JQ,sup_feu_foret,SUP Feu de forêt
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JO,sup_inondation,SUP inondation
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JP,sup_mouvement_terrain,SUP Mouvement de terrain
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JU,sup_phenomenes_meteorologiques,SUP phénomènes météorologique
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JV,sup_risque_industriel,SUP Risque industriels
-2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,JS,sup_risque_minier,SUP Risque Minier
 2026-08-22T20:01:21+00:00,Arbigny,01016,Chemin des Jeangrands,ZK,0185,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
 2026-08-22T20:03:32+00:00,Arbigny,01016,Chemin des Jeangrands,AB,0023,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-22T20:03:32+00:00,Arbigny,01016,Chemin des Jeangrands,AB,0023,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
