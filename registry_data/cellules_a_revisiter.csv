@@ -3155,25 +3155,11 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-08-22T20:08:26+00:00,Arbigny,01016,Chemin des Jeangrands,AB,0035,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-22T20:08:26+00:00,Arbigny,01016,Chemin des Jeangrands,AB,0035,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
 2026-08-22T20:08:26+00:00,Arbigny,01016,Chemin des Jeangrands,AB,0035,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-23T08:25:01+00:00,Arbigny,01016,Les Blaises,ZL,0002,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
 2026-08-23T08:25:01+00:00,Arbigny,01016,Les Bruyères,ZK,0192,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-23T08:25:01+00:00,Arbigny,01016,Les Bruyères,ZK,0192,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
@@ -3211,203 +3197,63 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-08-23T08:25:04+00:00,Arbigny,01016,Les Cours Basses,AB,0072,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-23T08:25:04+00:00,Arbigny,01016,Les Cours Basses,AB,0072,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
 2026-08-23T08:25:04+00:00,Arbigny,01016,Les Cours Basses,AB,0072,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-23T08:26:48+00:00,Arbigny,01016,Les Jeangrands,ZL,0132,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-23T08:28:28+00:00,Arbigny,01016,Les Jeangrands,ZL,0134,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-23T08:30:10+00:00,Arbigny,01016,Les Jeangrands,ZL,0153,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-23T08:31:51+00:00,Arbigny,01016,Les Jeangrands,ZL,0155,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-23T08:33:33+00:00,Arbigny,01016,Les Jeangrands,ZL,0159,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-23T08:35:12+00:00,Arbigny,01016,Les Jeangrands,ZL,0161,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-23T08:36:53+00:00,Arbigny,01016,Les Jeangrands,ZL,0162,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-23T08:38:32+00:00,Arbigny,01016,Les Jeangrands,ZL,0163,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-23T08:40:14+00:00,Arbigny,01016,Les Jeangrands,ZL,0164,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,IH,alea_debordement_frequent,Inondation (Aléa débordement de cours d'eau fréquent ou décennal
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,II,alea_debordement_moyen,Inondation (Aléa débordement de cours d'eau moyen ou centennal
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,IJ,alea_debordement_rare,Inondation (Aléa débordement de cours d'eau rare ou millénial
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,IO,alea_ruissellement_frequent,Inondation (Aléa ruissellement fréquent ou décennal)
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,IP,alea_ruissellement_moyen,Inondation (Aléa ruissellement moyen ou centennal)
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,IQ,alea_ruissellement_rare,Inondation (Aléa ruissellement rare ou milléniall)
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,IK,alea_submersion_frequent,Inondation (Aléa submersion fréquent ou décennal)
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,IL,alea_submersion_moyen,Inondation (Aléa submersion moyen ou centennal)
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,IM,alea_submersion_moyen_cc,Inondation (Aléa submersion moyen ou centennal avec prise en compte du changement climatique)
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,IN,alea_submersion_rare,Inondation (Aléa submersion rare ou millénial)
 2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,GS,degagement_secteur,Installations de navigation et d'atterrissage-Secteur de dégagement-T8
 2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,GQ,degagement_zone_secondaire,Installations de navigation et d'atterrissage-Zone secondaire de dégagement-T8
 2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,GR,degagement_zone_speciale,Installations de navigation et d'atterrissage-Zone spéciale de dégagement
 2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,GP,icone::GP,Installations de navigation et d'atterrissage-Zone primaire de dégagemement-T8
 2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,CL,immeuble_interieur_protege_totalite,"Immeuble bâti dont les parties intérieures sont protégées en totalité, à conserver, restaurer et mettre en valeur"
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,ID,ouvrage_protection_inondation,Inondation (Ouvrages de protection)
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,IG,territoire_risque_important_inondation,Inondation (Territoires à risues importants d'inondation)
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,IF,zone_soustraite_alea_inondation,Inondation (Zone soustraittes à l'aléa Inondation)
-2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,IE,zone_sur_alea_inondation,Inondation (Zone de sur-aléa Inondation)
 2026-08-23T08:41:56+00:00,Arbigny,01016,les Petits,ZH,0269,HZ,zones_sans_enquete_terrain,Zones sans enquête terrain
