@@ -288,7 +288,24 @@ def _parcelles_depuis_lieu_dit(
     vrai lieu-dit habité, mais absent de la BAN et à 289m de "Chemin des
     Blaises" (une rue au nom proche mais sans rapport) — sans ce repli,
     le pipeline concluait "introuvable" pour un lieu qui existe
-    réellement et a une parcelle cadastrale précise."""
+    réellement et a une parcelle cadastrale précise.
+
+    Second repli imbriqué, également confirmé par investigation live sur
+    le même run (Arbigny, "Les Bruyères"/"Les Jeangrands") : certains
+    lieux-dits BDTOPO sont en fait des CROISEMENTS — leur géométrie est
+    un minuscule marqueur ponctuel (quelques mètres, confirmé sur
+    capture d'écran utilisateur : le repère tombe pile sur un croisement
+    de routes) qui ne chevauche AUCUNE parcelle (confirmé par test
+    point-dans-polygone sur les parcelles les plus proches, toutes
+    négatives). Dans ce cas SEULEMENT (jamais si le polygone est un vrai
+    contour de zone habitée avec 0 parcelle en intersection pour une
+    autre raison — l'appelant ne peut pas distinguer les deux, mais
+    aucun autre cas rencontré à ce jour), repli sur un tampon autour du
+    centroïde du marqueur — rayon de 20m choisi explicitement par
+    l'utilisateur après comparaison de plusieurs rayons sur un cas réel
+    (5 parcelles trouvées à 20m contre 3 à 10m et 15 à 60m ; 20m capture
+    exactement les parcelles qui touchent le croisement, sans déborder
+    sur les suivantes)."""
     if voirie is None:
         return None
     geometrie = voirie.get_lieu_dit(element.code_insee, element.rue)
@@ -299,17 +316,28 @@ def _parcelles_depuis_lieu_dit(
         commune=element.commune, departement=element.departement,
         code_postal=element.code_postal, rue=element.rue,
     )
+    repli_croisement = False
     if not parcelles:
-        _logger.warning(
-            "Lieu-dit '%s' (%s) trouvé dans BDTOPO, mais aucune parcelle cadastrale n'intersecte "
-            "sa zone — rien à traiter.", element.rue, element.commune,
+        cx, cy = centroide_geometrie(geometrie)
+        parcelles = cadastre.get_parcelles_pres_du_point(
+            element.code_insee, cx, cy,
+            commune=element.commune, departement=element.departement,
+            code_postal=element.code_postal, rue=element.rue,
+            marge_m=20.0,
         )
-        return []
+        repli_croisement = True
+        if not parcelles:
+            _logger.warning(
+                "Lieu-dit '%s' (%s) trouvé dans BDTOPO, mais aucune parcelle cadastrale à moins de "
+                "20m de son marqueur — rien à traiter.", element.rue, element.commune,
+            )
+            return []
     _logger.info(
         "Rue '%s' (%s) : introuvable comme voie BAN, mais reconnue comme LIEU-DIT — "
-        "%d parcelle(s) trouvée(s) par intersection géométrique directe (pas d'ordre de parcours, "
-        "pas de rattachement à une adresse).",
+        "%d parcelle(s) trouvée(s) %s (pas d'ordre de parcours, pas de rattachement à une adresse).",
         element.rue, element.commune, len(parcelles),
+        "à 20m du marqueur (croisement, aucune parcelle en intersection directe)" if repli_croisement
+        else "par intersection géométrique directe",
     )
     resultat = []
     for parcelle in parcelles:
