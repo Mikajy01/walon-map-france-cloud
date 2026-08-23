@@ -69,6 +69,21 @@ class HttpClient:
         if response.status_code >= 500:
             raise ApiServiceTransientError(f"{url} -> HTTP {response.status_code}")
         response.raise_for_status()
+        if not response.text:
+            # Écart réel trouvé en investigation live (Géorisques
+            # `/api/v1/rga`, 2026-08-22) : certains endpoints renvoient
+            # HTTP 200 avec un corps LITTÉRALEMENT VIDE plutôt qu'un JSON
+            # structuré du genre `{}`/`{"data": []}` — leur façon (non
+            # standard) de dire "aucune donnée à ce point précis", pas une
+            # erreur. `response.json()` plante sur un texte vide
+            # (`JSONDecodeError`), ce qui remontait jusqu'à faire échouer
+            # TOUT un lot de règles regroupées (voir `resoudre_georisques`)
+            # au lieu de laisser la règle concernée traiter normalement
+            # une absence de donnée. Traité comme "aucune donnée" (`None`),
+            # jamais mis en cache comme un JSON `{}` normal (une future
+            # réponse non-vide au même point doit toujours écraser le
+            # cache, jamais rester bloquée sur ce repli).
+            return None
         data = response.json()
 
         if self._use_cache:

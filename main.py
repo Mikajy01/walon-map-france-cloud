@@ -847,11 +847,27 @@ def resoudre_georisques(parcelle: Parcelle, georisques: GeorisquesService) -> Di
     chaque règle et son niveau de confiance (CONFIRMÉ contre une vraie
     valeur, ou STRUCTUREL — correspondance raisonnée jamais encore
     vérifiée faute d'exemple positif réel). Une règle qui renvoie `None`
-    ne produit aucune entrée (colonne laissée vide, jamais devinée)."""
+    ne produit aucune entrée (colonne laissée vide, jamais devinée).
+
+    Chaque règle passe par `_resoudre_resilient` INDIVIDUELLEMENT — écart
+    réel trouvé en investigation live (Arbigny, 01016, 2026-08-22) :
+    l'ancienne boucle sans isolation par règle faisait qu'UN SEUL endpoint
+    en échec (ex: `argiles_exposition_*`, HTTP 200 mais corps vide sur
+    certaines parcelles) faisait perdre les ~47 AUTRES résultats déjà
+    obtenus avec succès pour cette même parcelle — 14 parcelles × ~50
+    rôles = 700 cellules "ERREUR" alors que seules 3 règles par parcelle
+    posaient vraiment problème. `_resoudre_resilient` étant déjà appelé
+    une fois de plus au niveau `traiter_rue` pour cette fonction dans son
+    ensemble, ce n'est pas redondant : le niveau externe protège contre
+    un échec qui romprait la boucle elle-même (ex: erreur de
+    programmation), le niveau interne ici protège chaque règle des
+    autres."""
     cx, cy = centroide_geometrie(parcelle.geometry)
     valeurs: Dict[str, str] = {}
     for role_code, regle in REGLES_GEORISQUES.items():
-        resultat = regle(cx, cy, parcelle.code_insee, georisques)
+        resultat = _resoudre_resilient(
+            role_code, parcelle, lambda regle=regle: regle(cx, cy, parcelle.code_insee, georisques), None,
+        )
         if resultat is not None:
             valeurs[role_code] = resultat
     return valeurs
@@ -861,12 +877,17 @@ def resoudre_wfs_inondation(parcelle: Parcelle, wfs: WfsGeorisquesService) -> Di
     """Applique `services.georisques_rules.REGLES_WFS` — voir
     `services/wfs_georisques_service.py` pour la découverte de cette
     source (couches WFS Géorisques, distinctes de l'API REST v1) et la
-    confirmation en direct du mapping type/intensité."""
+    confirmation en direct du mapping type/intensité.
+
+    Même isolation par règle que `resoudre_georisques` — même risque
+    structurel (une boucle sur plusieurs couches WFS), même précaution,
+    même si aucun cas réel de ce type n'a encore été rencontré ici."""
     cx, cy = centroide_geometrie(parcelle.geometry)
     valeurs: Dict[str, str] = {}
     for role_code, (methode_nom, intensite) in REGLES_WFS.items():
         methode = getattr(wfs, methode_nom)
-        resultat = methode(cy, cx, intensite) if intensite is not None else methode(cy, cx)
+        fn = (lambda methode=methode, intensite=intensite: methode(cy, cx, intensite) if intensite is not None else methode(cy, cx))
+        resultat = _resoudre_resilient(role_code, parcelle, fn, None)
         if resultat is not None:
             valeurs[role_code] = resultat
     return valeurs
