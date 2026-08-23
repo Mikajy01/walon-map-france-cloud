@@ -301,11 +301,15 @@ def _parcelles_depuis_lieu_dit(
     contour de zone habitée avec 0 parcelle en intersection pour une
     autre raison — l'appelant ne peut pas distinguer les deux, mais
     aucun autre cas rencontré à ce jour), repli sur un tampon autour du
-    centroïde du marqueur — rayon de 20m choisi explicitement par
-    l'utilisateur après comparaison de plusieurs rayons sur un cas réel
-    (5 parcelles trouvées à 20m contre 3 à 10m et 15 à 60m ; 20m capture
-    exactement les parcelles qui touchent le croisement, sans déborder
-    sur les suivantes)."""
+    centroïde du marqueur — rayon de 18m choisi explicitement par
+    l'utilisateur après comparaison de plusieurs paliers sur 2 cas réels
+    (Les Bruyères, Les Jeangrands) : à 12-13m, une parcelle légitime mais
+    en 2e rang ("Les Jeangrands"/ZL 0153, confirmée par l'utilisateur sur
+    capture d'écran comme "tout près mais ne borde pas") reste exclue de
+    justesse ; 18m la réintègre, choix délibéré de l'utilisateur pour
+    éviter le risque inverse (exclure une vraie parcelle de 1er rang sur
+    un croisement légèrement plus large ailleurs) plutôt que d'optimiser
+    ce cas précis."""
     if voirie is None:
         return None
     geometrie = voirie.get_lieu_dit(element.code_insee, element.rue)
@@ -323,20 +327,20 @@ def _parcelles_depuis_lieu_dit(
             element.code_insee, cx, cy,
             commune=element.commune, departement=element.departement,
             code_postal=element.code_postal, rue=element.rue,
-            marge_m=20.0,
+            marge_m=18.0,
         )
         repli_croisement = True
         if not parcelles:
             _logger.warning(
                 "Lieu-dit '%s' (%s) trouvé dans BDTOPO, mais aucune parcelle cadastrale à moins de "
-                "20m de son marqueur — rien à traiter.", element.rue, element.commune,
+                "18m de son marqueur — rien à traiter.", element.rue, element.commune,
             )
             return []
     _logger.info(
         "Rue '%s' (%s) : introuvable comme voie BAN, mais reconnue comme LIEU-DIT — "
         "%d parcelle(s) trouvée(s) %s (pas d'ordre de parcours, pas de rattachement à une adresse).",
         element.rue, element.commune, len(parcelles),
-        "à 20m du marqueur (croisement, aucune parcelle en intersection directe)" if repli_croisement
+        "à 18m du marqueur (croisement, aucune parcelle en intersection directe)" if repli_croisement
         else "par intersection géométrique directe",
     )
     resultat = []
