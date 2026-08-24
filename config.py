@@ -199,14 +199,32 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     # Risque Minier" tout court, colonne JD — la version PARCELLE,
     # volontairement non câblée, voir le docstring de georisques_rules.py).
 
-    "sup_inondation": ["SUP inondation"],
-    "sup_mouvement_terrain": ["SUP Mouvement de terrain"],
-    "sup_feu_foret": ["SUP Feu de forêt", "SUP Feu de foret"],
-    "sup_avalanche": ["SUP Avalanche"],
-    "sup_risque_minier": ["SUP Risque Minier"],
-    "sup_eruption_volcanique": ["SUP Eruption Volcanique"],
-    "sup_phenomenes_meteorologiques": ["SUP phénomènes météorologique"],
-    "sup_risque_industriel": ["SUP Risque industriels"],
+    "sup_inondation": ["SUP inondation", "Zone à risque d'inondation entraînant une servitude d'utilité publique"],
+    "sup_mouvement_terrain": [
+        "SUP Mouvement de terrain",
+        "Zone à risque de mouvement de terrain entraînant une servitude d'utilité publique",
+    ],
+    "sup_feu_foret": [
+        "SUP Feu de forêt", "SUP Feu de foret",
+        "Zone à risque d'incendie entraînant une servitude d'utilité publique",
+    ],
+    "sup_avalanche": ["SUP Avalanche", "Zone à risque d'avalanche entraînant une servitude d'utilité publique"],
+    "sup_risque_minier": ["SUP Risque Minier", "Zone à risque minier entraînant une servitude d'utilité publique"],
+    "sup_eruption_volcanique": [
+        "SUP Eruption Volcanique", "Zone à risque volcanique entraînant une servitude d'utilité publique",
+    ],
+    "sup_phenomenes_meteorologiques": [
+        "SUP phénomènes météorologique",
+        # "cyclonique" rattaché ici plutôt qu'à un rôle séparé : le
+        # cyclone est classé comme "Phénomène lié à l'atmosphère" dans
+        # la nomenclature DGPR officielle (confirmé en direct via
+        # /gaspar/risques, code "17"), pas une catégorie SUP à part —
+        # aucune entrée "SUP cyclone" distincte n'existe dans le gabarit.
+        "Zone à risque cyclonique entraînant une servitude d'utilité publique",
+    ],
+    "sup_risque_industriel": [
+        "SUP Risque industriels", "Zone à risque industriel entraînant une servitude d'utilité publique",
+    ],
 
     # Catégories GPU `du` confirmées manuellement (analyse directe du
     # texte contre `/standard/du-categories`, pas un score de
@@ -328,6 +346,57 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     "remnappe_aucun_risque_moyenne": ["Pas de débordement de nappe ni d'inondation de cave fiabilité MOYENNE"],
     "remnappe_aucun_risque_faible": ["Pas de débordement de nappe ni d'inondation de cave fiabilité FAIBLE"],
     "remnappe_aucun_risque_inconnue": ["Pas de débordement de nappe ni d'inondation de cave fiabilité INCONNUE"],
+    "installation_nucleaire_cycle_combustible": ["Cycle du combustible"],
+    "installation_nucleaire_cycle_combustible_iode": ["Cycle du combustible avec risque iode"],
+    "installation_nucleaire_recherche": ["Activités de recherche"],
+    "installation_nucleaire_recherche_iode": ["Activités de recherche avec risque iode"],
+    "installation_nucleaire_dechets": ["Gestion des déchets radioactifs"],
+    "installation_nucleaire_dechets_iode": ["Gestion des déchets radioactifs avec risque iode"],
+    "installation_nucleaire_demantelement": ["Démantèlement"],
+    "installation_nucleaire_demantelement_iode": ["Démantèlement avec risque iode"],
+    "installation_nucleaire_centrale": ["Centrale nucléaire de production d'électricité"],
+    "installation_nucleaire_centrale_iode": ["Centrale nucléaire de production d'électricité avec risque iode"],
+    "installation_autres_activites_industrielles": ["Autres activités industrielles"],
+    "ppr_inondation_commune_prescrit": ["Commune concernée par un PPRN Risque Inondation prescrit"],
+    "ppr_inondation_commune_approuve": ["Commune concernée par un PPRN Risque Inondation approuvé"],
+    "ppr_submersion_marine_commune_prescrit": [
+        "Commune concernée par un PPRN Risque Inondation par submersion marine prescrit",
+    ],
+    "ppr_submersion_marine_commune_approuve": [
+        "Commune concernée par un PPRN Risque Inondation par submersion marine approuvé",
+    ],
+    "ppr_mouvement_terrain_commune_prescrit": ["Commune concernée par un PPRN Risque Mouvement de terrain prescrit"],
+    "ppr_mouvement_terrain_commune_approuve": ["Commune concernée par un PPRN Risque Mouvement de terrain approuvé"],
+    "ppr_mouvement_terrain_affaissement_commune_prescrit": [
+        "Commune concernée par un PPRN Risque Mouvement de terrain - Affaissements et effondrements "
+        "(Cavités souterraines) prescrit",
+    ],
+    "ppr_mouvement_terrain_affaissement_commune_approuve": [
+        "Commune concernée par un PPRN Risque Mouvement de terrain - Affaissements et effondrements "
+        "(Cavités souterraines) approuvé",
+    ],
+    "ppr_mouvement_terrain_tassement_commune_prescrit": [
+        "Commune concernée par un PPRN Risque Mouvement de terrain - Tassements différentiels (Argile) prescrit",
+    ],
+    "ppr_mouvement_terrain_tassement_commune_approuve": [
+        "Commune concernée par un PPRN Risque Mouvement de terrain - Tassements différentiels (Argile) approuvé",
+    ],
+    "ppr_feu_foret_commune_prescrit": ["Commune concernée par un PPRN Risque Feu de forêt prescrit"],
+    "ppr_feu_foret_commune_approuve": ["Commune concernée par un PPRN Risque Feu de forêt approuvé"],
+    "ppr_avalanche_commune_prescrit": ["Commune concernée par un PPRN Risque Avalanche prescrit"],
+    "ppr_avalanche_commune_approuve": ["Commune concernée par un PPRN Risque Avalanche approuvé"],
+    "ppr_seisme_commune_prescrit": ["Commune concernée par un PPRN Risque Séisme prescrit"],
+    "ppr_seisme_commune_approuve": ["Commune concernée par un PPRN Risque Séisme approuvé"],
+    "ppr_eruption_volcanique_commune_prescrit": ["Commune concernée par un PPRN Risque Éruption volcanique prescrit"],
+    "ppr_eruption_volcanique_commune_approuve": ["Commune concernée par un PPRN Risque Éruption volcanique approuvé"],
+    "ppr_phenomenes_meteorologiques_commune_prescrit": [
+        "Commune concernée par un PPRN Risque Phénomènes météorologiques prescrit",
+    ],
+    "ppr_phenomenes_meteorologiques_commune_approuve": [
+        "Commune concernée par un PPRN Risque Phénomènes météorologiques approuvé",
+    ],
+    "ppr_risque_industriel_commune_prescrit": ["Commune concernée par un PPRN Risque industriel prescrit"],
+    "ppr_risque_industriel_commune_approuve": ["Commune concernée par un PPRN Risque industriel approuvé"],
 
     # Bridge vers des rôles déjà existants (voir REGLES_WFS pour
     # alea_debordement_*, et le rôle "territoire_risque_important_

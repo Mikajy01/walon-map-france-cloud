@@ -244,6 +244,30 @@ def _existence_installation_seveso(veut_seveso: bool) -> RegleGeorisques:
     return regle
 
 
+def _installation_nucleaire_type(type_attendu: str, risque_iode: Optional[bool] = None) -> RegleGeorisques:
+    """CONFIRMÉ (2026-08-24) — `get_installations_nucleaires` (déjà
+    câblée pour le rôle `installations_nucleaires`, jamais exploitée
+    finement avant) renvoie en réalité un champ `typeInstallationNucleaire`
+    dont les valeurs correspondent EXACTEMENT (mot pour mot pour 3 des 5)
+    aux nouvelles colonnes du gabarit — confirmé en direct sur 5 vrais
+    sites nucléaires français (La Hague, Cadarache, Marcoule, Chinon,
+    Tricastin) : "Cycle du combustible", "Activités de recherche",
+    "Gestion des déchets radioactifs" (identiques), "Installations en
+    démantèlement" (~ "Démantèlement" du gabarit), "Centrales nucléaires"
+    (~ "Centrale nucléaire de production d'électricité"). Le champ
+    `risqueIode` (booléen réel, confirmé `True` sur Bugey/Flamanville/
+    Chinon/Tricastin, `False` sur les installations du cycle/déchets)
+    distingue directement la variante "avec risque iode" du gabarit,
+    sans endpoint supplémentaire."""
+    def regle(cx: float, cy: float, code_insee: str, g: GeorisquesService) -> Optional[str]:
+        installations = g.get_installations_nucleaires(cy, cx)
+        candidates = [i for i in installations if i.get("typeInstallationNucleaire") == type_attendu]
+        if risque_iode is not None:
+            candidates = [i for i in candidates if bool(i.get("risqueIode")) == risque_iode]
+        return "O" if candidates else "N"
+    return regle
+
+
 def _existence_risque_dgpr(num_risque: str) -> RegleGeorisques:
     """CONFIRMÉ (2026-08-24) — `/gaspar/risques` (jamais câblé avant
     cette investigation, voir `GeorisquesService.get_gaspar_risques`),
@@ -332,6 +356,33 @@ def _ppr_parcelle_existe(get_liste: str, mots_cles: Optional[tuple]) -> RegleGeo
         enregistrements = methode(lon=cx, lat=cy)
         for rec in enregistrements:
             if _correspond(rec, mots_cles):
+                return "O"
+        return "N"
+    return regle
+
+
+def _ppr_commune_statut(get_liste: str, mots_cles: Optional[tuple], veut_approuve: bool) -> RegleGeorisques:
+    """Distingue "prescrit" de "approuvé" pour un PPR au niveau commune —
+    CONFIRMÉ en direct (2026-08-24) sur 3 communes réelles (Saint-Vulbas
+    01390, Perpignan 66136, Montpellier 34172) : le champ
+    `zonageReglementaire.zoneRegExists` d'un enregistrement PPR
+    (`get_gaspar_pprn`/`pprt`/`pprm`, déjà récupéré pour `supExists`
+    plus haut) est parfois `False` en pratique — le zonage réglementaire
+    n'est publié qu'une fois le PPR RÉELLEMENT approuvé (raisonnement
+    métier du dispositif GASPAR : un PPR "juste prescrit" n'a par
+    construction pas encore de zonage réglementaire opposable). Aucun
+    champ "état de la procédure" explicite (prescrit/anticipé/approuvé)
+    n'est exposé par cet endpoint (vérifié sur 5 enregistrements réels,
+    3 communes, jeu de champs identique partout) — `zoneRegExists` est
+    le seul signal disponible, mais un signal RÉEL, jamais deviné."""
+    def regle(cx: float, cy: float, code_insee: str, g: GeorisquesService) -> Optional[str]:
+        methode = getattr(g, get_liste)
+        enregistrements = methode(code_insee)
+        for rec in enregistrements:
+            if not _correspond(rec, mots_cles):
+                continue
+            zone_reg_existe = bool(rec.get("zonageReglementaire", {}).get("zoneRegExists"))
+            if zone_reg_existe == veut_approuve:
                 return "O"
         return "N"
     return regle
@@ -439,6 +490,42 @@ REGLES_GEORISQUES: Dict[str, RegleGeorisques] = {
 
     "mouvement_terrain_glissement": _existence_risque_dgpr("124"),
     "mouvement_terrain_eboulement": _existence_risque_dgpr("123"),
+
+    "installation_nucleaire_cycle_combustible": _installation_nucleaire_type("Cycle du combustible", False),
+    "installation_nucleaire_cycle_combustible_iode": _installation_nucleaire_type("Cycle du combustible", True),
+    "installation_nucleaire_recherche": _installation_nucleaire_type("Activités de recherche", False),
+    "installation_nucleaire_recherche_iode": _installation_nucleaire_type("Activités de recherche", True),
+    "installation_nucleaire_dechets": _installation_nucleaire_type("Gestion des déchets radioactifs", False),
+    "installation_nucleaire_dechets_iode": _installation_nucleaire_type("Gestion des déchets radioactifs", True),
+    "installation_nucleaire_demantelement": _installation_nucleaire_type("Installations en démantèlement", False),
+    "installation_nucleaire_demantelement_iode": _installation_nucleaire_type("Installations en démantèlement", True),
+    "installation_nucleaire_centrale": _installation_nucleaire_type("Centrales nucléaires", False),
+    "installation_nucleaire_centrale_iode": _installation_nucleaire_type("Centrales nucléaires", True),
+    "installation_autres_activites_industrielles": _installation_nucleaire_type("Autres activités industrielles"),
+
+    # -- PPR commune, statut prescrit/approuvé (voir _ppr_commune_statut)
+    "ppr_inondation_commune_prescrit": _ppr_commune_statut("get_gaspar_pprn", ("inond", "ppri"), False),
+    "ppr_inondation_commune_approuve": _ppr_commune_statut("get_gaspar_pprn", ("inond", "ppri"), True),
+    "ppr_submersion_marine_commune_prescrit": _ppr_commune_statut("get_gaspar_pprn", ("submersion", "littora"), False),
+    "ppr_submersion_marine_commune_approuve": _ppr_commune_statut("get_gaspar_pprn", ("submersion", "littora"), True),
+    "ppr_mouvement_terrain_commune_prescrit": _ppr_commune_statut("get_gaspar_pprn", ("mvt", "mouvement", "pprmt"), False),
+    "ppr_mouvement_terrain_commune_approuve": _ppr_commune_statut("get_gaspar_pprn", ("mvt", "mouvement", "pprmt"), True),
+    "ppr_mouvement_terrain_affaissement_commune_prescrit": _ppr_commune_statut("get_gaspar_pprn", ("affaissement",), False),
+    "ppr_mouvement_terrain_affaissement_commune_approuve": _ppr_commune_statut("get_gaspar_pprn", ("affaissement",), True),
+    "ppr_mouvement_terrain_tassement_commune_prescrit": _ppr_commune_statut("get_gaspar_pprn", ("tassement",), False),
+    "ppr_mouvement_terrain_tassement_commune_approuve": _ppr_commune_statut("get_gaspar_pprn", ("tassement",), True),
+    "ppr_feu_foret_commune_prescrit": _ppr_commune_statut("get_gaspar_pprn", ("feu de foret", "feu de forêt"), False),
+    "ppr_feu_foret_commune_approuve": _ppr_commune_statut("get_gaspar_pprn", ("feu de foret", "feu de forêt"), True),
+    "ppr_avalanche_commune_prescrit": _ppr_commune_statut("get_gaspar_pprn", ("avalanche",), False),
+    "ppr_avalanche_commune_approuve": _ppr_commune_statut("get_gaspar_pprn", ("avalanche",), True),
+    "ppr_seisme_commune_prescrit": _ppr_commune_statut("get_gaspar_pprn", ("seisme", "séisme"), False),
+    "ppr_seisme_commune_approuve": _ppr_commune_statut("get_gaspar_pprn", ("seisme", "séisme"), True),
+    "ppr_eruption_volcanique_commune_prescrit": _ppr_commune_statut("get_gaspar_pprn", ("volcan",), False),
+    "ppr_eruption_volcanique_commune_approuve": _ppr_commune_statut("get_gaspar_pprn", ("volcan",), True),
+    "ppr_phenomenes_meteorologiques_commune_prescrit": _ppr_commune_statut("get_gaspar_pprn", ("meteo", "météo"), False),
+    "ppr_phenomenes_meteorologiques_commune_approuve": _ppr_commune_statut("get_gaspar_pprn", ("meteo", "météo"), True),
+    "ppr_risque_industriel_commune_prescrit": _ppr_commune_statut("get_gaspar_pprt", None, False),
+    "ppr_risque_industriel_commune_approuve": _ppr_commune_statut("get_gaspar_pprt", None, True),
 }
 
 
