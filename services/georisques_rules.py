@@ -450,6 +450,26 @@ REGLES_GEORISQUES: Dict[str, RegleGeorisques] = {
 # réelles connues (TRI Vilaine pour le débordement, TRI La Rochelle Île
 # de Ré pour la submersion marine) — voir le docstring de
 # `wfs_georisques_service.py` pour le détail du mapping type/intensité.
+REGLES_REMNAPPE: Dict[str, tuple] = {
+    # role_code -> (classe, fiabilite) — voir services/wfs_remnappe_
+    # service.py::WfsRemnappeService.classe_fiabilite. fiabilite=None
+    # signifie "INCONNUE" (champ fiab_tot absent de la feature, jamais
+    # une 4e valeur littérale — non observée sur ~500 features réelles).
+    "remnappe_debordement_forte": ("Zones potentiellement sujettes aux débordements de nappe", "FORTE"),
+    "remnappe_debordement_moyenne": ("Zones potentiellement sujettes aux débordements de nappe", "MOYENNE"),
+    "remnappe_debordement_faible": ("Zones potentiellement sujettes aux débordements de nappe", "FAIBLE"),
+    "remnappe_debordement_inconnue": ("Zones potentiellement sujettes aux débordements de nappe", None),
+    "remnappe_inondation_cave_forte": ("Zones potentiellement sujettes aux inondations de cave", "FORTE"),
+    "remnappe_inondation_cave_moyenne": ("Zones potentiellement sujettes aux inondations de cave", "MOYENNE"),
+    "remnappe_inondation_cave_faible": ("Zones potentiellement sujettes aux inondations de cave", "FAIBLE"),
+    "remnappe_inondation_cave_inconnue": ("Zones potentiellement sujettes aux inondations de cave", None),
+    "remnappe_aucun_risque_forte": ("Pas de débordement de nappe ni d'inondation de cave", "FORTE"),
+    "remnappe_aucun_risque_moyenne": ("Pas de débordement de nappe ni d'inondation de cave", "MOYENNE"),
+    "remnappe_aucun_risque_faible": ("Pas de débordement de nappe ni d'inondation de cave", "FAIBLE"),
+    "remnappe_aucun_risque_inconnue": ("Pas de débordement de nappe ni d'inondation de cave", None),
+}
+
+
 REGLES_WFS: Dict[str, tuple] = {
     "alea_debordement_frequent": ("alea_debordement", "01FOR"),
     "alea_debordement_moyen": ("alea_debordement", "02MOY"),

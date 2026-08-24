@@ -316,6 +316,18 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     "installation_usine_non_seveso": ["Usine non Seveso"],
     "mouvement_terrain_glissement": ["Glissement"],
     "mouvement_terrain_eboulement": ["Eboulement"],
+    "remnappe_debordement_forte": ["Zones potentiellement sujettes aux débordements de nappe fiabilité FORTE"],
+    "remnappe_debordement_moyenne": ["Zones potentiellement sujettes aux débordements de nappe fiabilité MOYENNE"],
+    "remnappe_debordement_faible": ["Zones potentiellement sujettes aux débordements de nappe fiabilité FAIBLE"],
+    "remnappe_debordement_inconnue": ["Zones potentiellement sujettes aux débordements de nappe fiabilité INCONNUE"],
+    "remnappe_inondation_cave_forte": ["Zones potentiellement sujettes aux inondations de cave fiabilité FORTE"],
+    "remnappe_inondation_cave_moyenne": ["Zones potentiellement sujettes aux inondations de cave fiabilité MOYENNE"],
+    "remnappe_inondation_cave_faible": ["Zones potentiellement sujettes aux inondations de cave fiabilité FAIBLE"],
+    "remnappe_inondation_cave_inconnue": ["Zones potentiellement sujettes aux inondations de cave fiabilité INCONNUE"],
+    "remnappe_aucun_risque_forte": ["Pas de débordement de nappe ni d'inondation de cave fiabilité FORTE"],
+    "remnappe_aucun_risque_moyenne": ["Pas de débordement de nappe ni d'inondation de cave fiabilité MOYENNE"],
+    "remnappe_aucun_risque_faible": ["Pas de débordement de nappe ni d'inondation de cave fiabilité FAIBLE"],
+    "remnappe_aucun_risque_inconnue": ["Pas de débordement de nappe ni d'inondation de cave fiabilité INCONNUE"],
 
     # Bridge vers des rôles déjà existants (voir REGLES_WFS pour
     # alea_debordement_*, et le rôle "territoire_risque_important_
