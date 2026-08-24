@@ -73,6 +73,7 @@ from services.traversal_service import PositionParcours, TraversalService
 from services.urbanisme_service import UrbanismeService
 from services.voirie_service import VoirieService
 from services.wfs_clpa_service import WfsClpaService
+from services.wfs_steu_service import WfsSteuService
 from services.wfs_georisques_service import WfsGeorisquesService
 from services.wfs_remnappe_service import WfsRemnappeService
 from utils.geometrie import centroide_geometrie, point_dans_geometrie
@@ -1066,20 +1067,61 @@ def resoudre_wfs_remnappe(parcelle: Parcelle, wfs_remnappe: WfsRemnappeService) 
 
 
 def resoudre_clpa_avalanche(parcelle: Parcelle, clpa: WfsClpaService) -> Dict[str, str]:
-    """CLPA (voir `services/wfs_clpa_service.py`) — 2 des 3 colonnes
-    avalanches du gabarit, CONFIRMÉ en direct (GeoServer INRAE, testé
-    positivement sur Val d'Isère avant utilisation réelle). "Zones sans
-    enquête terrain" n'a pas de couche CLPA identifiée — non câblée,
-    reste dans les colonnes structurellement non résolues."""
+    """CLPA (voir `services/wfs_clpa_service.py`) — "Zones sans enquête
+    terrain" n'a toujours pas de couche CLPA identifiée — reste
+    structurellement non résolue (forcée à "N", voir config.ROLES_FORCE_N).
+
+    Extension (2026-08-24) aux 6 rôles fins du bloc "Tableau Geoportail
+    France Off.xlsx" (`clpa_zone_avalanches`, `clpa_zone_presumee_
+    avalancheuse`, `clpa_degats_souffle`, `clpa_avalanche_localisee`,
+    `clpa_avalanche_localisee_presumee`, `clpa_liaison_presumee`) plus
+    le libellé nu `clpa_avalanche` — GUESS explicitement autorisé par
+    l'utilisateur ("je te laisse deviner"), aucune documentation
+    officielle CODE/RuleID -> catégorie trouvée malgré investigation
+    réelle (GetCapabilities, DescribeFeatureType, GetLegendGraphic, jeu
+    data.gouv.fr bloqué). Les 4 couches CLPA ne distinguent QUE "terrain
+    confirmé" (zont/lint) de "présumé par photo-interprétation" (zonpi/
+    linpi), jamais les 7 libellés fins du gabarit — correspondance
+    retenue, PAS vérifiée contre une source officielle :
+      - clpa_zone_avalanches = clpa_zont (même couche que temoignages_avalanches)
+      - clpa_zone_presumee_avalancheuse = clpa_zonpi (même couche que interpretation_phenomenes_passes)
+      - clpa_avalanche_localisee = clpa_lint
+      - clpa_avalanche_localisee_presumee = clpa_linpi
+      - clpa_liaison_presumee = clpa_linpi (même couche que localisee_presumee — la couche ne distingue pas "liaison" d'"avalanche localisée" côté présumé, donc valeur IDENTIQUE aux deux rôles)
+      - clpa_degats_souffle = clpa_lint (évaluation de dégâts = typiquement un constat terrain, pas une photo-interprétation)
+      - clpa_avalanche (libellé nu) = union des 4 couches (toute preuve d'avalanche, confirmée ou présumée), calculée seulement si les 4 couches ont répondu (jamais une union partielle silencieuse)."""
     cx, cy = centroide_geometrie(parcelle.geometry)
     valeurs: Dict[str, str] = {}
     temoignage = clpa.temoignage(cy, cx)
     if temoignage is not None:
         valeurs["temoignages_avalanches"] = temoignage
+        valeurs["clpa_zone_avalanches"] = temoignage
     interpretation = clpa.interpretation(cy, cx)
     if interpretation is not None:
         valeurs["interpretation_phenomenes_passes"] = interpretation
+        valeurs["clpa_zone_presumee_avalancheuse"] = interpretation
+    ligne_confirmee = clpa.ligne_confirmee(cy, cx)
+    if ligne_confirmee is not None:
+        valeurs["clpa_avalanche_localisee"] = ligne_confirmee
+        valeurs["clpa_degats_souffle"] = ligne_confirmee
+    ligne_presumee = clpa.ligne_presumee(cy, cx)
+    if ligne_presumee is not None:
+        valeurs["clpa_avalanche_localisee_presumee"] = ligne_presumee
+        valeurs["clpa_liaison_presumee"] = ligne_presumee
+    quatre = (temoignage, interpretation, ligne_confirmee, ligne_presumee)
+    if all(v is not None for v in quatre):
+        valeurs["clpa_avalanche"] = "O" if "O" in quatre else "N"
     return valeurs
+
+
+def resoudre_stations_epuration(parcelle: Parcelle, steu: WfsSteuService, layout: ColumnLayout) -> Dict[str, str]:
+    """"Stations d'épuration" — voir services/wfs_steu_service.py (source
+    trouvée le 2026-08-24, référentiel SANDRE, aucun lien avec Géorisques)."""
+    if "stations_epuration" not in layout.par_role:
+        return {}
+    cx, cy = centroide_geometrie(parcelle.geometry)
+    resultat = steu.existe(cy, cx)
+    return {"stations_epuration": resultat} if resultat is not None else {}
 
 
 def resoudre_natura2000(parcelle: Parcelle, urbanisme: UrbanismeService, layout: ColumnLayout) -> Dict[str, str]:
@@ -1128,8 +1170,21 @@ def _forcer_valeurs_manquantes_en_n(
     même n'est pas résolue (`layout.non_resolues()`) — celles-ci n'ont
     pas de lettre du tout, donc pas de rôle dans `par_role`.
 
+    Un 3e cas, traité à part AVANT tout le reste (voir config.ROLES_
+    FORCE_N, décision utilisateur 2026-08-24) : un rôle dont la valeur
+    structurelle vraie est connue d'avance et toujours "N" — écrit "N"
+    directement, JAMAIS journalisé dans `chemin_revisite` (ce n'est pas
+    un manque à corriger, c'est un défaut assumé) ni compté dans
+    `n_manuel`/`n_erreur`.
+
     Renvoie `(n_manuel, n_erreur)`."""
-    roles_manquants = sorted(set(layout.par_role) - set(valeurs.keys()))
+    roles_manquants_bruts = sorted(set(layout.par_role) - set(valeurs.keys()))
+    if not roles_manquants_bruts:
+        return 0, 0
+    for role_code in roles_manquants_bruts:
+        if role_code in config.ROLES_FORCE_N:
+            valeurs[role_code] = "N"
+    roles_manquants = [r for r in roles_manquants_bruts if r not in config.ROLES_FORCE_N]
     if not roles_manquants:
         return 0, 0
     n_manuel = sum(len(layout.lettres_pour_role(r)) for r in roles_manquants if _role_sans_regle(r))
@@ -1230,6 +1285,7 @@ def traiter_rue(
     wfs: Optional[WfsGeorisquesService] = None,
     wfs_remnappe: Optional[WfsRemnappeService] = None,
     clpa: Optional[WfsClpaService] = None,
+    steu: Optional[WfsSteuService] = None,
     voirie: Optional[VoirieService] = None,
     on_progress: Optional[ProgressCallback] = None,
     deadline: Optional[datetime] = None,
@@ -1323,11 +1379,14 @@ def traiter_rue(
         valeurs_clpa = _resoudre_resilient(
             "clpa_avalanche", parcelle, lambda: resoudre_clpa_avalanche(parcelle, clpa), {},
         ) if clpa is not None else {}
+        valeurs_steu = _resoudre_resilient(
+            "stations_epuration", parcelle, lambda: resoudre_stations_epuration(parcelle, steu, layout), {},
+        ) if steu is not None else {}
         valeurs = {
             **valeurs_zonage, **valeurs_risques, **valeurs_gpu_detaille,
             **valeurs_scot, **valeurs_secteur_cc, **valeurs_zone_humide,
             **valeurs_natura2000, **valeurs_urbaine_patrimoniale,
-            **valeurs_wfs, **valeurs_remnappe, **valeurs_clpa,
+            **valeurs_wfs, **valeurs_remnappe, **valeurs_clpa, **valeurs_steu,
         }
         n_manuel, n_erreur = _forcer_valeurs_manquantes_en_n(
             valeurs, layout, parcelle, config.CELLULES_A_REVISITER_PATH,
@@ -1377,6 +1436,7 @@ def traiter_commune_complete(
     commune_service: CommuneService,
     wfs: Optional[WfsGeorisquesService] = None, wfs_remnappe: Optional[WfsRemnappeService] = None,
     clpa: Optional[WfsClpaService] = None,
+    steu: Optional[WfsSteuService] = None,
     voirie: Optional[VoirieService] = None, on_progress: Optional[ProgressCallback] = None,
     rues_a_traiter: Optional[List[str]] = None,
 ) -> ResultatLot:
@@ -1439,7 +1499,7 @@ def traiter_commune_complete(
             element, ws, layout, excel_path=excel_path,
             cadastre=cadastre, urbanisme=urbanisme, georisques=georisques,
             geocodage=geocodage, traversal=traversal, registry=registry,
-            wfs=wfs, wfs_remnappe=wfs_remnappe, clpa=clpa, voirie=voirie,
+            wfs=wfs, wfs_remnappe=wfs_remnappe, clpa=clpa, steu=steu, voirie=voirie,
             on_progress=on_progress, deadline=deadline,
         )
         lot.resultats_par_rue.append(resultat)
@@ -2037,6 +2097,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     wfs = WfsGeorisquesService(http)
     wfs_remnappe = WfsRemnappeService(http)
     clpa = WfsClpaService(http)
+    steu = WfsSteuService(http)
     voirie = VoirieService(http)
 
     template_path = Path(args.template)
@@ -2152,7 +2213,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         deadline=deadline,
         cadastre=cadastre, urbanisme=urbanisme, georisques=georisques,
         geocodage=geocodage, traversal=traversal, registry=registry,
-        commune_service=commune_service, wfs=wfs, wfs_remnappe=wfs_remnappe, clpa=clpa, voirie=voirie,
+        commune_service=commune_service, wfs=wfs, wfs_remnappe=wfs_remnappe, clpa=clpa, steu=steu, voirie=voirie,
         rues_a_traiter=rues, on_progress=on_progress,
     )
     lot.colonnes_creees = codes_crees

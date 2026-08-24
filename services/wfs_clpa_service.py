@@ -82,3 +82,15 @@ class WfsClpaService:
     def interpretation(self, lat: float, lon: float) -> Optional[str]:
         """"Interprétation des phénomène passés" — couche `clpa_zonpi`."""
         return self._existe("clpa_zonpi", lat, lon)
+
+    def ligne_confirmee(self, lat: float, lon: float) -> Optional[str]:
+        """Couche `clpa_lint` (ligne "terrain", pendant linéaire de
+        `clpa_zont`) — CONFIRMÉ en direct (Val d'Isère, features réelles,
+        champ `CODE` présent mais sans table de correspondance officielle
+        trouvée, voir `main.py::resoudre_clpa_avalanche`)."""
+        return self._existe("clpa_lint", lat, lon)
+
+    def ligne_presumee(self, lat: float, lon: float) -> Optional[str]:
+        """Couche `clpa_linpi` (ligne "photo-interprétation", pendant
+        linéaire de `clpa_zonpi`) — CONFIRMÉ en direct (Val d'Isère)."""
+        return self._existe("clpa_linpi", lat, lon)

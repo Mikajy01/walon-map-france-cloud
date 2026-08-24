@@ -685,7 +685,6 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
 # aussi, détecté par préfixe, pas listé ici un par un.
 ROLES_SANS_REGLE: frozenset = frozenset({
     "secteur_urbanise_dense",
-    "immeuble_interieur_protege_totalite",
     # degagement_zone_primaire/_secondaire/_speciale/_secteur (bloc
     # "Installations de navigation et d'atterrissage") : CONCLUSION
     # DÉFINITIVE (2026-08-22, pas juste "pas encore trouvé") — le "T8"
@@ -719,36 +718,23 @@ ROLES_SANS_REGLE: frozenset = frozenset({
     "degagement_zone_secondaire",
     "degagement_zone_speciale",
     "degagement_secteur",
-    "zones_sans_enquete_terrain",
 
-    # -- Bloc "Tableau Geoportail France Off.xlsx" (2026-08-24) : 21
-    # colonnes réellement nouvelles (aucun équivalent dans l'ancien
-    # gabarit, vérifié en direct), pour lesquelles AUCUNE source fiable
-    # n'a été trouvée malgré une investigation réelle sur chacune —
-    # jamais deviné, jamais laissé "non résolu" (mystère) non plus :
-    # l'identité est classée, seule la règle de calcul manque.
+    # -- Bloc "Tableau Geoportail France Off.xlsx" (2026-08-24) : colonnes
+    # réellement nouvelles (aucun équivalent dans l'ancien gabarit,
+    # vérifié en direct), pour lesquelles AUCUNE source fiable n'a été
+    # trouvée malgré une investigation réelle sur chacune — jamais deviné,
+    # jamais laissé "non résolu" (mystère) non plus : l'identité est
+    # classée, seule la règle de calcul manque.
     #
-    # Avalanches CLPA (6) — la légende officielle (PDF gouvernemental
-    # MEDDE-ONF-Irstea, ET les images de légende du visualiseur public
-    # map.avalanches.fr) confirme le VOCABULAIRE de ces 6 catégories,
-    # mais reste un pictogramme (couleur/motif de hachure), jamais une
-    # table numérique. Les couches WFS réelles qui les portent
-    # (clpa_zont/zonpi pour les zones, clpa_lint/linpi découvertes en
-    # investigation — jamais utilisées avant — pour les lignes)
-    # exposent un champ `CODE`/`RuleID` numérique (1, 2, 3, 7, 8...
-    # confirmés en direct) mais AUCUNE des sources consultées
-    # (GetCapabilities, DescribeFeatureType, GetLegendGraphic, le jeu de
-    # données data.gouv.fr — téléchargement bloqué derrière une page JS
-    # non accessible par requête simple) ne documente la correspondance
-    # code -> catégorie. Deviner cette table (ex: "CODE 1 = Avalanche"
-    # par simple ordre d'apparition dans la légende) aurait été une pure
-    # supposition, jamais vérifiée.
-    "clpa_zone_avalanches",
-    "clpa_zone_presumee_avalancheuse",
-    "clpa_degats_souffle",
-    "clpa_avalanche_localisee",
-    "clpa_avalanche_localisee_presumee",
-    "clpa_liaison_presumee",
+    # Avalanches CLPA : les 7 rôles fins (clpa_zone_avalanches,
+    # clpa_zone_presumee_avalancheuse, clpa_degats_souffle,
+    # clpa_avalanche_localisee, clpa_avalanche_localisee_presumee,
+    # clpa_liaison_presumee, clpa_avalanche) ont depuis quitté cette
+    # liste (2026-08-24, GUESS explicitement autorisé par l'utilisateur —
+    # voir `main.py::resoudre_clpa_avalanche` pour la correspondance
+    # retenue et son détail). "zones_sans_enquete_terrain" reste sans
+    # couche CLPA identifiée, mais forcée à "N" plutôt que "Manuellement"
+    # (voir ROLES_FORCE_N plus bas — décision utilisateur 2026-08-24).
     #
     # Éolien - cycle de vie (10) — 3 sources réelles indépendantes
     # consultées, aucune n'expose la granularité "instruction/attente de
@@ -776,20 +762,22 @@ ROLES_SANS_REGLE: frozenset = frozenset({
     "eolien_parc_exploitation",
     "eolien_parc_cessation",
     #
-    # Isolés (5) — chacun vérifié séparément, aucune source trouvée :
-    # "Stations d'épuration" (aucune installation ICPE de ce type
-    # trouvée dans les échantillons `installations_classees` testés,
-    # aucun code DU/SUP correspondant) ; "Coulee" (le code DGPR officiel
-    # le plus proche, "114 - Par ruissellement et coulée de boue", est
-    # classé sous Inondation, pas Mouvement de terrain comme Glissement/
-    # Eboulement — rattachement réellement ambigu, jamais choisi au
-    # hasard) ; "Erosion des berges" (aucune entrée DU/DGPR trouvée) ;
-    # "Gaz Naturel" (4 codes SUP réels et pertinents trouvés — I1, I3,
-    # I5, I7 — mais aucun moyen de choisir lequel sans deviner, le texte
-    # du gabarit ne contient aucun code) ; "Mises en compatibilité"
-    # (terme procédural générique de l'urbanisme français, aucune
-    # catégorie DU/SUP dédiée trouvée).
-    "stations_epuration",
+    # Isolés — chacun vérifié séparément, aucune source trouvée :
+    # "Coulee" (le code DGPR officiel le plus proche, "114 - Par
+    # ruissellement et coulée de boue", est classé sous Inondation, pas
+    # Mouvement de terrain comme Glissement/Eboulement — rattachement
+    # réellement ambigu, jamais choisi au hasard) ; "Erosion des berges"
+    # (RE-vérifié en direct 2026-08-24 contre la nomenclature GASPAR/DGPR
+    # OFFICIELLE complète — PDF "Liste_aleas_Gaspar.pdf" lu intégralement,
+    # 1000000-3300000 — aucun code "berge"/érosion fluviale, seulement
+    # "1260000 Recul du trait de côte" qui est LITTORAL, pas fluvial ;
+    # confirmation, pas une nouvelle source) ; "Gaz Naturel" (4 codes SUP
+    # réels et pertinents trouvés — I1, I3, I5, I7 — mais aucun moyen de
+    # choisir lequel sans deviner, le texte du gabarit ne contient aucun
+    # code) ; "Mises en compatibilité" (terme procédural générique de
+    # l'urbanisme français, aucune catégorie DU/SUP dédiée trouvée).
+    # "Stations d'épuration" a depuis quitté cette liste (2026-08-24,
+    # source alternative trouvée — voir services/wfs_steu_service.py).
     "mouvement_terrain_coulee",
     "erosion_berges",
     "sup_gaz_naturel",
@@ -799,12 +787,8 @@ ROLES_SANS_REGLE: frozenset = frozenset({
     # 2026-08-24) : gaps révélés par le VRAI pipeline (le script
     # d'analyse préalable simulait un matching flou qui n'existe pas
     # réellement dans scan_layout) :
-    # "Avalanche" (bare, sans "Zone" ni "Zone présumée") : la légende
-    # CLPA officielle confirme que c'est une VRAIE catégorie distincte
-    # (avalanche identifiée par numéro via témoignage), même limite que
-    # les 6 autres catégories CLPA déjà classées plus haut — pas de
-    # table numérique CODE trouvée.
-    "clpa_avalanche",
+    # "clpa_avalanche" (bare, sans "Zone" ni "Zone présumée") a depuis
+    # quitté cette liste (2026-08-24, voir plus haut).
     # "Remontée de nappes (Entités hydrogéologiques imperméables à
     # l'affleurement)" : la source EXISTE et a été identifiée avec
     # certitude — couche WFS BRGM `MASQ_BDLISA`, titre officiel
@@ -836,6 +820,24 @@ ROLES_SANS_REGLE: frozenset = frozenset({
     "eolien_appartenant_parc_construction",
     "eolien_appartenant_parc_exploitation",
     "eolien_appartenant_parc_cessation",
+})
+
+# Rôles SANS règle de calcul (comme ROLES_SANS_REGLE) mais où la valeur
+# structurelle vraie est CONNUE à l'avance et toujours "N" — décision
+# explicite de l'utilisateur (2026-08-24), distincte de "Manuellement"
+# (`main.py::_forcer_valeurs_manquantes_en_n` écrit "N" directement,
+# sans journalisation dans `cellules_a_revisiter.csv` : ce n'est pas un
+# manque à corriger par un humain, c'est un défaut assumé) :
+#   - "immeuble_interieur_protege_totalite" : la seule catégorie
+#     officielle proche (07-50) couvre explicitement intérieur ET
+#     extérieur, jamais "intérieur seul" — structurellement jamais "O"
+#     via une source fiable.
+#   - "zones_sans_enquete_terrain" : aucune couche CLPA "enquête
+#     terrain" identifiée malgré investigation réelle (voir
+#     ROLES_SANS_REGLE ci-dessus) — structurellement toujours "N".
+ROLES_FORCE_N: frozenset = frozenset({
+    "immeuble_interieur_protege_totalite",
+    "zones_sans_enquete_terrain",
 })
 
 # Endpoints Géorisques v1 utilisés (bloc de colonnes risques). Confirmé en
