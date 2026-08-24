@@ -445,6 +445,16 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     "alea_debordement_moyen_cc": [
         "Evènement de moyenne probabilité avec prise en compte du changement climatique",
     ],
+    # Les 2 ci-dessous étaient déjà des paires connues (icône -> code DU)
+    # dans gpu_mappings.py::DU_MAPPING avant même cette migration —
+    # simple ajout d'un alias TEXTE pour que le nouveau gabarit (icônes
+    # différentes, jamais matchées par hash) résolve quand même via la
+    # même identité déjà validée.
+    "gpu_du_prescription_99-00": ["Autre", "Autres prescriptions"],
+    "gpu_du_information_99-00": [
+        "Autre  périmètre, secteur, plan, document, site, projet, espace.",
+        "Autres périmètres d'informations",
+    ],
 }
 
 # Rôles dont l'IDENTITÉ est résolue mais pour lesquels AUCUNE règle de
