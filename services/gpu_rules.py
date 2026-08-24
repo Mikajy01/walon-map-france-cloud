@@ -166,14 +166,27 @@ def resoudre_secteur_cc(parcelle: Parcelle, urbanisme: UrbanismeService, layout:
     Pour une commune SANS carte communale (PLU/PLUi, comme Arboys en
     Bugey), `secteur_cc` renvoie simplement 0 feature — "N" est alors la
     réponse VRAIE (ce mécanisme de zonage ne s'applique pas ici), pas une
-    valeur par défaut devinée."""
-    if "secteur_reserve_activites" not in layout.par_role:
+    valeur par défaut devinée.
+
+    Étendu (2026-08-24) aux 2 autres valeurs du MÊME enum officiel à 4
+    valeurs déjà récupéré pour "02" (pas une nouvelle investigation) :
+    "01" ("Secteur ouvert à la construction", rôle
+    `secteur_ouvert_construction`) et "03" ("Secteur non ouvert à la
+    construction...", rôle `secteur_non_ouvert_construction` — en-tête du
+    gabarit "Constructions non autorisées", même concept)."""
+    roles_secteur_cc = {
+        "01": "secteur_ouvert_construction",
+        "02": "secteur_reserve_activites",
+        "03": "secteur_non_ouvert_construction",
+    }
+    roles_presents = {code: role for code, role in roles_secteur_cc.items() if role in layout.par_role}
+    if not roles_presents:
         return {}
     dep, code_com = parcelle.code_insee[:2], parcelle.code_insee[2:]
     parcel_id = urbanisme.build_parcel_id(dep, code_com, "000", "000", parcelle.section, parcelle.numero)
     features = urbanisme.get_feature_info("du", "secteur_cc", parcel_id)
-    reserve_activites = any(f.get("properties", {}).get("typesect") == "02" for f in features)
-    return {"secteur_reserve_activites": "O" if reserve_activites else "N"}
+    codes_trouves = {f.get("properties", {}).get("typesect") for f in features}
+    return {role: ("O" if code in codes_trouves else "N") for code, role in roles_presents.items()}
 
 
 def resoudre_zone_humide_ou_littoral(

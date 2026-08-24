@@ -1057,6 +1057,11 @@ def resoudre_wfs_remnappe(parcelle: Parcelle, wfs_remnappe: WfsRemnappeService) 
     )
     if resultat_eaip is not None:
         valeurs["remnappe_eaip"] = resultat_eaip
+    resultat_masq_affleur = _resoudre_resilient(
+        "remnappe_masq_affleur", parcelle, lambda: wfs_remnappe.masque_etude_specifique(cy, cx), None,
+    )
+    if resultat_masq_affleur is not None:
+        valeurs["remnappe_masq_affleur"] = resultat_masq_affleur
     return valeurs
 
 
@@ -1578,14 +1583,17 @@ def reessayer_cellules_remnappe(
     cadastre: CadastreService, wfs_remnappe: WfsRemnappeService, registry: ColumnRegistryService,
 ) -> int:
     """Même motif que `reessayer_cellules_wfs`, limité aux 12 rôles
-    `REGLES_REMNAPPE` (voir `services/wfs_remnappe_service.py`)."""
+    `REGLES_REMNAPPE` (voir `services/wfs_remnappe_service.py`) plus les
+    2 rôles hors-table `remnappe_eaip`/`remnappe_masq_affleur` (présence/
+    absence, pas de couple classe/fiabilité)."""
     if not chemin_revisite.exists():
         return 0
 
+    _roles_hors_table = ("remnappe_eaip", "remnappe_masq_affleur")
     with chemin_revisite.open(newline="", encoding="utf-8") as f:
         lignes = list(csv.DictReader(f))
-    a_retenter_brut = [l for l in lignes if l["role_code"] in REGLES_REMNAPPE or l["role_code"] == "remnappe_eaip"]
-    autres = [l for l in lignes if l["role_code"] not in REGLES_REMNAPPE and l["role_code"] != "remnappe_eaip"]
+    a_retenter_brut = [l for l in lignes if l["role_code"] in REGLES_REMNAPPE or l["role_code"] in _roles_hors_table]
+    autres = [l for l in lignes if l["role_code"] not in REGLES_REMNAPPE and l["role_code"] not in _roles_hors_table]
     if not a_retenter_brut:
         return 0
 
@@ -1626,6 +1634,9 @@ def reessayer_cellules_remnappe(
         resultat_eaip = wfs_remnappe.eaip(cy, cx)
         if resultat_eaip is not None:
             valeurs_remnappe["remnappe_eaip"] = resultat_eaip
+        resultat_masq_affleur = wfs_remnappe.masque_etude_specifique(cy, cx)
+        if resultat_masq_affleur is not None:
+            valeurs_remnappe["remnappe_masq_affleur"] = resultat_masq_affleur
         if valeurs_remnappe:
             nouvelles_valeurs[(code_insee, section, numero)] = valeurs_remnappe
 

@@ -269,23 +269,64 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
         "Instauration du droit de préemption Urbain D.P.U / Périmètre droit de préemption urbain",
         "DPU", "D.P.U", "Périmètre de droit de préemption urbain"],
     "gpu_du_information_03-00": ["Zone de préemption dans un espace naturel et sensible"],
-    "schema_coherence_territoriale_publie": ["schéma de Cohérence territoriale(publié)"],
-    "schema_coherence_territoriale_non_publie": ["schéma de Cohérence territoriale (non publié)"],
+    "schema_coherence_territoriale_publie": [
+        "schéma de Cohérence territoriale(publié)",
+        # Variante du nouveau gabarit ("Tableau Geoportail France Off.xlsx",
+        # 2026-08-24) : "territorial" (accord masculin) au lieu de
+        # "territoriale" — même concept, jamais corrigé, seulement aliasé.
+        "Schéma de cohérence territorial (publié)",
+    ],
+    "schema_coherence_territoriale_non_publie": [
+        "schéma de Cohérence territoriale (non publié)",
+        "Schéma de cohérence territorial (non publié)",
+    ],
     "perimetre_scot_arrete": ["Périmètre de SCOT arrêté"],
     "gpu_du_information_08-00": [
         "Périmètre forestier : interdiction ou réglementation des plantations, "
         "plantations à réaliser et semis d'essence forestière",
     ],
     "gpu_du_prescription_07-69": ["Unité urbanistique ou paysagère soumise à des dispositions spécifiques"],
-    "gpu_du_prescription_49-00": ["Opération d'ensemble imposée"],
+    "gpu_du_prescription_49-00": ["Opération d'ensemble imposée", "Opération d'ensemble imposée en zone AU"],
     "gpu_du_prescription_04-00": [
         "Périmètre issu des plan de déplacements urbains sur obligation de stationnement",
     ],
     "gpu_du_information_20-00": ["Règlement local de publicité"],
     "gpu_du_information_98-00": ["Périmètre d'annulation partielle du document d'urbanisme"],
     "gpu_du_prescription_03-51": ["Immeuble ou partie d'immeuble dont la démolition peut être imposée à l'occasion d'opérations d'aménagement publiques ou privées"],
+    # Ajouts (2026-08-24, "Tableau Geoportail France Off.xlsx") — texte
+    # d'en-tête EXACTEMENT identique (ou tronqué de la parenthèse
+    # d'exemples officielle, ex "(grotte, rocher, etc.)") au `libelong`
+    # officiel de `/standard/du-categories`, vérifié en direct, aucune
+    # ambiguïté. Nécessaires car les icônes de ce nouveau fichier sont
+    # ré-exportées (octets PNG différents de l'ancien gabarit malgré le
+    # même concept visuel) donc absentes de `DU_MAPPING` (indexé par hash
+    # d'icône) — l'alias texte contourne ce problème (voir
+    # `services/excel_service.py::bootstrap_from_template`).
+    "gpu_du_information_10-00": ["Zone de recherche et d'exploitation de carrière"],
+    "gpu_du_information_38-00": ["Secteurs d'information sur les sols"],
+    "gpu_du_prescription_07-66": ["Place, cour, ou autre espace libre à dominante minérale non protégé à requalifier"],
+    "gpu_du_prescription_08-00": ["Terrain cultivé ou non bâti à protéger en zone urbaine"],
+    "gpu_du_prescription_03-50": [
+        "Immeuble ou partie d'immeuble dont la modification peut être imposée "
+        "à l'occasion d'opérations d'aménagement publiques ou privées",
+    ],
+    "gpu_du_prescription_44-00": ["Stationnement"],
+    # Tronqués de la parenthèse d'exemples officielle ("(grotte, rocher,
+    # etc.)" / "(pavés, calades, etc.)") — même code que l'entrée
+    # DU_MAPPING existante pour ce concept (icône ancienne), confirmé
+    # en direct contre `/standard/du-categories`.
+    "gpu_du_prescription_07-60": ["Arbre remarquable ou autre élément naturel protégé à conserver, restaurer et mettre en valeur"],
+    "gpu_du_prescription_07-61": ["Place, cour ou autre espace libre à dominante minérale protégé, à conserver, restaurer et mettre en valeur"],
     "gpu_du_information_02-00": ["Zone d'aménagement concerté", "Zone d'amenagement concentré"],
     "secteur_ouvert_construction": ["Secteur ouvert à la construction"],
+    # "typesect" 03 (voir services/gpu_rules.py::resoudre_secteur_cc,
+    # même mécanisme confirmé en direct sur Bézéril pour "02" — les 4
+    # valeurs de cet enum sont dans la MÊME liste officielle déjà
+    # récupérée à ce moment-là : {"01": ouvert, "02": réservé aux
+    # activités, "03": "Secteur non ouvert à la construction...", "99":
+    # zone non couverte} — pas une nouvelle investigation, une extension
+    # directe d'un champ déjà vérifié).
+    "secteur_non_ouvert_construction": ["Constructions non autorisées"],
     "secteur_vocation_agricole": ["Secteurs à vocation principale d'activité agricole"],
     "secteur_vocation_naturelle": ["Secteur a vocation principal naturel forestière"],
     "zone_constructible": ["Zone constructible", "zone construcible"],
@@ -611,6 +652,12 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
         "Remontée de nappes (Enveloppes Approchées des Innondations Potentielles en cours d'eau "
         "et submersion marine de plus d'un hectare)",
     ],
+    # Couche `MASQ_AFFLEUR` (serveur BRGM `mapsref.brgm.fr/wxs/georisques/
+    # risques`, même serveur que REMNAPPE_FIAB/MASQ_EAIP/MASQ_BDLISA) —
+    # titre officiel confirmé en direct via GetCapabilities : "Masque
+    # étude spécifique en cours", correspondance exacte avec l'en-tête du
+    # gabarit. Voir services/wfs_remnappe_service.py::masque_etude_specifique.
+    "remnappe_masq_affleur": ["Remontée de nappes (Masque étude spécifique en cours)"],
 
     # Identité classée, SANS règle (voir ROLES_SANS_REGLE) — 2e passe :
     "clpa_avalanche": ["Avalanche"],

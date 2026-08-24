@@ -84,6 +84,26 @@ class WfsRemnappeService:
             return None
         return "O" if "<wfs:member>" in xml else "N"
 
+    def masque_etude_specifique(self, lat: float, lon: float) -> Optional[str]:
+        """"Remontée de nappes (Masque étude spécifique en cours)" —
+        couche `MASQ_AFFLEUR`, même serveur BRGM que `REMNAPPE_FIAB`/
+        `MASQ_EAIP`/`MASQ_BDLISA`. Titre officiel confirmé en direct via
+        `GetCapabilities` : correspondance EXACTE (mot pour mot) avec
+        cette colonne du nouveau gabarit. CONFIRMÉ en direct : features
+        réelles trouvées sur une large bbox France (ex. Moselle), simple
+        polygone sans attribut exploitable (même mécanisme présence/
+        absence que `eaip`, pas de champ à filtrer)."""
+        params = {
+            "service": "WFS", "version": "2.0.0", "request": "GetFeature",
+            "typeName": "ms:MASQ_AFFLEUR", "bbox": self._bbox(lat, lon),
+        }
+        try:
+            xml = self._http.get_text(_WFS_BASE, params, service_key="brgm_remnappe_wfs")
+        except Exception as exc:  # noqa: BLE001
+            _logger.warning("Couche MASQ_AFFLEUR indisponible (lat=%s, lon=%s) : %s", lat, lon, exc)
+            return None
+        return "O" if "<wfs:member>" in xml else "N"
+
     def classe_fiabilite(self, lat: float, lon: float, classe: str, fiabilite: Optional[str]) -> Optional[str]:
         """`"O"`/`"N"` selon qu'au moins une feature au point donné
         matche à la fois `classe` (voir les 3 constantes du module) et

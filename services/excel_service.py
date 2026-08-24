@@ -21,7 +21,7 @@ from services.gpu_mappings import DU_MAPPING, ROLES_PERSONNALISES_PAR_ICONE
 from utils.color import rgb_de_cellule
 from utils.image_hash import extraire_icones_par_colonne
 from utils.logger import get_logger
-from utils.text_normalize import normaliser_code_zone
+from utils.text_normalize import normaliser, normaliser_code_zone
 
 _logger = get_logger("services.excel_service")
 
@@ -253,6 +253,23 @@ def bootstrap_from_template(
     sup_category_names = sup_category_names or set()
     icones_par_colonne = extraire_icones_par_colonne(ws, ICON_ROW_INDEX)
 
+    # Repli texte AVANT le synthétique `icone::<lettre>` — bug réel
+    # trouvé en investigation live (2026-08-24, sur le nouveau gabarit
+    # 596 colonnes) : 140 des 214 colonnes à icône de ce fichier tombaient
+    # sur `icone::<lettre>` (donc "Manuellement" pour toujours, jamais
+    # calculé), alors que 120 d'entre elles avaient DÉJÀ le bon alias
+    # dans `config.ROLES_CANONIQUES_VALIDES` (texte d'en-tête identique,
+    # souvent `gpu_du_*` déjà câblé pour `gpu_rules.resoudre_gpu_detaille`)
+    # — l'icône (couche 1, prioritaire et gagnante dès qu'approuvée)
+    # verrouillait la colonne sur le rôle synthétique AVANT que la couche
+    # alias (couche 3) n'ait la moindre chance de s'appliquer, à chaque
+    # scan futur du même fichier. Construit ici (pas dans la boucle) :
+    # `config.ROLES_CANONIQUES_VALIDES` est figé pour tout le run.
+    alias_par_texte: Dict[str, str] = {}
+    for role_code, libelles in config.ROLES_CANONIQUES_VALIDES.items():
+        for libelle in libelles:
+            alias_par_texte.setdefault(normaliser(libelle), role_code)
+
     # Icônes GÉNÉRIQUES : même icône, textes d'en-tête différents au
     # sein de CE MÊME gabarit — confirmé en investigation live (bloc
     # SUP officiel : "Canalisation électrique-I4" et "...chaleur-I9"
@@ -303,12 +320,15 @@ def bootstrap_from_template(
                 # code` plus bas, mais l'icône (couche 1, prioritaire)
                 # pointait quand même vers le rôle synthétique jamais
                 # calculé, rendant cet enregistrement inutile.
+                alias_role = alias_par_texte.get(normaliser(header_text))
                 if du_match:
                     role_code = f"gpu_du_{du_match[0]}_{du_match[1]}"
                 elif role_personnalise:
                     role_code = role_personnalise
                 elif sup_valide:
                     role_code = f"gpu_sup_{sup_valide.lower()}"
+                elif alias_role:
+                    role_code = alias_role
                 else:
                     role_code = f"icone::{lettre}"
                 registry.approuver_icone(icone.hash_md5, role_code=role_code, role_label=header_text)
