@@ -29,6 +29,16 @@ def centroide_geometrie(geometry: Dict) -> Tuple[float, float]:
         anneau = geometry["coordinates"][0]
     elif gtype == "MultiPolygon":
         anneau = geometry["coordinates"][0][0]
+    elif gtype == "Point":
+        # Un lieu-dit NON habité (BDTOPO `lieu_dit_non_habite`, voir
+        # VoirieService.get_lieu_dit) est un Point brut, pas une zone —
+        # écart réel trouvé en investigation live (Ambléon, 01006,
+        # "Corbanay") : contrairement aux lieux-dits habités
+        # (`zone_d_habitation`, toujours Polygon/MultiPolygon), ce
+        # deuxième calque BDTOPO n'a pas de contour, juste ses propres
+        # coordonnées comme "centroïde".
+        x, y = geometry["coordinates"]
+        return x, y
     else:
         raise ValueError(f"Type de géométrie non supporté : {gtype!r}")
     lons = [c[0] for c in anneau]

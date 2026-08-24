@@ -309,33 +309,62 @@ def _parcelles_depuis_lieu_dit(
     justesse ; 18m la réintègre, choix délibéré de l'utilisateur pour
     éviter le risque inverse (exclure une vraie parcelle de 1er rang sur
     un croisement légèrement plus large ailleurs) plutôt que d'optimiser
-    ce cas précis."""
+    ce cas précis.
+
+    Troisième repli imbriqué : un lieu-dit NON habité (BDTOPO
+    `lieu_dit_non_habite`, voir `VoirieService.get_lieu_dit`) est une
+    géométrie Point brute, pas une zone — impossible d'y appliquer une
+    intersection directe. Écart réel trouvé en investigation live
+    (Ambléon, 01006, "Corbanay", 2026-08-24) : ce point tombe pile DANS
+    une parcelle précise (0A 0747, confirmé par point-dans-polygone) —
+    traiter ce cas comme un simple "croisement" (tampon 18m, TOUTES les
+    parcelles à proximité) aurait grossièrement sur-inclus 2 parcelles
+    voisines sans rapport. Le test point-dans-polygone est donc tenté
+    D'ABORD parmi les candidates du tampon 18m ; seules les parcelles qui
+    CONTIENNENT réellement le point sont retenues quand au moins une le
+    fait, jamais un mélange des deux (le tampon complet ne sert que si
+    aucune parcelle ne contient le point, cas réellement analogue à un
+    croisement)."""
     if voirie is None:
         return None
     geometrie = voirie.get_lieu_dit(element.code_insee, element.rue)
     if geometrie is None:
         return None
-    parcelles = cadastre.get_parcelles_dans_geometrie(
-        element.code_insee, geometrie,
-        commune=element.commune, departement=element.departement,
-        code_postal=element.code_postal, rue=element.rue,
-    )
+
     repli_croisement = False
-    if not parcelles:
-        cx, cy = centroide_geometrie(geometrie)
-        parcelles = cadastre.get_parcelles_pres_du_point(
+    if geometrie.get("type") == "Point":
+        cx, cy = centroide_geometrie(geometrie)  # = le point lui-meme
+        candidates = cadastre.get_parcelles_pres_du_point(
             element.code_insee, cx, cy,
             commune=element.commune, departement=element.departement,
             code_postal=element.code_postal, rue=element.rue,
             marge_m=18.0,
         )
-        repli_croisement = True
+        contenantes = [p for p in candidates if point_dans_geometrie(cx, cy, p.geometry)]
+        parcelles = contenantes if contenantes else candidates
+        repli_croisement = not contenantes
+    else:
+        parcelles = cadastre.get_parcelles_dans_geometrie(
+            element.code_insee, geometrie,
+            commune=element.commune, departement=element.departement,
+            code_postal=element.code_postal, rue=element.rue,
+        )
         if not parcelles:
-            _logger.warning(
-                "Lieu-dit '%s' (%s) trouvé dans BDTOPO, mais aucune parcelle cadastrale à moins de "
-                "18m de son marqueur — rien à traiter.", element.rue, element.commune,
+            cx, cy = centroide_geometrie(geometrie)
+            parcelles = cadastre.get_parcelles_pres_du_point(
+                element.code_insee, cx, cy,
+                commune=element.commune, departement=element.departement,
+                code_postal=element.code_postal, rue=element.rue,
+                marge_m=18.0,
             )
-            return []
+            repli_croisement = True
+
+    if not parcelles:
+        _logger.warning(
+            "Lieu-dit '%s' (%s) trouvé dans BDTOPO, mais aucune parcelle cadastrale à moins de "
+            "18m de son marqueur — rien à traiter.", element.rue, element.commune,
+        )
+        return []
     _logger.info(
         "Rue '%s' (%s) : introuvable comme voie BAN, mais reconnue comme LIEU-DIT — "
         "%d parcelle(s) trouvée(s) %s (pas d'ordre de parcours, pas de rattachement à une adresse).",

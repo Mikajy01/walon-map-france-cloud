@@ -122,32 +122,48 @@ class VoirieService:
         return chaine if len(chaine) >= 2 else None
 
     def get_lieu_dit(self, code_insee: str, nom: str) -> Optional[Dict[str, Any]]:
-        """Géométrie GeoJSON (Polygon/MultiPolygon) d'un lieu-dit habité
-        nommé, ou `None` s'il n'existe pas — décision explicite de
-        l'utilisateur (2026-08-23) : repli utilisé par `main.py::
-        decouvrir_parcelles` quand une "rue" tapée ne correspond à AUCUNE
-        voie BAN, avant de conclure "introuvable".
+        """Géométrie GeoJSON (Polygon/MultiPolygon si habité, Point si
+        non habité — voir plus bas) d'un lieu-dit nommé, ou `None` s'il
+        n'existe pas — décision explicite de l'utilisateur (2026-08-23) :
+        repli utilisé par `main.py::decouvrir_parcelles` quand une "rue"
+        tapée ne correspond à AUCUNE voie BAN, avant de conclure
+        "introuvable".
 
         Source confirmée en direct (Arbigny, 01016) : `BDTOPO_V3:
         zone_d_habitation`, champ `toponyme` — couche SÉPARÉE de la BAN
         (adresses/voies uniquement) et de `voie_nommee` (routes), dédiée
-        aux lieux-dits/hameaux. Champ `identifiant_voie_ban` (souvent
-        vide en pratique) confirme qu'un lieu-dit n'est PAS forcément
-        rattaché à une voie BAN, même quand leurs noms se ressemblent
-        (écart réel trouvé : "les Blaises" à 289m de "Chemin des
-        Blaises", deux entités différentes malgré le nom commun).
+        aux lieux-dits/hameaux HABITÉS. Champ `identifiant_voie_ban`
+        (souvent vide en pratique) confirme qu'un lieu-dit n'est PAS
+        forcément rattaché à une voie BAN, même quand leurs noms se
+        ressemblent (écart réel trouvé : "les Blaises" à 289m de "Chemin
+        des Blaises", deux entités différentes malgré le nom commun).
+
+        Deuxième calque essayé en repli, `BDTOPO_V3:lieu_dit_non_habite`
+        — écart réel trouvé en investigation live (Ambléon, 01006,
+        "Corbanay", 2026-08-24) : un lieu-dit RURAL (champ/bois/lieu sans
+        habitation) n'apparaît QUE dans ce calque, jamais dans
+        `zone_d_habitation` ; sans ce repli, un nom comme "Corbanay"
+        (explicitement signalé "Lieu Dit" par la source de l'utilisateur)
+        restait faussement "introuvable". Géométrie de type Point (pas de
+        contour, contrairement au premier calque) — voir
+        `utils.geometrie.centroide_geometrie` et `main.py::
+        _parcelles_depuis_lieu_dit` pour la gestion de ce cas.
 
         Comparaison par texte normalisé (accents/casse insensibles,
         comme pour `get_polyligne_voie`) — jamais de correspondance
-        floue à seuil, jamais deviné."""
-        params: Dict[str, Any] = {
-            "SERVICE": "WFS", "VERSION": "2.0.0", "REQUEST": "GetFeature",
-            "TYPENAME": "BDTOPO_V3:zone_d_habitation", "OUTPUTFORMAT": "application/json",
-            "CQL_FILTER": f"insee_commune='{code_insee}'",
-        }
-        data = self._http.get_json(_WFS_BASE, params, service_key="ign_bdtopo")
+        floue à seuil, jamais deviné. Un préfixe descriptif comme "Lieu
+        Dit "/"Hameau " dans le nom saisi n'est PAS retiré automatiquement
+        (même principe que "jamais deviné") : l'utilisateur doit taper le
+        toponyme exact (ex: "Corbanay", pas "Lieu Dit Corbanay")."""
         nom_norm = normaliser(nom)
-        for feature in data.get("features", []):
-            if normaliser(feature["properties"].get("toponyme")) == nom_norm:
-                return feature["geometry"]
+        for typename in ("BDTOPO_V3:zone_d_habitation", "BDTOPO_V3:lieu_dit_non_habite"):
+            params: Dict[str, Any] = {
+                "SERVICE": "WFS", "VERSION": "2.0.0", "REQUEST": "GetFeature",
+                "TYPENAME": typename, "OUTPUTFORMAT": "application/json",
+                "CQL_FILTER": f"insee_commune='{code_insee}'",
+            }
+            data = self._http.get_json(_WFS_BASE, params, service_key="ign_bdtopo")
+            for feature in data.get("features", []):
+                if normaliser(feature["properties"].get("toponyme")) == nom_norm:
+                    return feature["geometry"]
         return None
