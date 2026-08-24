@@ -131,6 +131,41 @@ class GeorisquesService:
         data = self._http.get_json(self._url("cavites"), {"code_insee": code_insee}, service_key="georisques")
         return data.get("data", [])
 
+    def get_installations_classees(self, code_insee: str) -> List[Dict[str, Any]]:
+        """ICPE (Installations Classées pour la Protection de l'Environnement)
+        — endpoint défini depuis le début (`config.GEORISQUES_ENDPOINTS`)
+        mais jamais câblé jusqu'ici. Découvert en investigation live
+        (2026-08-24, Argis 01017) en analysant le bloc "Tableau
+        Geoportail France Off.xlsx" : plusieurs colonnes ("Elevage de
+        bovin/porc/volaille", "Eolienne", "Usine Seveso/non Seveso",
+        "Industries") correspondent EXACTEMENT aux champs booléens réels
+        de la réponse (`bovins`, `porcs`, `volailles`, `eolienne`,
+        `statutSeveso`, `industrie`, `carriere`, `ied`), confirmés sur un
+        enregistrement réel ("COIN RECYCLAGES", Argis)."""
+        data = self._http.get_json(
+            self._url("installations_classees"), {"code_insee": code_insee}, service_key="georisques",
+        )
+        return data.get("data", [])
+
+    def get_gaspar_risques(self, code_insee: str) -> List[Dict[str, Any]]:
+        """Nomenclature officielle DGPR des risques d'une commune
+        (`num_risque`/`libelle_risque_long`) — endpoint défini depuis le
+        début (`config.GEORISQUES_ENDPOINTS`) mais jamais câblé jusqu'ici.
+        Découvert en investigation live (2026-08-24) : confirmé exposer
+        les codes fins de "Mouvement de terrain" ("123" Eboulement, "124"
+        Glissement de terrain, testés sur Argis 01017 et Val d'Isère
+        73304) que ni `/mvt` ni aucun autre endpoint déjà câblé
+        n'exposait. Paramètre `code_insee` en snake_case (confirmé :
+        `codeInsee` en camelCase renvoie HTTP 500, contrairement à la
+        plupart des autres endpoints de cette API)."""
+        data = self._http.get_json(
+            self._url("gaspar_risques"), {"code_insee": code_insee}, service_key="georisques",
+        )
+        resultat: List[Dict[str, Any]] = []
+        for commune in data.get("data", []):
+            resultat.extend(commune.get("risques_detail", []))
+        return resultat
+
     def get_mvt(self, lat: float, lon: float, rayon: int = 1000) -> List[Dict[str, Any]]:
         """Mouvements de terrain répertoriés."""
         data = self._http.get_json(

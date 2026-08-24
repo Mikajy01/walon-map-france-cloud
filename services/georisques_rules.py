@@ -47,6 +47,7 @@ from __future__ import annotations
 from typing import Callable, Dict, Optional
 
 from services.georisques_service import GeorisquesService
+from utils.text_normalize import normaliser
 
 RegleGeorisques = Callable[[float, float, str, GeorisquesService], Optional[str]]
 
@@ -186,6 +187,66 @@ def _existence_ssp_conclusions_sis(cx: float, cy: float, code_insee: str, g: Geo
 def _existence_ssp_conclusions_sup(cx: float, cy: float, code_insee: str, g: GeorisquesService) -> Optional[str]:
     """STRUCTUREL — même remarque que `_existence_ssp_conclusions_sis`."""
     return "O" if g.get_ssp_conclusions_sup(code_insee) else "N"
+
+
+def _existence_cavite_type(type_attendu: str) -> RegleGeorisques:
+    """CONFIRMÉ (2026-08-24, Argis 01017) : le champ `type` d'une cavité
+    (`get_cavites`) matche l'énumération officielle documentée plus haut
+    (`_existence_cavites_non_localisees`) — 8 cavités réelles trouvées
+    pour Arbent, une avec `type="naturelle"`. Comparaison insensible à
+    la casse/aux accents (`normaliser`), le champ réel observé est en
+    minuscules alors que le gabarit capitalise ("Naturelle")."""
+    def regle(cx: float, cy: float, code_insee: str, g: GeorisquesService) -> Optional[str]:
+        cavites = g.get_cavites(code_insee)
+        cible = normaliser(type_attendu)
+        return "O" if any(normaliser(c.get("type")) == cible for c in cavites) else "N"
+    return regle
+
+
+def _existence_installation_flag(champ: str) -> RegleGeorisques:
+    """STRUCTUREL — `/installations_classees` (jamais câblé avant cette
+    investigation, voir `GeorisquesService.get_installations_classees`),
+    champ booléen direct sur chaque enregistrement (`bovins`, `porcs`,
+    `volailles`, `eolienne`, `industrie`...). Jamais testé contre un
+    exemple positif réel (l'unique installation trouvée à Argis a tous
+    ces champs à `false`), mais le nom du champ correspond exactement et
+    sans ambiguïté au libellé de la colonne."""
+    def regle(cx: float, cy: float, code_insee: str, g: GeorisquesService) -> Optional[str]:
+        installations = g.get_installations_classees(code_insee)
+        return "O" if any(inst.get(champ) for inst in installations) else "N"
+    return regle
+
+
+def _existence_installation_seveso(veut_seveso: bool) -> RegleGeorisques:
+    """STRUCTUREL — même source que `_existence_installation_flag`.
+    `statutSeveso` vaut `null` par défaut (confirmé sur l'unique
+    installation réelle testée, Argis) ; une valeur non nulle signale un
+    statut Seveso actif. "Usine Seveso" = au moins une installation
+    `industrie` avec `statutSeveso` renseigné ; "Usine non Seveso" =
+    au moins une installation `industrie` SANS statut Seveso — jamais
+    testé contre un exemple positif réel (aucune installation Seveso
+    trouvée sur les communes du projet à ce jour)."""
+    def regle(cx: float, cy: float, code_insee: str, g: GeorisquesService) -> Optional[str]:
+        installations = [i for i in g.get_installations_classees(code_insee) if i.get("industrie")]
+        if not installations:
+            return "N"
+        a_seveso = any(bool(i.get("statutSeveso")) for i in installations)
+        return "O" if (a_seveso if veut_seveso else not a_seveso) else "N"
+    return regle
+
+
+def _existence_risque_dgpr(num_risque: str) -> RegleGeorisques:
+    """CONFIRMÉ (2026-08-24) — `/gaspar/risques` (jamais câblé avant
+    cette investigation, voir `GeorisquesService.get_gaspar_risques`),
+    nomenclature officielle DGPR : Argis (01017), déjà une vraie commune
+    du projet, a EFFECTIVEMENT "123" (Eboulement) ET "124" (Glissement
+    de terrain) dans sa liste de risques réelle — les deux règles
+    renvoient "O" en direct sur ce cas connu, pas juste une
+    correspondance de nom plausible."""
+    def regle(cx: float, cy: float, code_insee: str, g: GeorisquesService) -> Optional[str]:
+        risques = g.get_gaspar_risques(code_insee)
+        return "O" if any(r.get("num_risque") == num_risque for r in risques) else "N"
+    return regle
 
 
 def _existence_ssp_basol(cx: float, cy: float, code_insee: str, g: GeorisquesService) -> Optional[str]:
@@ -344,6 +405,31 @@ REGLES_GEORISQUES: Dict[str, RegleGeorisques] = {
     "sup_eruption_volcanique": _sup_existe_pour_type("get_gaspar_pprn", ("volcan",)),
     "sup_phenomenes_meteorologiques": _sup_existe_pour_type("get_gaspar_pprn", ("meteo", "météo")),
     "sup_risque_industriel": _sup_existe_pour_type("get_gaspar_pprt", None),
+
+    # -- Ajouts 2026-08-24 (investigation "Tableau Geoportail France
+    # Off.xlsx") : cavités par type (champ `type` déjà récupéré par
+    # `_existence_cavites`, jamais exploité finement avant), et 2
+    # endpoints jamais câblés jusqu'ici (`installations_classees`,
+    # `gaspar_risques`) découverts en cherchant une source réelle pour
+    # des colonnes du nouveau gabarit qui semblaient "sans source".
+    "cavite_type_cave": _existence_cavite_type("Cave"),
+    "cavite_type_carriere": _existence_cavite_type("Carrière"),
+    "cavite_type_indetermine": _existence_cavite_type("Indéterminé"),
+    "cavite_type_galerie": _existence_cavite_type("Galerie"),
+    "cavite_type_ouvrage_civil": _existence_cavite_type("Ouvrage civil"),
+    "cavite_type_ouvrage_militaire": _existence_cavite_type("Ouvrage militaire"),
+    "cavite_type_puits": _existence_cavite_type("Puits"),
+
+    "installation_elevage_bovin": _existence_installation_flag("bovins"),
+    "installation_elevage_porcin": _existence_installation_flag("porcs"),
+    "installation_elevage_volaille": _existence_installation_flag("volailles"),
+    "installation_eolienne": _existence_installation_flag("eolienne"),
+    "installation_industrie": _existence_installation_flag("industrie"),
+    "installation_usine_seveso": _existence_installation_seveso(True),
+    "installation_usine_non_seveso": _existence_installation_seveso(False),
+
+    "mouvement_terrain_glissement": _existence_risque_dgpr("124"),
+    "mouvement_terrain_eboulement": _existence_risque_dgpr("123"),
 }
 
 

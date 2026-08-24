@@ -293,6 +293,48 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     "degagement_zone_speciale": ["Installations de navigation et d'atterrissage-Zone spéciale de dégagement"],
     "degagement_secteur": ["Installations de navigation et d'atterrissage-Secteur de dégagement-T8"],
     "zones_sans_enquete_terrain": ["Zones sans enquête terrain"],
+
+    # Ajoutés 2026-08-24 (nouveau gabarit "Tableau Geoportail France
+    # Off.xlsx") : le texte listé ici est celui du NOUVEAU fichier — ces
+    # rôles n'existaient pas avant, voir services/georisques_rules.py
+    # pour la règle (2 endpoints jamais câblés jusqu'ici,
+    # installations_classees et gaspar_risques, découverts pendant cette
+    # migration).
+    "cavite_type_cave": ["Cave"],
+    "cavite_type_carriere": ["Carrière"],
+    "cavite_type_indetermine": ["Indéterminée"],
+    "cavite_type_galerie": ["Galerie"],
+    "cavite_type_ouvrage_civil": ["Ouvrage Civil"],
+    "cavite_type_ouvrage_militaire": ["Ouvrage militaire"],
+    "cavite_type_puits": ["Puits"],
+    "installation_elevage_bovin": ["Elevage de bovin"],
+    "installation_elevage_porcin": ["Elevage de porc"],
+    "installation_elevage_volaille": ["Elevage de volaille"],
+    "installation_eolienne": ["Eolienne"],
+    "installation_industrie": ["Industries"],
+    "installation_usine_seveso": ["Usine Seveso"],
+    "installation_usine_non_seveso": ["Usine non Seveso"],
+    "mouvement_terrain_glissement": ["Glissement"],
+    "mouvement_terrain_eboulement": ["Eboulement"],
+
+    # Bridge vers des rôles déjà existants (voir REGLES_WFS pour
+    # alea_debordement_*, et le rôle "territoire_risque_important_
+    # inondation" plus haut) : le nouveau gabarit utilise un texte
+    # différent pour la MÊME donnée, jamais un concept différent —
+    # "TRI" est l'acronyme officiel de "Territoire à Risque important
+    # d'Inondation" (confirmé : le nom des zones réelles testées dans
+    # REGLES_WFS, "TRI Vilaine"/"TRI La Rochelle", utilise déjà cet
+    # acronyme). "Crue de X probabilité" reprend les 3 mêmes paliers
+    # que "Aléa débordement de cours d'eau X" (fréquent/décennal =
+    # forte probabilité, moyen/centennal = moyenne, rare/millénial =
+    # faible) — jamais la variante submersion (marine), qui n'a pas
+    # d'équivalent "Crue" dans le nouveau fichier.
+    "territoire_risque_important_inondation": [
+        "Inondation (Territoires à risues importants d'inondation)", "Perimètre de TRI",
+    ],
+    "alea_debordement_frequent": ["Inondation (Aléa débordement de cours d'eau fréquent ou décennal", "Crue de forte probabilité"],
+    "alea_debordement_moyen": ["Inondation (Aléa débordement de cours d'eau moyen ou centennal", "Crue de moyenne probabilité"],
+    "alea_debordement_rare": ["Inondation (Aléa débordement de cours d'eau rare ou millénial", "Crue de faible probabilité"],
 }
 
 # Rôles dont l'IDENTITÉ est résolue mais pour lesquels AUCUNE règle de
