@@ -771,16 +771,16 @@ ROLES_SANS_REGLE: frozenset = frozenset({
     # OFFICIELLE complète — PDF "Liste_aleas_Gaspar.pdf" lu intégralement,
     # 1000000-3300000 — aucun code "berge"/érosion fluviale, seulement
     # "1260000 Recul du trait de côte" qui est LITTORAL, pas fluvial ;
-    # confirmation, pas une nouvelle source) ; "Gaz Naturel" (4 codes SUP
-    # réels et pertinents trouvés — I1, I3, I5, I7 — mais aucun moyen de
-    # choisir lequel sans deviner, le texte du gabarit ne contient aucun
-    # code) ; "Mises en compatibilité" (terme procédural générique de
-    # l'urbanisme français, aucune catégorie DU/SUP dédiée trouvée).
+    # confirmation, pas une nouvelle source) ; "Mises en compatibilité"
+    # (terme procédural générique de l'urbanisme français, aucune
+    # catégorie DU/SUP dédiée trouvée).
     # "Stations d'épuration" a depuis quitté cette liste (2026-08-24,
     # source alternative trouvée — voir services/wfs_steu_service.py).
+    # "sup_gaz_naturel" a aussi quitté cette liste (2026-08-24, voir plus
+    # haut — GUESS via `casias.activite_principale`, pas les codes SUP
+    # I1/I3/I5/I7 finalement, ceux-ci restent inutilisés).
     "mouvement_terrain_coulee",
     "erosion_berges",
-    "sup_gaz_naturel",
     "mise_en_compatibilite",
 
     # -- 2e passe (test réel bootstrap+scan sur le gabarit construit,
@@ -800,16 +800,12 @@ ROLES_SANS_REGLE: frozenset = frozenset({
     # bug serveur, pas une question de source introuvable : à revisiter
     # si ce bug est un jour corrigé côté BRGM.
     "remnappe_masq_bdlisa",
-    # "Produits Chimiques"/"Hydrocarbures" (bare) : le seul endpoint
-    # Géorisques déjà câblé pour les matières dangereuses (`gaspar_tim`,
-    # rôle `canalisations_matieres_dangereuses`) ne renvoie qu'un flag
-    # d'existence par commune, sans détail de substance — vérifié en
-    # direct sur un enregistrement réel (Arbent). Les codes SUP les plus
-    # proches (I1/I3/I5/I7, "gaz naturel, hydrocarbures et produits
-    # chimiques") mélangent les 3 substances dans un même code, aucun
-    # moyen de les distinguer sans deviner.
-    "installation_produits_chimiques",
-    "installation_hydrocarbures",
+    # "Produits Chimiques"/"Hydrocarbures"/"Gaz Naturel" ont depuis
+    # quitté cette liste (2026-08-24, GUESS explicitement autorisé par
+    # l'utilisateur — voir services/georisques_rules.py::
+    # _existence_casias_activite pour le détail des mots-clés retenus,
+    # aucune classification officielle publiée trouvée pour le champ
+    # `activite_principale` de `casias`).
     # "Eoliennes appartenant à un parc en X" : 3e cluster de cycle de
     # vie éolien distinct de "Postes de livraison"/"Parcs éoliens
     # terrestres" déjà documentés plus haut — même investigation, même

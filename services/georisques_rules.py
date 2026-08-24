@@ -107,6 +107,39 @@ def _existence_casias(cx: float, cy: float, code_insee: str, g: GeorisquesServic
     return "O" if g.get_casias(cy, cx, rayon=200) else "N"
 
 
+def _existence_casias_activite(*mots_cles: str) -> Callable[[float, float, str, GeorisquesService], Optional[str]]:
+    """"Produits Chimiques"/"Hydrocarbures"/"Gaz Naturel" — GUESS
+    explicitement autorisé par l'utilisateur (2026-08-24). Le champ
+    `activite_principale` de `casias` (même endpoint/rayon que
+    `_existence_casias`) est un LIBELLÉ COURT, confirmé en direct comme
+    un vocabulaire contrôlé (~25 valeurs distinctes observées sur ~150
+    communes échantillonnées, jamais un texte vraiment libre) mais SANS
+    catégorisation "chimique"/"hydrocarbure"/"gaz" officielle publiée
+    trouvée nulle part — correspondance retenue par mots-clés explicites
+    dans le libellé (normalisé, insensible aux accents/casse), jamais un
+    rapprochement flou. "Dépôts de pétrole, produits dérivés ou gaz
+    naturel" matche à la fois `_MOTS_CASIAS_HYDROCARBURES` ET
+    `_MOTS_CASIAS_GAZ` — les 2 rôles répondent "O" pour ce même site,
+    ce n'est PAS une erreur (le libellé nomme littéralement les 2)."""
+    def regle(cx: float, cy: float, code_insee: str, g: GeorisquesService) -> Optional[str]:
+        sites = g.get_casias(cy, cx, rayon=200)
+        if not sites:
+            return "N"
+        for site in sites:
+            activite = normaliser(site.get("activite_principale") or "")
+            if any(mot in activite for mot in mots_cles):
+                return "O"
+        return "N"
+    return regle
+
+
+_MOTS_CASIAS_GAZ = ("gaz naturel", "usine a gaz", "usines a gaz", "cokefaction")
+_MOTS_CASIAS_HYDROCARBURES = ("carburant", "petrole", "hydrocarbure", "essence")
+_MOTS_CASIAS_CHIMIQUE = (
+    "chimique", "engrais", "peinture", "detergent", "pesticide", "phytosanitaire", "solvant",
+)
+
+
 def _existence_mvt(cx: float, cy: float, code_insee: str, g: GeorisquesService) -> Optional[str]:
     """STRUCTUREL — endpoint `mvt` (mouvements de terrain répertoriés),
     jamais renvoyé de résultat non vide sur les communes testées."""
@@ -430,6 +463,9 @@ REGLES_GEORISQUES: Dict[str, RegleGeorisques] = {
     "sismicite_forte": _sismicite("forte"),
 
     "anciens_sites_industriels": _existence_casias,
+    "installation_produits_chimiques": _existence_casias_activite(*_MOTS_CASIAS_CHIMIQUE),
+    "installation_hydrocarbures": _existence_casias_activite(*_MOTS_CASIAS_HYDROCARBURES),
+    "sup_gaz_naturel": _existence_casias_activite(*_MOTS_CASIAS_GAZ),
     "mouvements_de_terrain": _existence_mvt,
     "mouvements_de_terrain_non_localises": _existence_mvt_non_localise,
     "obligation_legale_debroussaillement": _existence_old,
