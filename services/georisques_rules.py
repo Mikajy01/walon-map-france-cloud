@@ -218,20 +218,29 @@ def _existence_installation_flag(champ: str) -> RegleGeorisques:
 
 
 def _existence_installation_seveso(veut_seveso: bool) -> RegleGeorisques:
-    """STRUCTUREL — même source que `_existence_installation_flag`.
-    `statutSeveso` vaut `null` par défaut (confirmé sur l'unique
-    installation réelle testée, Argis) ; une valeur non nulle signale un
-    statut Seveso actif. "Usine Seveso" = au moins une installation
-    `industrie` avec `statutSeveso` renseigné ; "Usine non Seveso" =
-    au moins une installation `industrie` SANS statut Seveso — jamais
-    testé contre un exemple positif réel (aucune installation Seveso
-    trouvée sur les communes du projet à ce jour)."""
+    """CONFIRMÉ (2026-08-24, Saint-Vulbas 01390 — commune du parc
+    industriel de la Plaine de l'Ain) : `statutSeveso` n'est PAS un
+    simple booléen "présent ou null" — écart réel trouvé en
+    investigation live, une installation réelle ("GEORG UTZ") a la
+    valeur littérale `"Non Seveso"` (chaîne NON vide), et une autre
+    ("ASTR'IN LOGISTIQUE") a `"Seveso seuil haut"`. Un premier jet de
+    cette règle basé sur `bool(statutSeveso)` aurait classé À TORT
+    "Non Seveso" comme "a un statut Seveso" (une chaîne non vide est
+    toujours truthy en Python) — corrigé avant tout déploiement en
+    excluant explicitement "Non Seveso" du test de vérité. "Usine
+    Seveso" = statut renseigné et différent de "Non Seveso" ; "Usine
+    non Seveso" = statut EXACTEMENT "Non Seveso" (jamais `null`, qui
+    signifie "non évalué", pas "confirmé non Seveso")."""
     def regle(cx: float, cy: float, code_insee: str, g: GeorisquesService) -> Optional[str]:
         installations = [i for i in g.get_installations_classees(code_insee) if i.get("industrie")]
         if not installations:
             return "N"
-        a_seveso = any(bool(i.get("statutSeveso")) for i in installations)
-        return "O" if (a_seveso if veut_seveso else not a_seveso) else "N"
+        statuts = [i.get("statutSeveso") for i in installations]
+        if veut_seveso:
+            trouve = any(s not in (None, "Non Seveso") for s in statuts)
+        else:
+            trouve = any(s == "Non Seveso" for s in statuts)
+        return "O" if trouve else "N"
     return regle
 
 
