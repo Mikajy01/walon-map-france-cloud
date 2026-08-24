@@ -18,7 +18,7 @@ from models.colonne import ColonneCreeeEvent, ColumnLayout, MethodeResolution
 from models.parcelle import normaliser_numero
 from services.column_registry_service import ColumnRegistryService
 from services.gpu_mappings import DU_MAPPING, ROLES_PERSONNALISES_PAR_ICONE
-from utils.color import copier_remplissage, rgb_de_cellule
+from utils.color import rgb_de_cellule
 from utils.image_hash import extraire_icones_par_colonne
 from utils.logger import get_logger
 from utils.text_normalize import normaliser_code_zone
@@ -75,19 +75,49 @@ _COLONNES_POSITION_FIXE = frozenset(range(COL_COMMUNE, COL_PLUI + 1))
 _COLONNE_VERS_TYPE_DOCUMENT = {v: k for k, v in TYPE_DOCUMENT_VERS_COLONNE.items()}
 
 
-_RE_CODE_SUP = re.compile(r"[-(]\s*([A-Za-z]+\d*(?:bis)?)\s*\)?\s*$")
+_RE_CODE_SUP_SUFFIXE = re.compile(r"[-(]\s*([A-Za-z]+\d*(?:bis)?)\s*\)?\s*$")
+# Format PRÉFIXE ("A9 - Zones agricoles protégées", "PM1bis - ...") —
+# écart réel trouvé en investigation live (2026-08-24, nouveau gabarit
+# "Tableau Geoportail France Off.xlsx") : contrairement à l'ancien
+# gabarit qui plaçait TOUJOURS le code SUP en fin d'en-tête, le nouveau
+# le place en TÊTE. Essayé en second (jamais en premier) pour ne
+# jamais casser la détection déjà validée sur l'ancien format.
+_RE_CODE_SUP_PREFIXE = re.compile(r"^([A-Za-z]+\d+(?:bis)?)\s*[-–]\s*")
+
+
+def _extraire_codes_sup_candidats(header_text: str) -> List[str]:
+    """Extrait TOUS les candidats plausibles de code SUP (début ET fin
+    d'en-tête), jamais un seul choisi à l'aveugle — écart réel trouvé
+    en investigation live (2026-08-24) : "AC4bis - Plans de
+    valorisation de l'architecture et du patrimoine (PVAP)" matche les
+    DEUX motifs (préfixe "AC4bis", suffixe "PVAP" — une simple
+    abréviation entre parenthèses, pas un code SUP), et le suffixe
+    aurait été retenu en premier alors que seul "AC4bis" est un code
+    réel. La validation contre `/standard/sup-categories` (faite par
+    l'appelant, seul à avoir accès à cette liste officielle) tranche
+    entre les candidats — ici on ne fait que les proposer, dans l'ordre
+    où ils apparaissent dans le texte (préfixe avant suffixe)."""
+    texte = header_text.strip()
+    candidats = []
+    m_prefixe = _RE_CODE_SUP_PREFIXE.match(texte)
+    if m_prefixe:
+        candidats.append(m_prefixe.group(1))
+    m_suffixe = _RE_CODE_SUP_SUFFIXE.search(texte)
+    if m_suffixe and m_suffixe.group(1) not in candidats:
+        candidats.append(m_suffixe.group(1))
+    return candidats
 
 
 def _extraire_code_sup(header_text: str) -> Optional[str]:
-    """Extrait le code SUP officiel en fin d'en-tête (`"...-EL7"` ->
-    `"EL7"`, `"...(T1)"` -> `"T1"`) — voir le plan/l'analyse du bloc
-    SUP. Ne valide PAS ici que le code existe réellement dans
-    `/standard/sup-categories` (fait dans `bootstrap_from_template`, la
-    seule fonction qui a accès à cette liste officielle) ; ici on
-    renvoie juste le candidat brut, ou `None` si le motif n'apparaît
-    pas du tout."""
-    m = _RE_CODE_SUP.search(header_text.strip())
-    return m.group(1) if m else None
+    """Repli à UN SEUL candidat pour les appelants qui n'ont pas accès à
+    la liste officielle des codes SUP pour arbitrer (voir `scan_layout`,
+    où un candidat incorrect échoue simplement sans risque — le
+    `code_registry` ne contient que les codes réellement validés par
+    `bootstrap_from_template`, voir `_extraire_codes_sup_candidats`).
+    Préfère le préfixe (moins sujet aux faux positifs qu'un suffixe
+    entre parenthèses, voir le docstring de `_extraire_codes_sup_candidats`)."""
+    candidats = _extraire_codes_sup_candidats(header_text)
+    return candidats[0] if candidats else None
 
 
 def _ressemble_a_un_code(header_text: str) -> bool:
@@ -251,8 +281,12 @@ def bootstrap_from_template(
         icone = icones_par_colonne.get(col_idx)
         if icone is not None:
             registry.enregistrer_icone_avec_image(icone.hash_md5, icone.png_bytes, "", "", lettre)
-            code_sup = _extraire_code_sup(header_text)
-            sup_valide = code_sup if (code_sup and code_sup in sup_category_names) else None
+            # Essaie CHAQUE candidat (préfixe ET suffixe) contre la
+            # liste officielle plutôt que d'en choisir un seul à
+            # l'aveugle — voir `_extraire_codes_sup_candidats`.
+            sup_valide = next(
+                (c for c in _extraire_codes_sup_candidats(header_text) if c in sup_category_names), None,
+            )
             if icone.hash_md5 not in hashes_ambigus:
                 du_match = DU_MAPPING.get(icone.hash_md5)
                 role_personnalise = ROLES_PERSONNALISES_PAR_ICONE.get(icone.hash_md5)
@@ -324,113 +358,45 @@ def bootstrap_from_template(
 # `main.py::executer_phase_a`, jamais appelé colonne par colonne pendant
 # le traitement d'une rue.
 
-def _dernier_index_famille(ws: Worksheet, family_id: str, registry: ColumnRegistryService) -> Optional[int]:
-    """Dernière colonne du fichier dont le remplissage matche la couleur
-    d'ancre de `family_id` — c'est APRÈS cette colonne qu'une nouvelle
-    colonne de cette famille doit être insérée (fin de bloc, jamais au
-    milieu)."""
-    dernier = None
-    for col_idx in range(1, ws.max_column + 1):
-        cell = ws.cell(row=HEADER_ROW, column=col_idx)
-        if not cell.value:
-            continue
-        rgb = rgb_de_cellule(cell)
-        if rgb and registry.classer_famille_couleur(rgb) == family_id:
-            dernier = col_idx
-    return dernier
-
-
-def _dernier_index_bloc_zonage(ws: Worksheet, registry: ColumnRegistryService) -> Optional[int]:
-    """Dernière colonne du fichier appartenant à N'IMPORTE QUELLE des 6
-    familles de couleur — repli utilisé quand la famille ciblée n'a
-    encore AUCUNE colonne dans ce fichier précis (jamais deviné un
-    emplacement arbitraire : on ancre au moins dans le bloc de zonage
-    dans son ensemble)."""
-    dernier = None
-    for col_idx in range(1, ws.max_column + 1):
-        cell = ws.cell(row=HEADER_ROW, column=col_idx)
-        if not cell.value:
-            continue
-        rgb = rgb_de_cellule(cell)
-        if rgb and registry.classer_famille_couleur(rgb) is not None:
-            dernier = col_idx
-    return dernier
 
 
 def ensure_columns_for_codes(
     ws: Worksheet, codes_nouveaux: Dict[str, str], registry: ColumnRegistryService,
     on_colonne_creee: Optional[Callable[[ColonneCreeeEvent], None]] = None,
 ) -> List[str]:
-    """Insère une colonne pour chaque `{code_brut: color_family_id}` de
-    `codes_nouveaux` (typiquement produit par `main.py::decouvrir_codes_
-    zone_manquants`), enregistre le code dans le registre (`role_code`
-    = code normalisé, cohérent avec ce que `ColumnRegistryService.
-    resolve_column` renverra pour ce même code la prochaine fois qu'il
-    est rencontré, gabarit ou pas), et notifie chaque création via
-    `on_colonne_creee` (lettre de colonne, position, en-têtes voisins) —
-    c'est le mécanisme concret demandé par l'utilisateur pour relais
-    manuel Teams. VOLONTAIREMENT PAS un simple `_logger.warning` : décision
-    utilisateur explicite (2026-08-19), cette notification ne doit jamais
-    être mélangée au flux de log général (main.py/gui.py la routent
-    chacun vers un canal séparé et bien visible) — un `_logger.debug` est
-    quand même émis en parallèle pour l'audit fichier, invisible en
-    fonctionnement normal (niveau INFO).
+    """Signale chaque code de zone rencontré sur une vraie parcelle mais
+    absent du fichier (`{code_brut: color_family_id}` de
+    `codes_nouveaux`, typiquement produit par `main.py::decouvrir_codes_
+    zone_manquants`) — décision explicite de l'utilisateur (2026-08-24) :
+    "il ne faut plus faire d'insertion de colonne, le tableau s'arrête
+    sur la partie géorisque". N'INSÈRE PLUS AUCUNE COLONNE (comportement
+    historique jusqu'au 2026-08-24, voir git blame pour l'ancienne
+    version qui appelait `ws.insert_cols`) — le bloc zonage existant
+    continue de résoudre normalement les codes déjà présents dans le
+    fichier (voir `ColumnRegistryService`, layer "code"), seul un code
+    RÉELLEMENT nouveau tombe ici, et reste désormais sans colonne,
+    signalé exactement comme une colonne non résolue (même canal
+    `on_colonne_creee`, pour ne jamais perdre le relais manuel Teams déjà
+    en place, mais plus aucune écriture dans le classeur).
 
-    Traite un code à la fois et RE-SCANNE la position d'insertion à
-    CHAQUE itération (jamais une liste de positions pré-calculées) :
-    `ws.insert_cols` décale toutes les colonnes suivantes d'un cran,
-    une position mise en cache serait fausse dès la 2e insertion.
-
-    Les lignes déjà écrites plus haut dans le fichier restent BLANCHES
-    dans la colonne nouvellement créée (jamais de remplissage rétroactif
-    deviné : on ne sait tout simplement pas si ces anciennes parcelles
-    correspondent à ce code, elles n'ont jamais été vérifiées pour lui).
-
-    Renvoie la liste des codes effectivement créés (PAS juste un compte —
-    un code peut être ignoré faute d'ancre de famille, la liste exacte
-    est nécessaire pour un relais manuel fiable, voir `executer_phase_a`)."""
-    codes_crees: List[str] = []
+    Renvoie toujours une liste vide (aucun code n'est plus jamais
+    "créé") — le type de retour reste `List[str]` pour ne pas casser les
+    appelants existants (`main.py::executer_phase_a`), qui traitent déjà
+    une liste vide comme "rien de nouveau à signaler à l'utilisateur
+    au-delà des événements `on_colonne_creee`"."""
     for code, family_id in codes_nouveaux.items():
-        position = _dernier_index_famille(ws, family_id, registry)
-        if position is None:
-            position = _dernier_index_bloc_zonage(ws, registry)
-        if position is None:
-            _logger.warning(
-                "Phase A : code de zone '%s' (famille '%s') — aucun bloc de zonage existant "
-                "trouvé dans ce fichier pour ancrer l'insertion, colonne NON créée.",
-                code, family_id,
-            )
-            continue
-        col_insertion = position + 1
-        # Capturé AVANT insert_cols : au-delà de ce point, la colonne qui
-        # suivait le point d'insertion a déjà été décalée d'un cran, son
-        # en-tête ne serait plus lisible à la même position.
-        lettre_avant = get_column_letter(position)
-        entete_avant = ws.cell(row=HEADER_ROW, column=position).value or ""
-        entete_apres = ws.cell(row=HEADER_ROW, column=col_insertion).value or ""
-        ws.insert_cols(col_insertion)
-        cellule = ws.cell(row=HEADER_ROW, column=col_insertion)
-        cellule.value = code
-        copier_remplissage(config.COLOR_FAMILY_ANCHORS[family_id], cellule)
-        # Sensible à la casse (voir normaliser_code_zone, 2026-08-21) :
-        # "Ua" et "UA" sont des zones réellement différentes.
-        role_code = normaliser_code_zone(code)
-        registry.enregistrer_code(code, role_code=role_code, canonical_label=code, color_family_id=family_id)
-        lettre = get_column_letter(col_insertion)
-        lettre_apres = get_column_letter(col_insertion + 1)
-        _logger.debug(
-            "Phase A : nouvelle colonne %s, entre %s ('%s') et %s ('%s') — code '%s', famille '%s'.",
-            lettre, lettre_avant, entete_avant, lettre_apres, entete_apres,
+        _logger.warning(
+            "Code de zone '%s' (famille '%s') rencontré sur une vraie parcelle mais absent du "
+            "fichier — signalé, AUCUNE colonne créée (insertion automatique désactivée, décision "
+            "utilisateur 2026-08-24).",
             code, family_id,
         )
         if on_colonne_creee is not None:
             on_colonne_creee(ColonneCreeeEvent(
-                column_letter=lettre, code=code, color_family_id=family_id,
-                lettre_avant=lettre_avant, entete_avant=entete_avant,
-                lettre_apres=lettre_apres, entete_apres=entete_apres,
+                column_letter="", code=code, color_family_id=family_id,
+                lettre_avant="", entete_avant="", lettre_apres="", entete_apres="",
             ))
-        codes_crees.append(code)
-    return codes_crees
+    return []
 
 
 def _derniere_ligne_remplie(ws: Worksheet) -> int:

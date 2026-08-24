@@ -126,9 +126,9 @@ COLOR_FAMILY_ANCHORS: dict[str, str] = {
 # nouvelle colonne validée contre une vraie API (voir le plan) et à
 # chaque nouvelle variante de libellé observée dans un fichier réel.
 ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
-    "argiles_exposition_forte": ["Argiles Exposition Forte"],
-    "argiles_exposition_moyenne": ["Argiles Exposition Moayen"],
-    "argiles_exposition_faible": ["Argiles Exposition Faible"],
+    "argiles_exposition_forte": ["Argiles Exposition Forte", "Exposition Forte"],
+    "argiles_exposition_moyenne": ["Argiles Exposition Moayen", "Exposition Moayen"],
+    "argiles_exposition_faible": ["Argiles Exposition Faible", "Exposition Faible"],
     "radon_categorie_1": ["Catégorie 1"],
     "radon_categorie_2": ["Catégorie 2"],
     "radon_categorie_3": ["Catégorie 3"],
@@ -137,7 +137,12 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     "sismicite_moderee": ["Sismicité modorée"],
     "sismicite_moyenne": ["Sismicité moyenne"],
     "sismicite_forte": ["Sismicité forte"],
-    "anciens_sites_industriels": ["Anciens sites industriels et activités de service"],
+    "anciens_sites_industriels": [
+        "Anciens sites industriels et activités de service",
+        "Emprises des sites industriels", "ocalisations des sites industriels",
+        "Localisation des anciens sites industriels et activités de service",
+        "Emprises des anciens sites industriels et activités de service",
+    ],
     "installations_nucleaires": ["Installation Industrielles (Installation nucléaire de base (INB))"],
     "cavites_non_minieres": ["Cavités souterraines d'origine non minière"],
     "cavites_non_minieres_non_localisees": ["Cavités souterraine non minières abandonnées non localisée"],
@@ -146,14 +151,19 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     # services/georisques_rules.py pour la règle associée à chacun, et sa
     # confiance CONFIRMÉ/STRUCTUREL).
     "mouvements_de_terrain": ["Mouvements de terrain"],
-    "mouvements_de_terrain_non_localises": ["Mouvements de terrain non localisés"],
+    "mouvements_de_terrain_non_localises": [
+        "Mouvements de terrain non localisés", "Mouvements des terrain non localisés",
+        "Mouvements des terrain non localiés",  # coquille réelle du nouveau gabarit ("localiés")
+    ],
     "obligation_legale_debroussaillement": ["(Zonage informatif des obligation légales de debroussaillement"],
     "canalisations_matieres_dangereuses": [
         "Réseaux et canalisation (Canalisations de transport de matières "
         "dangereuses: Gaz, Hydrocarbures, Produits chimiques)"
     ],
     "secteur_information_sols": ["Secteur d'information sur les sols"],
-    "servitude_utilite_publique_sols": ["Servitudes d'utilité Publique"],
+    "servitude_utilite_publique_sols": [
+        "Servitudes d'utilité Publique", "Emprises des servitudes d'utilité publique",
+    ],
     "sites_pollues_basol": [
         "Site pollués ou potentiellement pollués appelant une action de "
         "pouvoir publics, à titre preventif ou curatif (BASOL)"
@@ -164,20 +174,31 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     # _ppr_parcelle_existe — confirmé en direct que `longitude`/
     # `latitude` sur gaspar/pprn|pprt|pprm fait une vraie intersection
     # géométrique, testé sur Lyon).
-    "ppr_inondation": ["PPR INONDATION"],
-    "ppr_littoraux": ["PPR LITTORAUX"],
-    "ppr_mouvement_terrain": ["PPR Mouvement de terrain"],
-    "ppr_feu_foret": ["PPR Feu de forêt", "PPR Feu de foret"],
-    "ppr_avalanche": ["PPR Avalanche"],
+    "ppr_inondation": ["PPR INONDATION", "PPR INONDATION Périmètre -PPRN Risque Inondation"],
+    "ppr_littoraux": [
+        "PPR LITTORAUX", "PPR LITTORAUX Périmètre -PPRN Risque Inondation- Par sublension marine",
+    ],
+    "ppr_mouvement_terrain": [
+        "PPR Mouvement de terrain", "PPR Mouvement de terrain Périmètre- PPRN Risque Mouvement de terrain",
+    ],
+    # "PPR Feu de forêt Périmètre-PPRN Risque Avalanche" : coquille bien
+    # réelle du nouveau gabarit (suffixe copié-collé d'une autre ligne,
+    # confirmé par sa POSITION — 4e sur 8 dans le bloc PPR parcelle,
+    # exactement où "Feu de forêt" est attendu) — jamais "corrigée",
+    # juste rattachée au bon rôle par sa position et son préfixe.
+    "ppr_feu_foret": [
+        "PPR Feu de forêt", "PPR Feu de foret", "PPR Feu de forêt Périmètre-PPRN Risque Avalanche",
+    ],
+    "ppr_avalanche": ["PPR Avalanche", "PPR Avalanche PPRN Risque Avalanche"],
     # CLPA (Carte de Localisation des Phénomènes d'Avalanche) — confirmé
     # en direct via le GeoServer public INRAE (voir services/wfs_clpa_
     # service.py), après que la source initialement référencée
     # (Cartorisque/prim.net) se soit révélée décommissionnée (HTTP 403).
     "temoignages_avalanches": ["Témoignages d'avalanches"],
     "interpretation_phenomenes_passes": ["Interprétation des phénomène passés"],
-    "ppr_seisme": ["PPR Seisme"],
-    "ppr_risque_minier": ["PPR Risque Minier"],
-    "ppr_risque_industriel": ["PPR Risque Industriel"],
+    "ppr_seisme": ["PPR Seisme", "PPR Seisme PPRN Risque Seisme"],
+    "ppr_risque_minier": ["PPR Risque Minier", "PPR Risque Minier PPRT Risque Minier"],
+    "ppr_risque_industriel": ["PPR Risque Industriel", "PPR Risque Industriel PPRT Risque Industriel"],
 
     "ppr_inondation_commune": ["PPR Inondation sur la commune"],
     "ppr_submersion_marine_commune": ["PPR Inondation par submension marine sur la commune"],
@@ -238,7 +259,7 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     # services/gpu_rules.py::_role_vers_code_du) — les deux chemins de
     # résolution convergent vers le même rôle.
     "gpu_du_information_01-01": ["Secteur sauvegardé"],  # PSMV
-    "gpu_du_prescription_31-05": ["Zone Humides"],
+    "gpu_du_prescription_31-05": ["Zone Humides", "Périmètre d'application du plan de sauvegarde et mise en valeur"],
     "zone_natura_2000": ["Zone Nature 2000"],
     "zone_urbaine_patrimoniale": ["Zone urbaine Patrimoniale"],
     "gpu_du_prescription_07-52": ["Immeuble bâti dont les parties extérieures sont protégées, à conserver, restaurer et mettre en valeur"],
@@ -246,8 +267,7 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     "gpu_du_prescription_07-67": ["Immeuble bâti non protégé soumis à des dispositions spécifiques ou des règles générales localisées"],
     "gpu_du_information_04-00": [
         "Instauration du droit de préemption Urbain D.P.U / Périmètre droit de préemption urbain",
-        "DPU", "D.P.U",
-    ],
+        "DPU", "D.P.U", "Périmètre de droit de préemption urbain"],
     "gpu_du_information_03-00": ["Zone de préemption dans un espace naturel et sensible"],
     "schema_coherence_territoriale_publie": ["schéma de Cohérence territoriale(publié)"],
     "schema_coherence_territoriale_non_publie": ["schéma de Cohérence territoriale (non publié)"],
@@ -281,7 +301,9 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     "alea_ruissellement_rare": ["Inondation (Aléa ruissellement rare ou milléniall)"],
     "ouvrage_protection_inondation": ["Inondation (Ouvrages de protection)"],
     "zone_sur_alea_inondation": ["Inondation (Zone de sur-aléa Inondation)"],
-    "zone_soustraite_alea_inondation": ["Inondation (Zone soustraittes à l'aléa Inondation)"],
+    "zone_soustraite_alea_inondation": [
+        "Inondation (Zone soustraittes à l'aléa Inondation)", "Zone soustraittes à l'aléa Inondation)",
+    ],
     "territoire_risque_important_inondation": ["Inondation (Territoires à risues importants d'inondation)"],
     "zone_urbaine": ["Zone urbaine"],
     "zone_a_urbaniser_ouverte": ["Zone à urbaniser ouverte"],
@@ -421,10 +443,6 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     "secteur_information_sols": [
         "Secteur d'information sur les sols", "Emprises des secteurs d'information sur les sols",
     ],
-    "anciens_sites_industriels": [
-        "Anciens sites industriels et activités de service",
-        "Emprises des sites industriels", "ocalisations des sites industriels",
-    ],
     "cavites_non_minieres_non_localisees": [
         "Cavités souterraine non minières abandonnées non localisée", "Communes avec cavités non localisées",
     ],
@@ -442,6 +460,100 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
         "Périmètres de projets Association Foncière Urbaine de Projet",
     ],
     "gpu_du_prescription_38-00": ["Emprise au sol"],
+    # Ajouts en masse (2026-08-24) : 91 correspondances DU haute
+    # confiance (score >= 0.90 contre /standard/du-categories),
+    # verifiees en direct -- necessaires car aucune correspondance
+    # floue dynamique n'existe reellement dans le pipeline de
+    # production (scan_layout n'appelle jamais la couche 4).
+    "gpu_du_information_05-00": ["Zone d'aménagement différé"],
+    "gpu_du_information_07-00": ["Périmètre de développement prioritaire économie d'énergie"],
+    "gpu_du_information_09-00": ["Périmètre minier de concession pour l'exploitation ou le stockage"],
+    "gpu_du_information_11-00": ["Périmètre des zones délimitées - divisions foncière soumises à déclaration préalable"],
+    "gpu_du_information_12-00": ["Périmètre de sursis à statuer"],
+    "gpu_du_information_13-00": ["Secteur de programme d'aménagement d'ensemble"],
+    "gpu_du_information_14-00": ["Périmètre de voisinage d'infrastructure de transport terrestre (secteur affecté par le bruit)"],
+    "gpu_du_information_16-00": ["Site archéologique"],
+    "gpu_du_information_17-00": ["Zone à risque d'exposition au plomb"],
+    "gpu_du_information_19-01": ["Zones d'assainissement collectif / non collectif / eaux usées / eaux pluviales, schéma de réseaux eau et assainissement, systèmes d'élimination des déchets"],
+    "gpu_du_information_21-00": ["Projet de plan de prévention des risques"],
+    "gpu_du_information_22-00": ["Protection des rives des plans d'eau en zone de montagne"],
+    "gpu_du_information_23-00": ["Arrêté du préfet coordonnateur de massif"],
+    "gpu_du_information_25-00": ["Périmètre de protection des espaces agricoles et naturels péri-urbains"],
+    "gpu_du_information_27-00": ["Plan d'exposition au bruit des aérodromes"],
+    "gpu_du_information_30-00": ["Périmètre projet urbain partenarial"],
+    "gpu_du_information_31-00": ["Périmètres patrimoniaux d’exclusion des matériaux et énergies renouvelables pris par délibération"],
+    "gpu_du_information_32-00": ["Secteur de taxe d'aménagement"],
+    "gpu_du_information_33-00": ["Droit de préemption commercial"],
+    "gpu_du_information_34-00": ["Périmètre d'opération d'intérêt national"],
+    "gpu_du_information_35-00": ["Périmètre de secteur afffecté par un seuil minimal de densité"],
+    "gpu_du_information_36-00": ["Schémas d'aménagement de plage"],
+    "gpu_du_information_37-00": ["Bois ou forêts relevant du régime forestier"],
+    "gpu_du_information_40-00": ["Bien inscrit au patrimoine mondial"],
+    "gpu_du_information_41-00": ["Bande de recul le long des axes à grande circulation"],
+    "gpu_du_information_42-00": ["Secteurs délimités par délibération de l'autorité compétente en matière d'urbanisme, dans lesquels certaines opérations sont soumises à autorisation d'urbanisme"],
+    "gpu_du_information_43-00": ["Secteur d’obligation légale de débroussaillement (OLD) en prévention des incendies"],
+    "gpu_du_information_70-00": ["Emprise ou localisation des immeubles bâtis ou non bâtis classés ou inscrits au titre des monuments historiques"],
+    "gpu_du_prescription_01-00": ["Espace boisé classé"],
+    "gpu_du_prescription_01-01": ["Espace boisé classé à protéger ou conserver"],
+    "gpu_du_prescription_02-00": ["Limitation de la constructibilité pour des raisons environnementales, de risques, d’intérêt général"],
+    "gpu_du_prescription_03-00": ["Secteur avec disposition de reconstruction/démolition"],
+    "gpu_du_prescription_05-00": ["Emplacement réservé"],
+    "gpu_du_prescription_07-00": ["Patrimoine bâti, paysager ou éléments de paysages à protéger pour des motifs d'ordre culturel, historique, architectural ou écologique"],
+    "gpu_du_prescription_07-51": ["Elément extérieur particulier protégé à conserver, restaurer et mettre en valeur", "Elément intérieur particulier protégé, à conserver, restaurer et mettre en valeur"],
+    "gpu_du_prescription_07-53": ["Mur de soutènemenr, rempart ou mur de clôture protégé, à conserver, restaurer et mettre en valeur"],
+    "gpu_du_prescription_07-55": ["Séquence, composition, ordonnance architecturale ou urbaine protégée, à conserver, restaurer et mettre en valeur"],
+    "gpu_du_prescription_07-56": ["Séquence naturelle protégée (front rocheux, falaise, etc.), à conserver, restaurer et mettre en valeur"],
+    "gpu_du_prescription_07-57": ["Parc ou jardin de pleine terre protégé, à conserver, restaurer et mettre en valeur"],
+    "gpu_du_prescription_07-58": ["Espace libre à dominante végétale protégé à conserver, restaurer et mettre en valeur"],
+    "gpu_du_prescription_07-59": ["Séquence, composition ou ordonnance végétale s'ensemble protégée, à conserver, restaurer et mettre en valeur"],
+    "gpu_du_prescription_07-63": ["Point d'eau ou source protégé, à conserver, restaurer et mettre en valeur"],
+    "gpu_du_prescription_07-64": ["Passage d'eau souterrain protégé, à conserver, restaurer et mettre en valeur"],
+    "gpu_du_prescription_07-65": ["Espace vert non protégé à requalifier"],
+    "gpu_du_prescription_07-68": ["Immeuble non bâti ou espace libre non protégé soumis à des dispositions spécifiques ou des règles générales localisées"],
+    "gpu_du_prescription_13-00": ["Zone à aménager en vue de la pratique du ski"],
+    "gpu_du_prescription_14-00": ["Secteur de plan de masse"],
+    "gpu_du_prescription_15-00": ["Règles d'implantation des constructions"],
+    "gpu_du_prescription_15-50": ["Limite maximale d'implantation de construction"],
+    "gpu_du_prescription_15-51": ["Limite imposée d'implantation de construction"],
+    "gpu_du_prescription_16-00": ["Constructions et installations nécessaires à des équipements collectifs en zone A ou N"],
+    "gpu_du_prescription_17-00": ["Secteur à programme de logements mixité sociale en zone U et AU"],
+    "gpu_du_prescription_18-00": ["Périmètre comportant des orientations d’aménagement et de programmation (OAP)"],
+    "gpu_du_prescription_19-00": ["Secteur protégé en raison de la richesse du sol et du sous-sol"],
+    "gpu_du_prescription_20-00": ["Secteur à transfert de constructibilité en zone N"],
+    "gpu_du_prescription_22-00": ["Diversité commerciale à protéger ou à développer"],
+    "gpu_du_prescription_23-00": ["Secteur avec taille minimale des logements en zone U et AU"],
+    "gpu_du_prescription_24-50": ["Passage ou liaison piétonne à maintenir ou à créer"],
+    "gpu_du_prescription_25-00": ["Éléments de continuité écologique et trame verte et bleue"],
+    "gpu_du_prescription_26-00": ["Secteur de performance énergétique"],
+    "gpu_du_prescription_27-00": ["Secteur d’aménagement numérique"],
+    "gpu_du_prescription_28-00": ["Conditions de desserte"],
+    "gpu_du_prescription_29-00": ["Secteur avec densité minimale de construction"],
+    "gpu_du_prescription_30-00": ["Majoration des volumes constructibles"],
+    "gpu_du_prescription_31-00": ["Espaces remarquables du littoral"],
+    "gpu_du_prescription_32-00": ["Exclusion protection de plans d’eau de faible importance"],
+    "gpu_du_prescription_33-00": ["Secteur de dérogation aux protections des rives des plans d'eau en zone de montagne"],
+    "gpu_du_prescription_34-00": ["Espaces, paysage et milieux caractéristiques du patrimoine naturel et culturel montagnard à préserver"],
+    "gpu_du_prescription_35-00": ["Terres nécessaires au maintien et au développement des activités agricoles pastorales et forestières à préserver"],
+    "gpu_du_prescription_36-00": ["Mixité des destinations ou sous-destinations"],
+    "gpu_du_prescription_37-00": ["Règles différenciées entre le rez-de-chaussée et les étages supérieurs des constructions"],
+    "gpu_du_prescription_39-50": ["Hauteur maximale de façade"],
+    "gpu_du_prescription_39-51": ["Hauteur maximale de faîtage ou de construction"],
+    "gpu_du_prescription_39-52": ["Hauteur imposée de façade"],
+    "gpu_du_prescription_40-50": ["Point de vue, perspective à préserver et à mettre en valeur"],
+    "gpu_du_prescription_41-00": ["Aspect extérieur"],
+    "gpu_du_prescription_42-00": ["Coefficient de biotope par surface"],
+    "gpu_du_prescription_43-00": ["Réalisation d’espaces libres, plantations, aires de jeux et de loisir"],
+    "gpu_du_prescription_45-00": ["Secteur de ZAC avec surfaces de plancher déterminées"],
+    "gpu_du_prescription_46-00": ["Constructibilité espace boisé antérieur au 20ème siècle"],
+    "gpu_du_prescription_47-00": ["Desserte par les réseaux"],
+    "gpu_du_prescription_48-00": ["Mesures pour limiter l'imperméabilisation des sols"],
+    "gpu_du_prescription_50-00": ["Interdiction types d’activités, destinations, sous-destinations"],
+    "gpu_du_prescription_51-00": ["Autorisation sous conditions types d’activités, destinations, sous-destinations"],
+    "gpu_du_prescription_52-00": ["Infrastructures et équipements logistiques à préserver ou à développer en zones U et AU"],
+    "gpu_du_prescription_53-00": ["Dérogation à l’article L.111-6 pour l’implantation des constructions le long des grands axes routiers"],
+    "gpu_du_prescription_54-01": ["Zone exposée au recul du trait de côte à l'horizon de trente ans"],
+    "gpu_du_prescription_55-01": ["Secteur d’implantation d’installations de production d'énergies renouvelables, et leurs ouvrages de raccordement, soumises à conditions"],
+    "gpu_du_prescription_56-00": ["Secteur dans lequel toutes les constructions nouvelles de logements sont à usage exclusif de résidence principale"],
     "alea_debordement_moyen_cc": [
         "Evènement de moyenne probabilité avec prise en compte du changement climatique",
     ],
@@ -489,6 +601,31 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     "erosion_berges": ["Erosion des berges"],
     "sup_gaz_naturel": ["Gaz Naturel"],
     "mise_en_compatibilite": ["Mises en compatibilité"],
+
+    # Ajouts (2e passe, test réel bootstrap+scan sur le gabarit construit) :
+    # rôles avec une vraie règle nouvellement câblée.
+    "cavite_type_souterrain": ["Souterrain"],
+    "installation_elevage": ["Elevage"],
+    "mouvement_terrain_effondrement": ["Effondrement"],
+    "remnappe_eaip": [
+        "Remontée de nappes (Enveloppes Approchées des Innondations Potentielles en cours d'eau "
+        "et submersion marine de plus d'un hectare)",
+    ],
+
+    # Identité classée, SANS règle (voir ROLES_SANS_REGLE) — 2e passe :
+    "clpa_avalanche": ["Avalanche"],
+    "remnappe_masq_bdlisa": [
+        "Remontée de nappes (Entités hydrogéologiques imperméables à l'affleurement)",
+    ],
+    "installation_produits_chimiques": ["Produits Chimiques"],
+    "installation_hydrocarbures": ["Hydrocarbures"],
+    "eolien_appartenant_parc_instruction": ["Eoliennes appartenant à un parc en instruction"],
+    "eolien_appartenant_parc_attente_construction": [
+        "Eoliennes appartenant à un parc en attente de construction",
+    ],
+    "eolien_appartenant_parc_construction": ["Eoliennes appartenant à un parc en construction"],
+    "eolien_appartenant_parc_exploitation": ["Eoliennes appartenant à un parc en exploitation"],
+    "eolien_appartenant_parc_cessation": ["Eoliennes appartenant à un parc en cessation d'activité"],
 }
 
 # Rôles dont l'IDENTITÉ est résolue mais pour lesquels AUCUNE règle de
@@ -610,6 +747,48 @@ ROLES_SANS_REGLE: frozenset = frozenset({
     "erosion_berges",
     "sup_gaz_naturel",
     "mise_en_compatibilite",
+
+    # -- 2e passe (test réel bootstrap+scan sur le gabarit construit,
+    # 2026-08-24) : gaps révélés par le VRAI pipeline (le script
+    # d'analyse préalable simulait un matching flou qui n'existe pas
+    # réellement dans scan_layout) :
+    # "Avalanche" (bare, sans "Zone" ni "Zone présumée") : la légende
+    # CLPA officielle confirme que c'est une VRAIE catégorie distincte
+    # (avalanche identifiée par numéro via témoignage), même limite que
+    # les 6 autres catégories CLPA déjà classées plus haut — pas de
+    # table numérique CODE trouvée.
+    "clpa_avalanche",
+    # "Remontée de nappes (Entités hydrogéologiques imperméables à
+    # l'affleurement)" : la source EXISTE et a été identifiée avec
+    # certitude — couche WFS BRGM `MASQ_BDLISA`, titre officiel
+    # confirmé en direct via GetCapabilities, correspondance EXACTE mot
+    # pour mot. MAIS le serveur renvoie une erreur SQL 500 sur CETTE
+    # couche précise, à chaque coordonnée testée (4 régions différentes,
+    # avec et sans le paramètre `count`) — contrairement à `MASQ_EAIP`
+    # (même serveur, couche voisine) qui fonctionne normalement. Un vrai
+    # bug serveur, pas une question de source introuvable : à revisiter
+    # si ce bug est un jour corrigé côté BRGM.
+    "remnappe_masq_bdlisa",
+    # "Produits Chimiques"/"Hydrocarbures" (bare) : le seul endpoint
+    # Géorisques déjà câblé pour les matières dangereuses (`gaspar_tim`,
+    # rôle `canalisations_matieres_dangereuses`) ne renvoie qu'un flag
+    # d'existence par commune, sans détail de substance — vérifié en
+    # direct sur un enregistrement réel (Arbent). Les codes SUP les plus
+    # proches (I1/I3/I5/I7, "gaz naturel, hydrocarbures et produits
+    # chimiques") mélangent les 3 substances dans un même code, aucun
+    # moyen de les distinguer sans deviner.
+    "installation_produits_chimiques",
+    "installation_hydrocarbures",
+    # "Eoliennes appartenant à un parc en X" : 3e cluster de cycle de
+    # vie éolien distinct de "Postes de livraison"/"Parcs éoliens
+    # terrestres" déjà documentés plus haut — même investigation, même
+    # conclusion (aucune des 3 sources réelles consultées n'expose
+    # cette granularité par projet).
+    "eolien_appartenant_parc_instruction",
+    "eolien_appartenant_parc_attente_construction",
+    "eolien_appartenant_parc_construction",
+    "eolien_appartenant_parc_exploitation",
+    "eolien_appartenant_parc_cessation",
 })
 
 # Endpoints Géorisques v1 utilisés (bloc de colonnes risques). Confirmé en

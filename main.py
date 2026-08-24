@@ -806,45 +806,23 @@ def executer_phase_a(
     voirie: Optional[VoirieService] = None,
     on_colonne_creee: Optional[Callable[[ColonneCreeeEvent], None]] = None,
 ) -> Tuple[ColumnLayout, List[str]]:
-    """Phase A complète : découvre les codes de zonage manquants sur tout
-    le lot, insère une colonne pour chacun, puis RE-SCANNE la disposition
-    de colonnes (une insertion change les lettres de toutes les colonnes
-    suivantes — la `layout` d'avant Phase A serait fausse). À appeler
-    ENTRE `preparer_lot` et la boucle de traitement des rues, jamais
-    pendant (voir `models/colonne.py::ColumnLayout`). Renvoie `(layout,
-    codes_crees)` — `codes_crees` (liste vide si rien créé) est destiné à
-    `ResultatLot.colonnes_creees` (voir `models/resultats.py::resume`) —
-    écart réel trouvé en investigation live : ce champ existait déjà et
-    figurait déjà dans `resume()`, mais n'était jamais rempli nulle part,
-    donc jamais affiché à l'utilisateur malgré le besoin explicite de
-    relais manuel (Teams) pour toute colonne nouvellement créée."""
+    """Phase A : découvre les codes de zonage manquants sur tout le lot
+    et les SIGNALE (voir `excel_service.ensure_columns_for_codes` —
+    décision explicite de l'utilisateur, 2026-08-24 : plus aucune
+    insertion automatique de colonne). `ws`/`excel_path` restent des
+    paramètres (signature inchangée pour ne pas casser les appelants)
+    mais ne sont plus écrits ici : `layout` ne peut plus changer sans
+    insertion, donc jamais de re-scan ni de sauvegarde à ce stade.
+    Renvoie `(layout, [])` — la liste est toujours vide (voir
+    `ensure_columns_for_codes`), gardée dans la signature pour la même
+    raison de compatibilité."""
     codes_nouveaux = decouvrir_codes_zone_manquants(
         elements, layout, cadastre=cadastre, geocodage=geocodage, traversal=traversal,
         urbanisme=urbanisme, voirie=voirie,
     )
-    if not codes_nouveaux:
-        return layout, []
-    codes_crees = ensure_columns_for_codes(ws, codes_nouveaux, registry, on_colonne_creee=on_colonne_creee)
-    if not codes_crees:
-        return layout, []
-    _logger.info(
-        "Phase A : %d nouvelle(s) colonne(s) de code de zonage créée(s) : %s",
-        len(codes_crees), sorted(codes_crees),
-    )
-    # Sauvegarde IMMÉDIATE de `ws` (structure seule, aucune ligne de
-    # données touchée) puis rescan sur une copie FRAÎCHE, jamais sur `ws`
-    # lui-même — même piège openpyxl que `preparer_lot` (lire les octets
-    # d'icône via `scan_layout`/`extraire_icones_par_colonne` épuise leur
-    # flux source ; sauvegarder `ws` ensuite plante avec `ValueError: I/O
-    # operation on closed file`). Confirmé en investigation live : sans
-    # ce correctif, la toute première sauvegarde après une insertion
-    # Phase A plante systématiquement.
-    ws.parent.save(excel_path)
-    ws_rescan = charger_feuille(excel_path)
-    nouvelle_layout = scan_layout(
-        ws_rescan, registry, run_id=excel_path.stem, file_path=str(excel_path), commune="", rue="",
-    )
-    return nouvelle_layout, sorted(codes_crees)
+    if codes_nouveaux:
+        ensure_columns_for_codes(ws, codes_nouveaux, registry, on_colonne_creee=on_colonne_creee)
+    return layout, []
 
 
 # Rôles "binaires fixes" du bloc zonage (ancres + reformulation T/U/V/W/X)
@@ -1074,6 +1052,11 @@ def resoudre_wfs_remnappe(parcelle: Parcelle, wfs_remnappe: WfsRemnappeService) 
         resultat = _resoudre_resilient(role_code, parcelle, fn, None)
         if resultat is not None:
             valeurs[role_code] = resultat
+    resultat_eaip = _resoudre_resilient(
+        "remnappe_eaip", parcelle, lambda: wfs_remnappe.eaip(cy, cx), None,
+    )
+    if resultat_eaip is not None:
+        valeurs["remnappe_eaip"] = resultat_eaip
     return valeurs
 
 
@@ -1601,8 +1584,8 @@ def reessayer_cellules_remnappe(
 
     with chemin_revisite.open(newline="", encoding="utf-8") as f:
         lignes = list(csv.DictReader(f))
-    a_retenter_brut = [l for l in lignes if l["role_code"] in REGLES_REMNAPPE]
-    autres = [l for l in lignes if l["role_code"] not in REGLES_REMNAPPE]
+    a_retenter_brut = [l for l in lignes if l["role_code"] in REGLES_REMNAPPE or l["role_code"] == "remnappe_eaip"]
+    autres = [l for l in lignes if l["role_code"] not in REGLES_REMNAPPE and l["role_code"] != "remnappe_eaip"]
     if not a_retenter_brut:
         return 0
 
@@ -1640,6 +1623,9 @@ def reessayer_cellules_remnappe(
             resultat = wfs_remnappe.classe_fiabilite(cy, cx, classe, fiabilite)
             if resultat is not None:
                 valeurs_remnappe[role_code] = resultat
+        resultat_eaip = wfs_remnappe.eaip(cy, cx)
+        if resultat_eaip is not None:
+            valeurs_remnappe["remnappe_eaip"] = resultat_eaip
         if valeurs_remnappe:
             nouvelles_valeurs[(code_insee, section, numero)] = valeurs_remnappe
 

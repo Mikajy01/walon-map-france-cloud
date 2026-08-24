@@ -65,6 +65,25 @@ class WfsRemnappeService:
         dlon = marge_m / (111320 * math.cos(math.radians(lat)))
         return f"{lat - dlat},{lon - dlon},{lat + dlat},{lon + dlon},EPSG:4326"
 
+    def eaip(self, lat: float, lon: float) -> Optional[str]:
+        """"Remontée de nappes (Enveloppes Approchées des Inondations
+        Potentielles en cours d'eau et submersion marine de plus d'un
+        hectare)" — couche `MASQ_EAIP`, même serveur BRGM que
+        `REMNAPPE_FIAB`. Titre officiel confirmé en direct via
+        `GetCapabilities` : correspondance EXACTE (mot pour mot) avec
+        cette colonne du nouveau gabarit. CONFIRMÉ positif en direct
+        (2 features réelles trouvées, Seine à Rouen)."""
+        params = {
+            "service": "WFS", "version": "2.0.0", "request": "GetFeature",
+            "typeName": "ms:MASQ_EAIP", "bbox": self._bbox(lat, lon),
+        }
+        try:
+            xml = self._http.get_text(_WFS_BASE, params, service_key="brgm_remnappe_wfs")
+        except Exception as exc:  # noqa: BLE001
+            _logger.warning("Couche MASQ_EAIP indisponible (lat=%s, lon=%s) : %s", lat, lon, exc)
+            return None
+        return "O" if "<wfs:member>" in xml else "N"
+
     def classe_fiabilite(self, lat: float, lon: float, classe: str, fiabilite: Optional[str]) -> Optional[str]:
         """`"O"`/`"N"` selon qu'au moins une feature au point donné
         matche à la fois `classe` (voir les 3 constantes du module) et

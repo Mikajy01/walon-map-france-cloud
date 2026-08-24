@@ -244,6 +244,19 @@ def _existence_installation_seveso(veut_seveso: bool) -> RegleGeorisques:
     return regle
 
 
+def _existence_installation_flag_ou(*champs: str) -> RegleGeorisques:
+    """"Elevage" (bare, sans type d'animal précisé) — interprétation
+    raisonnée (2026-08-24) : au moins un des 3 flags déjà confirmés
+    (`bovins`/`porcs`/`volailles`, voir `_existence_installation_flag`)
+    est vrai, plutôt qu'un flag dédié qui n'existe pas dans
+    `/installations_classees` — jamais deviné une distinction plus fine
+    que ce que l'API expose réellement."""
+    def regle(cx: float, cy: float, code_insee: str, g: GeorisquesService) -> Optional[str]:
+        installations = g.get_installations_classees(code_insee)
+        return "O" if any(any(inst.get(c) for c in champs) for inst in installations) else "N"
+    return regle
+
+
 def _installation_nucleaire_type(type_attendu: str, risque_iode: Optional[bool] = None) -> RegleGeorisques:
     """CONFIRMÉ (2026-08-24) — `get_installations_nucleaires` (déjà
     câblée pour le rôle `installations_nucleaires`, jamais exploitée
@@ -479,10 +492,12 @@ REGLES_GEORISQUES: Dict[str, RegleGeorisques] = {
     "cavite_type_ouvrage_civil": _existence_cavite_type("Ouvrage civil"),
     "cavite_type_ouvrage_militaire": _existence_cavite_type("Ouvrage militaire"),
     "cavite_type_puits": _existence_cavite_type("Puits"),
+    "cavite_type_souterrain": _existence_cavite_type("Souterrain"),
 
     "installation_elevage_bovin": _existence_installation_flag("bovins"),
     "installation_elevage_porcin": _existence_installation_flag("porcs"),
     "installation_elevage_volaille": _existence_installation_flag("volailles"),
+    "installation_elevage": _existence_installation_flag_ou("bovins", "porcs", "volailles"),
     "installation_eolienne": _existence_installation_flag("eolienne"),
     "installation_industrie": _existence_installation_flag("industrie"),
     "installation_usine_seveso": _existence_installation_seveso(True),
@@ -490,6 +505,7 @@ REGLES_GEORISQUES: Dict[str, RegleGeorisques] = {
 
     "mouvement_terrain_glissement": _existence_risque_dgpr("124"),
     "mouvement_terrain_eboulement": _existence_risque_dgpr("123"),
+    "mouvement_terrain_effondrement": _existence_risque_dgpr("121"),
 
     "installation_nucleaire_cycle_combustible": _installation_nucleaire_type("Cycle du combustible", False),
     "installation_nucleaire_cycle_combustible_iode": _installation_nucleaire_type("Cycle du combustible", True),
