@@ -416,6 +416,35 @@ ROLES_CANONIQUES_VALIDES: dict[str, list[str]] = {
     "alea_debordement_frequent": ["Inondation (Aléa débordement de cours d'eau fréquent ou décennal", "Crue de forte probabilité"],
     "alea_debordement_moyen": ["Inondation (Aléa débordement de cours d'eau moyen ou centennal", "Crue de moyenne probabilité"],
     "alea_debordement_rare": ["Inondation (Aléa débordement de cours d'eau rare ou millénial", "Crue de faible probabilité"],
+    "ouvrage_protection_inondation": ["Inondation (Ouvrages de protection)", "Ouvrage de protection"],
+    "zone_sur_alea_inondation": ["Inondation (Zone de sur-aléa Inondation)", "Zones de sur-aléa inondation"],
+    "secteur_information_sols": [
+        "Secteur d'information sur les sols", "Emprises des secteurs d'information sur les sols",
+    ],
+    "anciens_sites_industriels": [
+        "Anciens sites industriels et activités de service",
+        "Emprises des sites industriels", "ocalisations des sites industriels",
+    ],
+    "cavites_non_minieres_non_localisees": [
+        "Cavités souterraine non minières abandonnées non localisée", "Communes avec cavités non localisées",
+    ],
+    # "Périmètre d'application ... annexes" et "Périmètres de projets
+    # AFUP" : score de correspondance DU sous le seuil automatique
+    # (texte tronqué/reformulé) mais concept sans ambiguïté (un seul
+    # candidat officiel possible à chaque fois, voir gpu_mappings.py
+    # pour la 1ère, déjà documentée comme "AFUP").
+    "gpu_du_information_97-00": [
+        "Périmètre d'application d'une pièce écrite territorialisée relative aux annexes "
+        "(liste des annexes, liste des SUP, plan des SUP)",
+        "Périmètre d'application d'une pièce écrite territorialisée relative aux annexes",
+    ],
+    "gpu_du_information_39-00": [
+        "Périmètres de projets Association Foncière Urbaine de Projet",
+    ],
+    "gpu_du_prescription_38-00": ["Emprise au sol"],
+    "alea_debordement_moyen_cc": [
+        "Evènement de moyenne probabilité avec prise en compte du changement climatique",
+    ],
 }
 
 # Rôles dont l'IDENTITÉ est résolue mais pour lesquels AUCUNE règle de

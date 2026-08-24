@@ -560,6 +560,11 @@ REGLES_REMNAPPE: Dict[str, tuple] = {
 REGLES_WFS: Dict[str, tuple] = {
     "alea_debordement_frequent": ("alea_debordement", "01FOR"),
     "alea_debordement_moyen": ("alea_debordement", "02MOY"),
+    # Ajouté 2026-08-24 : couche "ALEA_SYNT_01_03MCC_FXX" CONFIRMÉE
+    # positive en direct (Seine à Rouen) — même convention de nommage
+    # que alea_submersion_moyen_cc (déjà confirmée), jamais supposée
+    # sans exemple réel positif cette fois non plus.
+    "alea_debordement_moyen_cc": ("alea_debordement", "03MCC"),
     "alea_debordement_rare": ("alea_debordement", "04FAI"),
     "alea_ruissellement_frequent": ("alea_ruissellement", "01FOR"),
     "alea_ruissellement_moyen": ("alea_ruissellement", "02MOY"),
