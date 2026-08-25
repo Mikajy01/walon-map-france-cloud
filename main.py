@@ -955,6 +955,17 @@ def resoudre_zonage(
             )
             if resolution_libelong.resolu and resolution_libelong.role_code:
                 valeurs[resolution_libelong.role_code] = "O"
+
+    # Repli RNU (2026-08-25) : aucun `gpu_doc_id` trouvé sur la parcelle
+    # (aucune zone `zone_urba` couvrante, ex. Ambléon 01006) — jusqu'ici
+    # `doc_type` restait `None` pour toujours, laissant H→M silencieusement
+    # VIDES (aucun filet de sécurité, contrairement aux rôles dynamiques,
+    # voir `_forcer_valeurs_manquantes_en_n`). "Aucun document d'urbanisme
+    # LOCAL publié" est, par construction légale, la définition même du
+    # RNU (Règlement National d'Urbanisme, colonne H) — jamais une
+    # supposition, voir `UrbanismeService.commune_a_document_du`.
+    if doc_type is None and not urbanisme.commune_a_document_du(parcelle.code_insee):
+        doc_type = "RNU"
     return valeurs, doc_type
 
 

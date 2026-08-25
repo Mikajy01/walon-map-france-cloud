@@ -125,6 +125,24 @@ class UrbanismeService:
             legal_status=data.get("legalStatus", ""), grid_rnu=grid.get("rnu"),
         )
 
+    def commune_a_document_du(self, code_insee: str) -> bool:
+        """Existence d'AU MOINS UN document d'urbanisme LOCAL (famille
+        "DU" : PLU/POS/CC/PSMV/PLUi) pour cette commune — endpoint
+        `/api/document?partition=DU_<code_insee>`, CONFIRMÉ en direct
+        (2026-08-25, page "Page territoire" du GPU) : liste vide pour
+        Ambléon (01006, aucun document local publié, seulement des SUP)
+        contre une liste réelle non vide pour Chazey-Bons (01098, PLU
+        réel, `partition="DU_01098"` confirmé dans la réponse elle-même).
+
+        Utilisé UNIQUEMENT en repli quand `resoudre_zonage` n'a trouvé
+        aucun `gpu_doc_id` sur la parcelle (aucune zone `zone_urba`
+        couvrante) — voir `main.py::resoudre_zonage` : "aucun document
+        local" est, par construction légale (voir le plan), la
+        définition même du RNU, jamais une supposition."""
+        url = f"{config.GPU_API_BASE}/document"
+        documents = self._http.get_json(url, {"partition": f"DU_{code_insee}"}, service_key="gpu")
+        return bool(documents)
+
     def get_du_categories(self) -> List[Dict[str, str]]:
         """Liste officielle des 277 catégories GPU (`type`, `code`,
         `libelong`) — mise en cache en mémoire pour tout le run (appelée
