@@ -172,10 +172,25 @@ def _calibrer_positionneur_polyligne_reelle(
         chaînage brut de l'adresse la plus basse à celui de la plus haute
         sur le côté de départ, pour que trier() (croissant sur le
         premier côté) reproduise bien un vrai sens de marche.
-    Renvoie `None` si la calibration est impossible (pas assez d'adresses
-    des deux parités projetables) — l'appelant doit alors retomber sur
-    l'ancienne méthode par adresses seules, jamais une calibration
-    incertaine appliquée quand même."""
+
+    Écart réel trouvé en investigation live (Artemare, 01022, "Chemin
+    des Framboisiers", 2026-08-25) : une SEULE adresse connue sur toute
+    la rue (donc une SEULE parité représentée) faisait échouer cette
+    calibration (ancien garde-fou : les 2 parités devaient être
+    représentées), ce qui faisait ensuite échouer le positionnement de
+    TOUTES les parcelles SANS adresse propre mais bordant réellement la
+    route (8 parcelles réelles perdues sur cette seule rue, voir
+    `decouvrir_parcelles`) — seule la parcelle directement adressée
+    profitait du repli "best effort" plus bas. Une route a
+    STRUCTURELLEMENT 2 côtés : connaître le signe géométrique d'UNE
+    SEULE parité suffit à déduire l'autre (signe opposé) — jamais
+    deviné, une vraie propriété géométrique d'une route à 2 bords, pas
+    une supposition sur les adresses elles-mêmes.
+
+    Renvoie `None` si la calibration est impossible (aucune adresse
+    projetable, quelle que soit la parité) — l'appelant doit alors
+    retomber sur l'ancienne méthode par adresses seules, jamais une
+    calibration incertaine appliquée quand même."""
     lat_ref = adresses[0].lat
     projections: List[Tuple[AdressePoint, float, float, float]] = []
     for a in adresses:
@@ -186,19 +201,27 @@ def _calibrer_positionneur_polyligne_reelle(
 
     signes_pair = [cross for (a, _, _, cross) in projections if a.numero_parite == "pair"]
     signes_impair = [cross for (a, _, _, cross) in projections if a.numero_parite == "impair"]
-    if not signes_pair or not signes_impair:
+    if not signes_pair and not signes_impair:
         return None
-    moy_pair = sum(signes_pair) / len(signes_pair)
-    moy_impair = sum(signes_impair) / len(signes_impair)
-    if (moy_pair > 0) == (moy_impair > 0):
-        # Les 2 parités tombent du même côté géométrique — calibration
-        # incohérente (adresses insuffisantes ou toutes proches du même
-        # segment), jamais utilisée avec un signe ambigu.
-        return None
+    if signes_pair and signes_impair:
+        moy_pair = sum(signes_pair) / len(signes_pair)
+        moy_impair = sum(signes_impair) / len(signes_impair)
+        if (moy_pair > 0) == (moy_impair > 0):
+            # Les 2 parités tombent du même côté géométrique — calibration
+            # incohérente (adresses insuffisantes ou toutes proches du même
+            # segment), jamais utilisée avec un signe ambigu.
+            return None
+        signe_pair_positif = moy_pair > 0
+    elif signes_pair:
+        # Une SEULE parité représentée (voir docstring) : l'autre côté
+        # est déduit comme le signe géométrique opposé.
+        signe_pair_positif = (sum(signes_pair) / len(signes_pair)) > 0
+    else:
+        signe_pair_positif = not ((sum(signes_impair) / len(signes_impair)) > 0)
 
     def cote_de(cross: float) -> str:
         est_positif = cross > 0
-        return "pair" if (est_positif == (moy_pair > 0)) else "impair"
+        return "pair" if (est_positif == signe_pair_positif) else "impair"
 
     # Sens du chaînage : comparer, sur le côté de la plus basse adresse
     # globale, le chaînage de l'adresse la plus basse à celui de la plus
