@@ -2062,28 +2062,37 @@ def journaliser_colonne_creee_fichier(event: ColonneCreeeEvent, chemin_log: Path
     """Append dans le fichier dédié `config.COLONNES_CREEES_LOG_PATH` —
     VOLONTAIREMENT séparé de `logs/` (voir `services/excel_service.py::
     ensure_columns_for_codes`) : ce fichier ne contient QUE l'historique
-    des colonnes créées, relisible tel quel pour le relais manuel Teams,
-    jamais mélangé au flux de log général. Partagé par le CLI et le GUI
-    (voir `_notifier_colonne_creee_cli` ci-dessous et `gui.py::_executer`)."""
+    des codes de zone signalés, relisible tel quel pour le relais manuel
+    Teams, jamais mélangé au flux de log général. Partagé par le CLI et
+    le GUI (voir `_notifier_colonne_creee_cli` ci-dessous et
+    `gui.py::_executer`).
+
+    Depuis 2026-08-24, `event` ne correspond plus jamais à une insertion
+    réelle (`column_letter`/`lettre_avant`/`entete_avant`/`lettre_apres`/
+    `entete_apres` sont toujours vides) — seuls `code`/`color_family_id`
+    restent significatifs."""
     chemin_log.parent.mkdir(parents=True, exist_ok=True)
     with open(chemin_log, "a", encoding="utf-8") as f:
         f.write(
-            f"{datetime.now().isoformat(timespec='seconds')} | colonne {event.column_letter} | "
-            f"entre {event.lettre_avant} ('{event.entete_avant}') et {event.lettre_apres} "
-            f"('{event.entete_apres}') | code='{event.code}' | famille={event.color_family_id}\n"
+            f"{datetime.now().isoformat(timespec='seconds')} | code de zone absent du fichier "
+            f"| code='{event.code}' | famille={event.color_family_id} | AUCUNE colonne insérée\n"
         )
 
 
 def _notifier_colonne_creee_cli(event: ColonneCreeeEvent, chemin_log: Path) -> None:
-    """Canal CLI dédié à la création de colonne — VOLONTAIREMENT séparé
-    du logger : `print()` direct (jamais `_logger`, pour ne jamais se
-    retrouver mélangé au flux INFO/DEBUG du reste du traitement) + append
-    dans le fichier dédié (voir `journaliser_colonne_creee_fichier`)."""
+    """Canal CLI dédié au signalement d'un code de zone absent du fichier
+    — VOLONTAIREMENT séparé du logger : `print()` direct (jamais
+    `_logger`, pour ne jamais se retrouver mélangé au flux INFO/DEBUG du
+    reste du traitement) + append dans le fichier dédié (voir
+    `journaliser_colonne_creee_fichier`).
+
+    Depuis 2026-08-24 (décision utilisateur : "il ne faut plus faire
+    d'insertion de colonne"), AUCUNE colonne n'est plus jamais insérée —
+    ce canal ne fait plus que SIGNALER le code pour relais manuel Teams."""
     bandeau = (
         f"\n{'=' * 72}\n"
-        f"NOUVELLE COLONNE CRÉÉE : {event.column_letter}  (code '{event.code}', famille '{event.color_family_id}')\n"
-        f"  Position : entre {event.lettre_avant} ('{event.entete_avant}') "
-        f"et {event.lettre_apres} ('{event.entete_apres}')\n"
+        f"CODE DE ZONE ABSENT DU FICHIER : '{event.code}' (famille '{event.color_family_id}') — "
+        f"AUCUNE colonne insérée, relais manuel Teams requis.\n"
         f"{'=' * 72}"
     )
     print(bandeau, flush=True)

@@ -123,21 +123,29 @@ class ResultatLot:
             f"{self.total_lignes_ecrites} ligne(s) écrite(s), "
             f"{self.total_echecs} échec(s).",
         ]
+        # Depuis 2026-08-24 (décision utilisateur : "il ne faut plus faire
+        # d'insertion de colonne"), `ensure_columns_for_codes` n'insère
+        # plus jamais rien — ces évènements signalent seulement un code de
+        # zone absent, `column_letter`/`lettre_avant`/`entete_avant`/
+        # `lettre_apres`/`entete_apres` sont désormais TOUJOURS vides (plus
+        # de position à afficher). Le texte disait encore "créée(s)"
+        # jusqu'ici, ce qui laissait croire qu'une colonne avait été
+        # insérée alors qu'aucune ne l'est plus — corrigé ici.
         if self.colonnes_creees_detail:
-            lignes.append(f"{len(self.colonnes_creees_detail)} nouvelle(s) colonne(s) créée(s) — à relayer manuellement (Teams) :")
+            lignes.append(
+                f"{len(self.colonnes_creees_detail)} code(s) de zone rencontré(s) sur une vraie parcelle "
+                "mais absent(s) du fichier — signalé(s), AUCUNE colonne insérée (relais manuel Teams requis) :"
+            )
             for ev in self.colonnes_creees_detail:
-                lignes.append(
-                    f"  - {ev.column_letter} : code '{ev.code}' (famille '{ev.color_family_id}'), "
-                    f"entre {ev.lettre_avant} ('{ev.entete_avant}') et {ev.lettre_apres} ('{ev.entete_apres}')"
-                )
+                lignes.append(f"  - code '{ev.code}' (famille '{ev.color_family_id}')")
         elif self.colonnes_creees:
             # Repli si seuls les codes sont connus (pas d'évènement
             # détaillé disponible) — ne devrait plus arriver en pratique
             # une fois tous les appelants à jour, gardé pour compatibilité.
             lignes.append(
-                f"{len(self.colonnes_creees)} nouvelle(s) colonne(s) créée(s) : "
+                f"{len(self.colonnes_creees)} code(s) de zone rencontré(s) mais absent(s) du fichier — "
+                "signalé(s), AUCUNE colonne insérée (relais manuel Teams requis) : "
                 + ", ".join(self.colonnes_creees)
-                + " — à relayer manuellement (Teams)."
             )
         non_resolues = {c for r in self.resultats_par_rue for c in r.colonnes_non_resolues}
         if non_resolues:
