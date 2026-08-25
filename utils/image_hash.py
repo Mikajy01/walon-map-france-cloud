@@ -8,7 +8,7 @@ from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass
-from typing import Dict
+from typing import Dict, List
 
 
 @dataclass(frozen=True)
@@ -27,22 +27,31 @@ def hash_icone(png_bytes: bytes) -> str:
     return hashlib.md5(png_bytes).hexdigest()
 
 
-def extraire_icones_par_colonne(ws, icon_row_index: int = 0) -> Dict[int, IconeCellule]:
-    """Extrait, pour chaque colonne ayant une icône ancrée à la ligne
-    `icon_row_index` (0-indexée, convention openpyxl — confirmé en
+def extraire_icones_par_colonne(ws, icon_row_index: int = 0) -> Dict[int, List[IconeCellule]]:
+    """Extrait, pour chaque colonne ayant au moins une icône ancrée à la
+    ligne `icon_row_index` (0-indexée, convention openpyxl — confirmé en
     investigation live que les icônes du bloc H→HV sont ancrées à la
     ligne 1 du classeur = index 0, une ligne au-dessus de la ligne
-    d'en-tête texte qui elle est en ligne 2), le hash de son icône.
+    d'en-tête texte qui elle est en ligne 2), TOUTES ses icônes (liste,
+    jamais une seule).
 
     `ws` : `openpyxl.worksheet.worksheet.Worksheet` (non typé
     explicitement pour éviter une dépendance d'import lourde ici).
 
-    Si plusieurs images sont ancrées sur la même colonne (observé une
-    fois dans TRECY ARBENT.xlsx, colonne AD, 2 images) la DERNIÈRE
-    rencontrée dans `ws._images` gagne silencieusement — cette fonction
-    reste un pur extracteur, c'est à l'appelant (ExcelService) de logger
-    ce cas s'il veut le signaler."""
-    resultat: Dict[int, IconeCellule] = {}
+    Plusieurs images peuvent être ancrées sur la même colonne (observé
+    dans TRECY ARBENT.xlsx, colonne AD ; puis réellement exploité dans
+    "Tableau Geoportail France Off 4.xlsx", 2026-08-25, colonnes CF/FW —
+    une administration y a AJOUTÉ une 2e icône à une cellule qui en avait
+    déjà une). Renvoyées dans l'ordre de `ws._images` (reflète l'ordre du
+    XML source) — observé en direct sur ces 2 cas réels : une icône
+    AJOUTÉE arrive toujours APRÈS l'icône déjà présente, jamais avant,
+    donc le PREMIER élément de la liste est toujours l'icône d'origine/
+    "propriétaire" de la colonne (voir `services/excel_service.py::
+    bootstrap_from_template`, qui s'appuie sur cet ordre pour ne jamais
+    laisser un ajout thématique redéfinir l'identité déjà établie
+    d'une colonne, ni écraser l'identité globale d'une icône empruntée
+    à une AUTRE colonne)."""
+    resultat: Dict[int, List[IconeCellule]] = {}
     # `ws._images` est une API privée d'openpyxl, mais c'est la seule
     # voie disponible pour lire les images déjà présentes dans un
     # classeur chargé (par opposition à `ws.add_image`, qui n'aide qu'à
@@ -53,7 +62,7 @@ def extraire_icones_par_colonne(ws, icon_row_index: int = 0) -> Dict[int, IconeC
             continue
         col_index = image.anchor._from.col + 1
         png_bytes = image._data()
-        resultat[col_index] = IconeCellule(
-            column_index=col_index, png_bytes=png_bytes, hash_md5=hash_icone(png_bytes),
+        resultat.setdefault(col_index, []).append(
+            IconeCellule(column_index=col_index, png_bytes=png_bytes, hash_md5=hash_icone(png_bytes)),
         )
     return resultat

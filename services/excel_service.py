@@ -173,8 +173,9 @@ def scan_layout(
             continue
 
         lettre = get_column_letter(col_idx)
-        icone = icones_par_colonne.get(col_idx)
-        icon_hash = icone.hash_md5 if icone else None
+        icones = icones_par_colonne.get(col_idx, [])
+        icon_hash = icones[0].hash_md5 if icones else None
+        icon_hashes_supplementaires = [i.hash_md5 for i in icones[1:]]
 
         rgb = rgb_de_cellule(header_cell)
         famille = registry.classer_famille_couleur(rgb) if rgb else None
@@ -186,9 +187,9 @@ def scan_layout(
         # des 6 couleurs d'ancre connues, ET que son texte ressemble à
         # un code (garde-fou contre une collision de couleur fortuite,
         # voir `_ressemble_a_un_code`).
-        if famille and not icon_hash and _ressemble_a_un_code(header_text):
+        if famille and not icones and _ressemble_a_un_code(header_text):
             code_candidate = header_text
-        elif icon_hash:
+        elif icones:
             # Repli code SUP pour les colonnes à icône dont l'icône
             # n'est pas (encore) connue — voir le plan : plusieurs
             # colonnes SUP réellement différentes partagent une icône
@@ -203,18 +204,21 @@ def scan_layout(
 
         resolution = registry.resolve_column(
             lettre, header_text, icon_hash=icon_hash, code_candidate=code_candidate,
+            icon_hashes_supplementaires=icon_hashes_supplementaires,
             run_id=run_id, file_path=file_path, commune=commune, rue=rue,
         )
 
-        if icone and resolution.method != MethodeResolution.ICONE:
+        if icones and resolution.method != MethodeResolution.ICONE:
             # Icône non (encore) confirmée comme seule source de vérité
             # pour cette colonne (résolue par une autre couche, ou pas du
-            # tout) — on complète quand même sa fiche 'pending' avec la
-            # miniature (resolve_column l'a déjà créée sans les octets
-            # PNG, qu'il ne reçoit pas), pour que le GUI de registre
-            # puisse l'afficher même quand la résolution a réussi par
-            # ailleurs (voir le plan : cas des icônes génériques partagées).
-            registry.enregistrer_icone_avec_image(icon_hash, icone.png_bytes, commune, rue, lettre)
+            # tout) — on complète quand même la fiche 'pending' de CHAQUE
+            # icône de la cellule avec sa miniature (resolve_column les a
+            # déjà créées sans les octets PNG, qu'il ne reçoit pas), pour
+            # que le GUI de registre puisse les afficher même quand la
+            # résolution a réussi par ailleurs (voir le plan : cas des
+            # icônes génériques partagées).
+            for icone in icones:
+                registry.enregistrer_icone_avec_image(icone.hash_md5, icone.png_bytes, commune, rue, lettre)
 
         layout.resolutions.append(resolution)
 
@@ -277,11 +281,12 @@ def bootstrap_from_template(
     # approuvée comme identité à elle seule (ça confondrait les colonnes
     # qui la partagent) — on retombe sur le code SUP extrait du texte.
     textes_par_hash: Dict[str, set] = {}
-    for col_idx, icone in icones_par_colonne.items():
+    for col_idx, icones in icones_par_colonne.items():
         header_cell = ws.cell(row=HEADER_ROW, column=col_idx)
         texte = " ".join(str(header_cell.value).split()) if header_cell.value else ""
         if texte:
-            textes_par_hash.setdefault(icone.hash_md5, set()).add(texte)
+            for icone in icones:
+                textes_par_hash.setdefault(icone.hash_md5, set()).add(texte)
     hashes_ambigus = {h for h, textes in textes_par_hash.items() if len(textes) > 1}
 
     n_icones = n_codes = n_sup = n_icones_generiques = 0
@@ -295,50 +300,88 @@ def bootstrap_from_template(
             continue
         lettre = get_column_letter(col_idx)
 
-        icone = icones_par_colonne.get(col_idx)
-        if icone is not None:
-            registry.enregistrer_icone_avec_image(icone.hash_md5, icone.png_bytes, "", "", lettre)
+        icones = icones_par_colonne.get(col_idx, [])
+        if icones:
+            for icone in icones:
+                registry.enregistrer_icone_avec_image(icone.hash_md5, icone.png_bytes, "", "", lettre)
             # Essaie CHAQUE candidat (préfixe ET suffixe) contre la
             # liste officielle plutôt que d'en choisir un seul à
             # l'aveugle — voir `_extraire_codes_sup_candidats`.
             sup_valide = next(
                 (c for c in _extraire_codes_sup_candidats(header_text) if c in sup_category_names), None,
             )
-            if icone.hash_md5 not in hashes_ambigus:
+            icones_utilisables = [i for i in icones if i.hash_md5 not in hashes_ambigus]
+            # Un même en-tête peut désormais porter PLUSIEURS icônes
+            # (2026-08-25, "Tableau Geoportail France Off 4.xlsx",
+            # colonnes CF/FW) — une administration a ajouté une 2e icône
+            # THÉMATIQUE à une cellule qui en avait déjà une, sans
+            # changer l'identité réelle de la colonne (ex. FW "EL5 -
+            # Servitude de visibilité sur les voies publiques", un code
+            # SUP, a hérité au passage de l'icône DU "24-00 - Voies,
+            # chemins..."). Cherche le premier match DU_MAPPING/rôle
+            # personnalisé parmi TOUTES les icônes utilisables (dans
+            # l'ordre du fichier — la 1re est toujours l'icône d'origine,
+            # voir `utils/image_hash.py`), mais NE DÉCIDE PAS encore :
+            # `sup_valide` (extrait du TEXTE explicite de l'en-tête)
+            # reste prioritaire ci-dessous, précisément pour ne jamais
+            # laisser une icône empruntée voler l'identité d'une colonne
+            # dont le texte nomme déjà un vrai code SUP.
+            icone_identifiante = None
+            for icone in icones_utilisables:
                 du_match = DU_MAPPING.get(icone.hash_md5)
                 role_personnalise = ROLES_PERSONNALISES_PAR_ICONE.get(icone.hash_md5)
-                # Priorité : DU_MAPPING (icône -> catégorie officielle
-                # confirmée) > rôle personnalisé (icône -> concept d'une
-                # autre catégorie GPU sans code officiel, ex SCOT, voir
-                # gpu_mappings.py) > code SUP officiel extrait du texte >
-                # repli synthétique `icone::<lettre>` (jamais calculé
-                # nulle part, voir gpu_rules.py). Écart réel trouvé en
-                # relisant un fichier traité : 56 des 80 colonnes tombant
-                # sur ce repli avaient en réalité un code SUP officiel
-                # valide dans leur texte (ex "...-AR1", "...-EL9") —
-                # l'ancien ordre les enregistrait bien via `enregistrer_
-                # code` plus bas, mais l'icône (couche 1, prioritaire)
-                # pointait quand même vers le rôle synthétique jamais
-                # calculé, rendant cet enregistrement inutile.
-                alias_role = alias_par_texte.get(normaliser(header_text))
                 if du_match:
-                    role_code = f"gpu_du_{du_match[0]}_{du_match[1]}"
-                elif role_personnalise:
-                    role_code = role_personnalise
-                elif sup_valide:
-                    role_code = f"gpu_sup_{sup_valide.lower()}"
-                elif alias_role:
-                    role_code = alias_role
-                else:
-                    role_code = f"icone::{lettre}"
+                    icone_identifiante = f"gpu_du_{du_match[0]}_{du_match[1]}"
+                    break
+                if role_personnalise:
+                    icone_identifiante = role_personnalise
+                    break
+            # Priorité : code SUP officiel extrait du TEXTE (le plus
+            # explicite/fiable — voir ci-dessus) > DU_MAPPING/rôle
+            # personnalisé (icône) > alias texte déjà connu > repli
+            # synthétique `icone::<lettre>` (jamais calculé nulle part,
+            # voir gpu_rules.py). Écart réel trouvé en relisant un
+            # fichier traité : 56 des 80 colonnes tombant sur ce repli
+            # avaient en réalité un code SUP officiel valide dans leur
+            # texte (ex "...-AR1", "...-EL9") — l'ancien ordre les
+            # enregistrait bien via `enregistrer_code` plus bas, mais
+            # l'icône (couche 1, prioritaire) pointait quand même vers le
+            # rôle synthétique jamais calculé, rendant cet enregistrement
+            # inutile.
+            alias_role = alias_par_texte.get(normaliser(header_text))
+            if sup_valide:
+                role_code = f"gpu_sup_{sup_valide.lower()}"
+            elif icone_identifiante:
+                role_code = icone_identifiante
+            elif alias_role:
+                role_code = alias_role
+            else:
+                role_code = f"icone::{lettre}"
+            for icone in icones_utilisables:
+                # Ne JAMAIS approuver une icône "empruntée" sous le rôle
+                # de CETTE colonne si elle a déjà sa propre identité
+                # globale établie ailleurs (DU_MAPPING/rôle personnalisé)
+                # différente de `role_code` — sinon `approuver_icone`
+                # (UPDATE inconditionnel par hash, voir column_registry_
+                # service.py) écraserait silencieusement la VRAIE
+                # colonne propriétaire de cette icône. Cas réel : FW
+                # "EL5" ne doit jamais faire passer l'icône "24-00" (déjà
+                # propriété d'une autre colonne DU) sous "gpu_sup_el5".
+                deja_du = DU_MAPPING.get(icone.hash_md5)
+                deja_perso = ROLES_PERSONNALISES_PAR_ICONE.get(icone.hash_md5)
+                identite_etablie = (f"gpu_du_{deja_du[0]}_{deja_du[1]}" if deja_du else deja_perso)
+                if identite_etablie and identite_etablie != role_code:
+                    continue
                 registry.approuver_icone(icone.hash_md5, role_code=role_code, role_label=header_text)
+            if icones_utilisables:
                 n_icones += 1
             else:
                 n_icones_generiques += 1
-            # Le code SUP est enregistré dans tous les cas (icône
-            # ambiguë ou non) : un filet de sécurité supplémentaire même
-            # pour une icône non ambiguë aujourd'hui (robustesse en cas
-            # de recompression/variation future de l'image, voir le plan).
+            # Le code SUP est enregistré dans tous les cas (icône(s)
+            # ambiguë(s) ou non) : un filet de sécurité supplémentaire
+            # même pour une icône non ambiguë aujourd'hui (robustesse en
+            # cas de recompression/variation future de l'image, voir le
+            # plan).
             if sup_valide:
                 registry.enregistrer_code(
                     sup_valide, role_code=f"gpu_sup_{sup_valide.lower()}",

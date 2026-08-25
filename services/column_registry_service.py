@@ -138,6 +138,7 @@ class ColumnRegistryService:
         code_candidate: Optional[str] = None,
         fuzzy_candidates: Optional[List[Tuple[str, str]]] = None,
         *,
+        icon_hashes_supplementaires: Optional[List[str]] = None,
         run_id: str = "",
         file_path: str = "",
         commune: str = "",
@@ -152,6 +153,15 @@ class ColumnRegistryService:
         (qui connaît la structure du fichier) de le déterminer et de ne
         passer `code_candidate` que pour les colonnes concernées.
 
+        `icon_hash` : icône PRINCIPALE (première rencontrée dans le
+        fichier pour cette cellule, voir `utils/image_hash.py::
+        extraire_icones_par_colonne`). `icon_hashes_supplementaires` :
+        icônes additionnelles de la MÊME cellule (2026-08-25, "Tableau
+        Geoportail France Off 4.xlsx" — une cellule peut désormais
+        porter plusieurs icônes) — essayées dans l'ordre SEULEMENT si
+        `icon_hash` est inconnu, jamais avant (l'icône principale reste
+        toujours prioritaire quand elle est déjà connue).
+
         `fuzzy_candidates` : liste de `(role_code, libelle_canonique)`
         à essayer en dernier recours — typiquement la liste officielle
         `du-categories` pour le bloc GPU, vide/`None` pour les blocs
@@ -163,6 +173,7 @@ class ColumnRegistryService:
         matché + contexte commune/rue)."""
         resolution = self._resolve_layers(
             column_letter, header_text, icon_hash, code_candidate, fuzzy_candidates,
+            icon_hashes_supplementaires=icon_hashes_supplementaires,
             commune=commune, rue=rue, file_path=file_path,
         )
         self._log_snapshot(run_id, file_path, commune, rue, resolution, code_candidate)
@@ -176,6 +187,7 @@ class ColumnRegistryService:
         code_candidate: Optional[str],
         fuzzy_candidates: Optional[List[Tuple[str, str]]],
         *,
+        icon_hashes_supplementaires: Optional[List[str]] = None,
         commune: str,
         rue: str,
         file_path: str,
@@ -193,17 +205,19 @@ class ColumnRegistryService:
         # refuser tout repli aurait rendu ces colonnes ÉTERNELLEMENT non
         # résolues alors que leur code (couche 2) suffit à les
         # distinguer sans ambiguïté.
-        if icon_hash:
-            connu = self._icon_role(icon_hash)
+        for h in [icon_hash, *(icon_hashes_supplementaires or [])]:
+            if not h:
+                continue
+            connu = self._icon_role(h)
             if connu is not None:
                 role_code, role_label = connu
-                self._toucher_icone(icon_hash, commune, rue, column_letter)
+                self._toucher_icone(h, commune, rue, column_letter)
                 return ColumnResolution(
                     column_letter=column_letter, header_text=header_text,
                     role_code=role_code, method=MethodeResolution.ICONE,
-                    confidence=1.0, icon_hash=icon_hash,
+                    confidence=1.0, icon_hash=h,
                 )
-            self._enregistrer_icone_pending(icon_hash, header_text, commune, rue, column_letter)
+            self._enregistrer_icone_pending(h, header_text, commune, rue, column_letter)
             # Pas de retour ici : on tente les couches suivantes plutôt
             # que d'abandonner immédiatement (voir commentaire ci-dessus).
 
