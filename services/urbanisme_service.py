@@ -167,23 +167,43 @@ class UrbanismeService:
 
     @staticmethod
     def dedup_par_version_recente(features: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
-        """Ne garde que les features de la version de document la PLUS
-        RÉCENTE (date suffixe de `idurba`) — un même zonage/prescription
-        peut apparaître pour plusieurs révisions successives d'un PLUi
-        encore marquées "en production" simultanément, confirmé en
-        investigation live. Les features sans `idurba` exploitable sont
-        conservées telles quelles (jamais supprimées par prudence — un
-        champ manquant ne doit jamais faire disparaître une donnée)."""
+        """Ne garde, PAR DOCUMENT (préfixe d'`idurba` avant la date, ex
+        "01017_PLUi"), que les features de la version la PLUS RÉCENTE —
+        un même zonage/prescription peut apparaître pour plusieurs
+        révisions successives d'un PLUi encore marquées "en production"
+        simultanément, confirmé en investigation live. Les features sans
+        `idurba` exploitable sont conservées telles quelles (jamais
+        supprimées par prudence — un champ manquant ne doit jamais faire
+        disparaître une donnée).
+
+        Bug réel trouvé en investigation live (La Boisse, 01049, parcelle
+        AI/1218, 2026-08-26) : un Plan d'Exposition au Bruit (PEB)
+        d'aérodrome est structurellement INTERCOMMUNAL — publié ici sous
+        `idurba="69285_PLU_20241104"` (commune du Rhône), il couvre
+        géométriquement une parcelle de La Boisse dont le PLU local a
+        `idurba="01049_PLU_20260309"`, une date plus récente. L'ANCIENNE
+        version comparait les dates de TOUS les `idurba` entre eux sans
+        regarder leur préfixe (commune + type de document), donc
+        traitait à tort ce PEB comme une version PÉRIMÉE du PLU d'une
+        commune totalement différente, le faisant disparaître
+        silencieusement (0 "Plan d'exposition au bruit des aérodromes"
+        alors que la donnée existe bel et bien). Compare désormais les
+        dates SEULEMENT au sein du même préfixe — jamais entre
+        documents différents."""
         avec_date = []
         sans_date = []
         for f in features:
             idurba = (f.get("properties") or {}).get("idurba", "")
             m = _RE_DATE_IDURBA.search(idurba or "")
             if m:
-                avec_date.append((m.group(1), f))
+                prefixe = idurba[: m.start()]
+                avec_date.append((prefixe, m.group(1), f))
             else:
                 sans_date.append(f)
         if not avec_date:
             return features
-        date_max = max(date for date, _ in avec_date)
-        return [f for date, f in avec_date if date == date_max] + sans_date
+        date_max_par_prefixe: Dict[str, str] = {}
+        for prefixe, date, _ in avec_date:
+            if date > date_max_par_prefixe.get(prefixe, ""):
+                date_max_par_prefixe[prefixe] = date
+        return [f for prefixe, date, f in avec_date if date == date_max_par_prefixe[prefixe]] + sans_date
