@@ -56,7 +56,7 @@ from services.column_registry_service import ColumnRegistryService
 from services.commune_service import CommuneService
 from services.exceptions import ApiServiceError
 from services.excel_service import (
-    COL_PARCELLE, COL_SECTION, FIRST_DATA_ROW,
+    COL_PARCELLE, COL_SECTION, COL_ZONE_CLASSEE, FIRST_DATA_ROW,
     TYPE_DOCUMENT_VERS_COLONNE, bootstrap_from_template, charger_feuille, ensure_columns_for_codes,
     lire_identifiants_deja_ecrits, lire_nature_document, scan_layout,
     trouver_premiere_ligne_vide, verifier_coherence_nature_document, write_ligne,
@@ -1776,6 +1776,113 @@ def reessayer_cellules_remnappe(
     return n_repare
 
 
+def recalculer_zonage_gpu_du(
+    excel_path: Path, code_insee: str, *,
+    cadastre: CadastreService, urbanisme: UrbanismeService, registry: ColumnRegistryService,
+) -> int:
+    """Recalcule le bloc zonage (colonne G "Zone Classée" + codes de zone
+    dynamiques + ancres/rôles secondaires + `zone_couverte_rnu`), les
+    colonnes H→M (nature du document) et le bloc `gpu_du_*` (fiche
+    d'information détaillée) + `zone_urbaine_patrimoniale`, pour TOUTES
+    les lignes DÉJÀ ÉCRITES d'un fichier — utile après un correctif
+    touchant directement le CALCUL de ces rôles (ex:
+    `UrbanismeService.dedup_par_version_recente`, 2026-08-26 : un bug
+    réel qui produisait un "N" à tort, JAMAIS journalisé comme un échec,
+    donc invisible pour `reessayer_cellules_*`, qui ne retentent QUE les
+    cellules explicitement trackées dans `cellules_a_revisiter.csv`).
+    Contrairement à un retraitement complet de la commune (des heures,
+    voir le plan cloud), ceci évite de refaire la découverte des rues/
+    parcelles (déjà faite) et tous les appels API NON concernés par le
+    bug corrigé (Géorisques, CLPA, remontée de nappe, stations
+    d'épuration, CASIAS, SUP...).
+
+    Regroupe par PARCELLE UNIQUE (une même parcelle peut avoir plusieurs
+    lignes/adresses) : un seul jeu d'appels API par parcelle, valeurs
+    réappliquées à TOUTES les lignes qui la partagent. Sauvegarde après
+    CHAQUE parcelle (même motif que `traiter_rue` — jamais perdre le
+    travail déjà recalculé si une coupure survient en cours de route).
+    Une parcelle en échec (API indisponible, introuvable au cadastre) est
+    journalisée et IGNORÉE, jamais silencieuse, jamais interrompt le
+    reste du recalcul."""
+    # `scan_layout` lit les octets PNG des icônes (pour les hasher) et
+    # épuise ainsi leur flux source — un classeur dont les icônes ont
+    # été lues ne peut plus être sauvegardé (`ValueError: I/O operation
+    # on closed file`, même limite openpyxl déjà rencontrée ailleurs
+    # dans ce module). `ws_scan` sert UNIQUEMENT à calculer `layout` et
+    # la liste des lignes déjà écrites ; la boucle d'écriture plus bas
+    # utilise `ws`, un chargement SÉPARÉ et encore vierge.
+    ws_scan = charger_feuille(excel_path)
+    derniere = trouver_premiere_ligne_vide(ws_scan) - 1
+    layout = scan_layout(
+        ws_scan, registry, run_id=excel_path.stem, file_path=str(excel_path), commune="", rue="",
+    )
+
+    lignes_par_parcelle: Dict[Tuple[str, str], List[int]] = {}
+    for r in range(FIRST_DATA_ROW, derniere + 1):
+        section = ws_scan.cell(row=r, column=COL_SECTION).value
+        numero = ws_scan.cell(row=r, column=COL_PARCELLE).value
+        if not section or numero is None or str(numero).strip() in ("", "/"):
+            continue
+        cle = (str(section).strip(), str(numero).strip())
+        lignes_par_parcelle.setdefault(cle, []).append(r)
+
+    ws = charger_feuille(excel_path)
+
+    n_lignes_modifiees = 0
+    for (section, numero), lignes in lignes_par_parcelle.items():
+        parcelles = cadastre.get_parcelle(code_insee, section, numero)
+        if not parcelles or not parcelles[0].geometry:
+            _logger.warning(
+                "Recalcul zonage/GPU : parcelle %s %s introuvable au cadastre (%s) — ignorée.",
+                section, numero, code_insee,
+            )
+            continue
+        parcelle = parcelles[0]
+        parcelle.code_insee = code_insee
+        parcelle.section = section
+        parcelle.numero = numero
+
+        try:
+            valeurs_zonage, doc_type = resoudre_zonage(parcelle, urbanisme, registry, layout)
+            valeurs_gpu = resoudre_gpu_detaille(parcelle, urbanisme, layout)
+            valeurs_patrimoniale = resoudre_zone_urbaine_patrimoniale(parcelle, urbanisme, layout)
+        except Exception as exc:  # noqa: BLE001 — une parcelle en échec ne doit jamais arrêter tout le recalcul
+            _logger.warning(
+                "Recalcul zonage/GPU : échec sur la parcelle %s %s (%s) — ignorée, à retenter plus tard.",
+                section, numero, exc,
+            )
+            continue
+
+        valeurs_fixes: Dict[int, str] = {}
+        if doc_type and doc_type in TYPE_DOCUMENT_VERS_COLONNE:
+            for type_doc, col in TYPE_DOCUMENT_VERS_COLONNE.items():
+                valeurs_fixes[col] = "O" if type_doc == doc_type else "N"
+
+        toutes_valeurs: Dict[str, str] = {**valeurs_zonage, **valeurs_gpu, **valeurs_patrimoniale}
+
+        for r in lignes:
+            for col, valeur in valeurs_fixes.items():
+                ws.cell(row=r, column=col).value = valeur
+            for role_code, valeur in toutes_valeurs.items():
+                if role_code == "__zone_classee__":
+                    ws.cell(row=r, column=COL_ZONE_CLASSEE).value = valeur
+                    continue
+                if role_code.startswith("__"):
+                    continue
+                for lettre in layout.lettres_pour_role(role_code):
+                    ws.cell(row=r, column=column_index_from_string(lettre)).value = valeur
+            n_lignes_modifiees += 1
+
+        ws.parent.save(excel_path)
+        ws = charger_feuille(excel_path)
+
+    _logger.info(
+        "Recalcul zonage/GPU (%s) : %d parcelle(s) unique(s), %d ligne(s) mise(s) à jour.",
+        excel_path.name, len(lignes_par_parcelle), n_lignes_modifiees,
+    )
+    return n_lignes_modifiees
+
+
 def reessayer_cellules_georisques(
     excel_path: Path, chemin_revisite: Path, *,
     cadastre: CadastreService, georisques: GeorisquesService, registry: ColumnRegistryService,
@@ -2053,12 +2160,15 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
              "couvrir une commune en entier quand on le veut vraiment.",
     )
     parser.add_argument(
-        "--mode", choices=["traiter_commune", "retenter_erreurs"], default="traiter_commune",
+        "--mode", choices=["traiter_commune", "retenter_erreurs", "recalculer_gpu_zonage"], default="traiter_commune",
         help="'traiter_commune' : découvre et traite toutes les rues (retente aussi automatiquement les "
              "cellules ERREUR en fin de run si la commune est allée jusqu'au bout). 'retenter_erreurs' : "
              "ne fait QUE retenter les cellules ERREUR déjà trackées pour cette commune (WFS Géorisques + "
              "bloc H→HV, voir reessayer_cellules_wfs/reessayer_cellules_gpu_du) — jamais les cellules "
-             "Manuellement, qui n'ont aucune règle à retenter.",
+             "Manuellement, qui n'ont aucune règle à retenter. 'recalculer_gpu_zonage' : recalcule le "
+             "zonage + le bloc gpu_du_* + H→M pour TOUTES les lignes déjà écrites (pas seulement les "
+             "cellules trackées) — utile après un correctif touchant directement le CALCUL de ces rôles "
+             "(voir recalculer_zonage_gpu_du), jamais pour un simple échec réseau ponctuel.",
     )
     parser.add_argument(
         "--traitement", choices=["continuer", "nouveau"], default="continuer",
@@ -2195,6 +2305,16 @@ def main(argv: Optional[List[str]] = None) -> int:
             "%d cellule(s) \"Manuellement\" restante(s) (jamais récupérables automatiquement).",
             args.commune, n_repare_wfs, n_repare_gpu, n_repare_georisques, n_repare_remnappe,
             n_erreur_restant, n_manuel_restant,
+        )
+        return 0
+
+    if args.mode == "recalculer_gpu_zonage":
+        n_modifiees = recalculer_zonage_gpu_du(
+            excel_path, code_insee, cadastre=cadastre, urbanisme=urbanisme, registry=registry,
+        )
+        _logger.info(
+            "Résumé final (recalculer_gpu_zonage, %s) : %d ligne(s) mise(s) à jour.",
+            args.commune, n_modifiees,
         )
         return 0
 
