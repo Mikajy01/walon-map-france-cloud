@@ -39,6 +39,7 @@ import re
 from typing import Optional
 
 from services.http_client import HttpClient
+from utils.geometrie import point_dans_geometrie
 from utils.logger import get_logger
 
 _logger = get_logger("services.wfs_remnappe_service")
@@ -47,6 +48,40 @@ _WFS_BASE = "https://mapsref.brgm.fr/wxs/georisques/risques"
 _RE_MEMBER = re.compile(r"<wfs:member>(.*?)</wfs:member>", re.S)
 _RE_CLASSE = re.compile(r"<ms:classe>([^<]*)</ms:classe>")
 _RE_FIAB_TOT = re.compile(r"<ms:fiab_tot>([^<]*)</ms:fiab_tot>")
+_RE_POSLIST = re.compile(r"<gml:posList[^>]*>([^<]+)</gml:posList>")
+
+
+def _point_dans_reponse_gml(lat: float, lon: float, xml: str) -> bool:
+    """True si `(lat, lon)` tombe dans AU MOINS UN des anneaux de
+    polygone d'une réponse GML — nécessaire car ce serveur (MapServer)
+    NE FILTRE PAS par géométrie exacte sur son paramètre `BBOX` pour au
+    moins certaines couches à géométrie complexe. Bug réel trouvé en
+    investigation live (La Boisse, 01049, "Chemin de la Saccunière",
+    2026-08-27, signalé par l'utilisateur : la carte georisques.gouv.fr
+    ne montre AUCUNE zone à cet endroit précis, alors que `eaip()`
+    répondait "O") : une requête `BBOX` de ~50m x 50m autour de la
+    parcelle renvoyait quand même la TOTALITÉ de la géométrie `MASQ_
+    EAIP` (1 seule feature, 1104 anneaux de polygone dispersés sur tout
+    le département, enveloppe globale 45.61-46.34 / 4.92-5.99) — le
+    filtre BBOX ne teste que l'enveloppe GLOBALE de la feature, jamais
+    ses anneaux individuels. `"<wfs:member>" in xml` (utilisé jusqu'ici)
+    ne prouve donc RIEN sur le point précis interrogé pour ce genre de
+    couche — seul un vrai test géométrique anneau par anneau (voir
+    `utils/geometrie.py::point_dans_geometrie`, déjà utilisé ailleurs
+    dans ce projet pour la même raison) donne une réponse fiable."""
+    for bloc in _RE_POSLIST.findall(xml):
+        nombres = [float(x) for x in bloc.split()]
+        # Ordre (latitude, longitude) dans le posList, comme partout sur
+        # ce serveur (voir l'avertissement du docstring de module) —
+        # converti en [longitude, latitude] pour `point_dans_geometrie`
+        # (convention GeoJSON, déjà celle utilisée par cette fonction).
+        anneau = [[nombres[i + 1], nombres[i]] for i in range(0, len(nombres) - 1, 2)]
+        if len(anneau) < 3:
+            continue
+        geometry = {"type": "Polygon", "coordinates": [anneau]}
+        if point_dans_geometrie(lon, lat, geometry):
+            return True
+    return False
 
 CLASSE_DEBORDEMENT_NAPPE = "Zones potentiellement sujettes aux débordements de nappe"
 CLASSE_INONDATION_CAVE = "Zones potentiellement sujettes aux inondations de cave"
@@ -71,8 +106,17 @@ class WfsRemnappeService:
         hectare)" — couche `MASQ_EAIP`, même serveur BRGM que
         `REMNAPPE_FIAB`. Titre officiel confirmé en direct via
         `GetCapabilities` : correspondance EXACTE (mot pour mot) avec
-        cette colonne du nouveau gabarit. CONFIRMÉ positif en direct
-        (2 features réelles trouvées, Seine à Rouen)."""
+        cette colonne du nouveau gabarit.
+
+        Test géométrique RÉEL (voir `_point_dans_reponse_gml`) — jamais
+        juste "une réponse est revenue", depuis le bug réel trouvé en
+        investigation live (2026-08-27) : le filtre `BBOX` de ce serveur
+        ne teste que l'enveloppe globale de la géométrie `MASQ_EAIP`
+        (une SEULE feature réelle, 1104 anneaux dispersés sur tout le
+        département), donc répondait "O" pour N'IMPORTE QUEL point du
+        département, y compris des parcelles réellement hors de toute
+        zone visible sur la carte officielle (confirmé faux en direct,
+        La Boisse, "Chemin de la Saccunière")."""
         params = {
             "service": "WFS", "version": "2.0.0", "request": "GetFeature",
             "typeName": "ms:MASQ_EAIP", "bbox": self._bbox(lat, lon),
@@ -82,17 +126,19 @@ class WfsRemnappeService:
         except Exception as exc:  # noqa: BLE001
             _logger.warning("Couche MASQ_EAIP indisponible (lat=%s, lon=%s) : %s", lat, lon, exc)
             return None
-        return "O" if "<wfs:member>" in xml else "N"
+        return "O" if _point_dans_reponse_gml(lat, lon, xml) else "N"
 
     def masque_etude_specifique(self, lat: float, lon: float) -> Optional[str]:
         """"Remontée de nappes (Masque étude spécifique en cours)" —
         couche `MASQ_AFFLEUR`, même serveur BRGM que `REMNAPPE_FIAB`/
         `MASQ_EAIP`/`MASQ_BDLISA`. Titre officiel confirmé en direct via
         `GetCapabilities` : correspondance EXACTE (mot pour mot) avec
-        cette colonne du nouveau gabarit. CONFIRMÉ en direct : features
-        réelles trouvées sur une large bbox France (ex. Moselle), simple
-        polygone sans attribut exploitable (même mécanisme présence/
-        absence que `eaip`, pas de champ à filtrer)."""
+        cette colonne du nouveau gabarit.
+
+        Même correctif géométrique que `eaip` (2026-08-27) : ce serveur
+        ne filtre pas par géométrie exacte sur `BBOX`, un simple
+        `"<wfs:member>" in xml` n'aurait jamais prouvé que le POINT
+        précis interrogé est réellement dans la zone."""
         params = {
             "service": "WFS", "version": "2.0.0", "request": "GetFeature",
             "typeName": "ms:MASQ_AFFLEUR", "bbox": self._bbox(lat, lon),
@@ -102,7 +148,7 @@ class WfsRemnappeService:
         except Exception as exc:  # noqa: BLE001
             _logger.warning("Couche MASQ_AFFLEUR indisponible (lat=%s, lon=%s) : %s", lat, lon, exc)
             return None
-        return "O" if "<wfs:member>" in xml else "N"
+        return "O" if _point_dans_reponse_gml(lat, lon, xml) else "N"
 
     def classe_fiabilite(self, lat: float, lon: float, classe: str, fiabilite: Optional[str]) -> Optional[str]:
         """`"O"`/`"N"` selon qu'au moins une feature au point donné
