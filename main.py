@@ -1883,6 +1883,91 @@ def recalculer_zonage_gpu_du(
     return n_lignes_modifiees
 
 
+def recalculer_remnappe_eaip(
+    excel_path: Path, code_insee: str, *,
+    cadastre: CadastreService, wfs_remnappe: WfsRemnappeService, registry: ColumnRegistryService,
+) -> int:
+    """Recalcule `remnappe_eaip`/`remnappe_masq_affleur` pour TOUTES les
+    lignes DÉJÀ ÉCRITES d'un fichier — suite au correctif du 2026-08-27
+    (`WfsRemnappeService.eaip`/`masque_etude_specifique` répondaient "O"
+    pour à peu près N'IMPORTE QUEL point du département, faute de
+    vérification géométrique réelle sur le serveur BRGM — voir
+    `services/wfs_remnappe_service.py::_point_dans_reponse_gml`). Même
+    motif que `recalculer_zonage_gpu_du` : jamais tracké comme une
+    erreur (une réponse "existait" toujours), donc invisible pour
+    `reessayer_cellules_remnappe`.
+
+    Ne recalcule QUE si au moins un de ces 2 rôles est réellement
+    présent dans ce fichier (voir `layout.par_role`) — jamais un appel
+    API inutile sinon. Regroupe par PARCELLE UNIQUE, sauvegarde après
+    CHAQUE parcelle (même filet de sécurité que `traiter_rue`)."""
+    ws_scan = charger_feuille(excel_path)
+    derniere = trouver_premiere_ligne_vide(ws_scan) - 1
+    layout = scan_layout(
+        ws_scan, registry, run_id=excel_path.stem, file_path=str(excel_path), commune="", rue="",
+    )
+    roles = [r for r in ("remnappe_eaip", "remnappe_masq_affleur") if r in layout.par_role]
+    if not roles:
+        return 0
+
+    lignes_par_parcelle: Dict[Tuple[str, str], List[int]] = {}
+    for r in range(FIRST_DATA_ROW, derniere + 1):
+        section = ws_scan.cell(row=r, column=COL_SECTION).value
+        numero = ws_scan.cell(row=r, column=COL_PARCELLE).value
+        if not section or numero is None or str(numero).strip() in ("", "/"):
+            continue
+        cle = (str(section).strip(), str(numero).strip())
+        lignes_par_parcelle.setdefault(cle, []).append(r)
+
+    ws = charger_feuille(excel_path)
+
+    n_lignes_modifiees = 0
+    for (section, numero), lignes in lignes_par_parcelle.items():
+        parcelles = cadastre.get_parcelle(code_insee, section, numero)
+        if not parcelles or not parcelles[0].geometry:
+            _logger.warning(
+                "Recalcul remontée de nappe : parcelle %s %s introuvable au cadastre (%s) — ignorée.",
+                section, numero, code_insee,
+            )
+            continue
+        cx, cy = centroide_geometrie(parcelles[0].geometry)
+
+        try:
+            valeurs: Dict[str, str] = {}
+            if "remnappe_eaip" in roles:
+                resultat = wfs_remnappe.eaip(cy, cx)
+                if resultat is not None:
+                    valeurs["remnappe_eaip"] = resultat
+            if "remnappe_masq_affleur" in roles:
+                resultat = wfs_remnappe.masque_etude_specifique(cy, cx)
+                if resultat is not None:
+                    valeurs["remnappe_masq_affleur"] = resultat
+        except Exception as exc:  # noqa: BLE001 — une parcelle en échec ne doit jamais arrêter tout le recalcul
+            _logger.warning(
+                "Recalcul remontée de nappe : échec sur la parcelle %s %s (%s) — ignorée, à retenter plus tard.",
+                section, numero, exc,
+            )
+            continue
+
+        if not valeurs:
+            continue
+
+        for r in lignes:
+            for role_code, valeur in valeurs.items():
+                for lettre in layout.lettres_pour_role(role_code):
+                    ws.cell(row=r, column=column_index_from_string(lettre)).value = valeur
+            n_lignes_modifiees += 1
+
+        ws.parent.save(excel_path)
+        ws = charger_feuille(excel_path)
+
+    _logger.info(
+        "Recalcul remontée de nappe (%s) : %d parcelle(s) unique(s), %d ligne(s) mise(s) à jour.",
+        excel_path.name, len(lignes_par_parcelle), n_lignes_modifiees,
+    )
+    return n_lignes_modifiees
+
+
 def reessayer_cellules_georisques(
     excel_path: Path, chemin_revisite: Path, *,
     cadastre: CadastreService, georisques: GeorisquesService, registry: ColumnRegistryService,
@@ -2160,7 +2245,9 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
              "couvrir une commune en entier quand on le veut vraiment.",
     )
     parser.add_argument(
-        "--mode", choices=["traiter_commune", "retenter_erreurs", "recalculer_gpu_zonage"], default="traiter_commune",
+        "--mode", choices=[
+            "traiter_commune", "retenter_erreurs", "recalculer_gpu_zonage", "recalculer_remnappe_eaip",
+        ], default="traiter_commune",
         help="'traiter_commune' : découvre et traite toutes les rues (retente aussi automatiquement les "
              "cellules ERREUR en fin de run si la commune est allée jusqu'au bout). 'retenter_erreurs' : "
              "ne fait QUE retenter les cellules ERREUR déjà trackées pour cette commune (WFS Géorisques + "
@@ -2168,7 +2255,9 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
              "Manuellement, qui n'ont aucune règle à retenter. 'recalculer_gpu_zonage' : recalcule le "
              "zonage + le bloc gpu_du_* + H→M pour TOUTES les lignes déjà écrites (pas seulement les "
              "cellules trackées) — utile après un correctif touchant directement le CALCUL de ces rôles "
-             "(voir recalculer_zonage_gpu_du), jamais pour un simple échec réseau ponctuel.",
+             "(voir recalculer_zonage_gpu_du), jamais pour un simple échec réseau ponctuel. "
+             "'recalculer_remnappe_eaip' : même principe pour remnappe_eaip/remnappe_masq_affleur (voir "
+             "recalculer_remnappe_eaip), suite au correctif du 2026-08-27 sur WfsRemnappeService.",
     )
     parser.add_argument(
         "--traitement", choices=["continuer", "nouveau"], default="continuer",
@@ -2314,6 +2403,16 @@ def main(argv: Optional[List[str]] = None) -> int:
         )
         _logger.info(
             "Résumé final (recalculer_gpu_zonage, %s) : %d ligne(s) mise(s) à jour.",
+            args.commune, n_modifiees,
+        )
+        return 0
+
+    if args.mode == "recalculer_remnappe_eaip":
+        n_modifiees = recalculer_remnappe_eaip(
+            excel_path, code_insee, cadastre=cadastre, wfs_remnappe=wfs_remnappe, registry=registry,
+        )
+        _logger.info(
+            "Résumé final (recalculer_remnappe_eaip, %s) : %d ligne(s) mise(s) à jour.",
             args.commune, n_modifiees,
         )
         return 0
