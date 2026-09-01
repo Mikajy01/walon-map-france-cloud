@@ -56,7 +56,7 @@ from services.column_registry_service import ColumnRegistryService
 from services.commune_service import CommuneService
 from services.exceptions import ApiServiceError
 from services.excel_service import (
-    COL_PARCELLE, COL_SECTION, COL_ZONE_CLASSEE, FIRST_DATA_ROW,
+    COL_CODE_POSTAL, COL_COMMUNE, COL_PARCELLE, COL_RUE, COL_SECTION, COL_ZONE_CLASSEE, FIRST_DATA_ROW,
     TYPE_DOCUMENT_VERS_COLONNE, bootstrap_from_template, charger_feuille, ensure_columns_for_codes,
     lire_identifiants_deja_ecrits, lire_nature_document, scan_layout,
     trouver_premiere_ligne_vide, verifier_coherence_nature_document, write_ligne,
@@ -107,6 +107,25 @@ _DISTANCE_MAX_BORDURE_M = 40.0
 #     confiance, d'où le resserrement à 5 m.
 #   - 1407 (PAS bordière confirmée) : 10,0 m
 _DISTANCE_MAX_BORDURE_POLYGONE_M = 5.0
+
+# Pas (en mètres) d'échantillonnage le long de la polyligne réelle de la
+# rue pour découvrir TOUTES les sections cadastrales qu'elle traverse —
+# sans ça, la recherche de parcelles sans adresse ne cherchait que dans
+# les sections contenant au moins une parcelle ADRESSÉE (cf. ancienne
+# ligne `sections = {p.section for p in parcelles.values()}`), ce qui
+# ratait complètement le début de Route d'Etrez (avant le croisement du
+# n°1560) : les premières parcelles étaient dans une section SANS
+# adresse connue, donc purement et simplement ignorées. 20 m de pas :
+# suffisant pour ne manquer aucune section (les plus petites sections
+# rurales mesurent ~50 m de large), et raisonnable en nombre d'appels
+# API (une rue de 5 km → 250 appels `get_parcelles_pres_du_point`, bien
+# sous les quotas).
+_PAS_ECHANTILLONNAGE_RUE_M = 20.0
+# Marge (en mètres) autour de chaque point échantillonné pour la requête
+# apicarto — un peu plus large que `_DISTANCE_MAX_BORDURE_M` pour
+# rattraper les parcelles en retrait mais bien bordières, et les
+# imprécisions de l'échantillonnage "au fil de l'eau".
+_MARGE_ECHANTILLONNAGE_M = 15.0
 
 
 def _distance_min_polygone_a_positionneur(
@@ -561,11 +580,44 @@ def decouvrir_parcelles(
         parcelles.setdefault(meilleure.identifiant, meilleure)
         adresses_par_parcelle.setdefault(meilleure.identifiant, []).append(point)
 
-    # Parcelles sans adresse : toutes les parcelles des sections déjà
-    # rencontrées, dont le centroïde tombe près de la rue (polyligne
-    # réelle si disponible, sinon la reconstruction par adresses) et qui
-    # n'ont pas déjà été trouvées ci-dessus.
-    sections = {p.section for p in parcelles.values()}
+    # Parcelles sans adresse : recherche dans TOUTES les sections que la
+    # rue traverse (pas seulement celles avec des adresses connues !)
+    # Anciennement, on faisait `sections = {p.section for p in parcelles.values()}`
+    # — ça ratait complètement le début de Route d'Etrez (avant le
+    # croisement du n°1560), parce que les premières parcelles étaient
+    # dans une section SANS aucune adresse BAN, donc purement ignorée.
+    # Maintenant : si la géométrie réelle BDTOPO est disponible, on
+    # ÉCHANTILLONNE toute la rue pour découvrir les sections, on y
+    # AJOUTE les sections connues par les parcelles adressées (sécurité
+    # supplémentaire pour ne rien rater si l'échantillonnage passe entre
+    # deux mailles). Si pas de polyligne réelle, on retombe sur
+    # l'ancienne méthode (sections des seules parcelles adressées) —
+    # c'est moins bon, mais on n'a pas mieux sans la géométrie de la
+    # rue elle-même.
+    sections_connues: set = {p.section for p in parcelles.values()}
+    if utilise_polyligne_reelle and polyligne_reelle is not None:
+        sections_decouverte = _decouvrir_sections_le_long_rue(
+            polyligne_reelle, element, cadastre,
+        )
+        sections = sections_connues | sections_decouverte
+        if sections_decouverte - sections_connues:
+            _logger.info(
+                "Rue '%s' (%s) : %d section(s) cadastrale(s) découverte(s) "
+                "en plus de celle(s) des adresses BAN : %s — anciennement "
+                "ignorées, maintenant scannées (parcelles manquantes "
+                "probables, ex: début de Route d'Etrez avant le croisement).",
+                element.rue, element.commune,
+                len(sections_decouverte - sections_connues),
+                ", ".join(sorted(sections_decouverte - sections_connues)),
+            )
+    else:
+        sections = sections_connues
+        _logger.info(
+            "Rue '%s' (%s) : pas de géométrie BDTOPO disponible pour "
+            "découvrir toutes les sections — recherche limitée aux %d "
+            "section(s) contenant au moins une adresse BAN connue.",
+            element.rue, element.commune, len(sections),
+        )
     for section in sections:
         for feature in cadastre.get_parcelles_section(element.code_insee, section):
             numero = feature["properties"]["numero"]
@@ -577,11 +629,6 @@ def decouvrir_parcelles(
             if position is None:
                 continue
             if utilise_polyligne_reelle:
-                # Distance du POLYGONE (pas du seul centroïde) à la
-                # géométrie réelle de la rue — bien plus fiable, voir
-                # `_distance_min_polygone_a_positionneur`. Repli sur la
-                # distance du centroïde seul si le polygone n'a, pour une
-                # raison quelconque, aucun sommet projetable.
                 distance_reelle = _distance_min_polygone_a_positionneur(feature["geometry"], positionneur_distance)
                 if distance_reelle is None:
                     distance_reelle = position.distance_segment
@@ -639,6 +686,77 @@ def _distance_m(a: Tuple[float, float], b: Tuple[float, float]) -> float:
     dx = (lon_a - lon_b) * math.cos(math.radians(lat_ref)) * 111320
     dy = (lat_a - lat_b) * 111320
     return math.hypot(dx, dy)
+
+
+def _echantillonner_polyligne(
+    polyligne: List[Tuple[float, float]], pas_m: float,
+) -> List[Tuple[float, float]]:
+    """Produit une liste de points espacés de `pas_m` mètres le long de
+    la polyligne (y compris ses deux extrémités) — sert à découvrir
+    TOUTES les sections cadastrales traversées par une rue, pas
+    seulement celles qui contiennent une adresse BAN. Voir
+    `_decouvrir_sections_le_long_rue`."""
+    import math
+    if len(polyligne) < 2:
+        return list(polyligne)
+    echantillons: List[Tuple[float, float]] = [polyligne[0]]
+    cumule = 0.0
+    prochain_pas = pas_m
+    for a, b in zip(polyligne, polyligne[1:]):
+        lon_a, lat_a = a
+        lon_b, lat_b = b
+        lat_ref = (lat_a + lat_b) / 2
+        cos_lat = math.cos(math.radians(lat_ref))
+        dx = (lon_b - lon_a) * cos_lat * 111320
+        dy = (lat_b - lat_a) * 111320
+        longueur = math.hypot(dx, dy)
+        if longueur == 0:
+            continue
+        while cumule + longueur >= prochain_pas:
+            ratio = (prochain_pas - cumule) / longueur
+            ratio = max(0.0, min(1.0, ratio))
+            pt_lon = lon_a + ratio * (lon_b - lon_a)
+            pt_lat = lat_a + ratio * (lat_b - lat_a)
+            echantillons.append((pt_lon, pt_lat))
+            prochain_pas += pas_m
+        cumule += longueur
+    # Garantit que l'extrémité finale est toujours présente (même si le
+    # dernier segment ne tombait pas pile sur un multiple du pas).
+    dernier = polyligne[-1]
+    if not echantillons or _distance_m(echantillons[-1], dernier) > pas_m * 0.1:
+        echantillons.append(dernier)
+    return echantillons
+
+
+def _decouvrir_sections_le_long_rue(
+    polyligne_reelle: List[Tuple[float, float]],
+    element: ElementTravail,
+    cadastre: CadastreService,
+) -> set:
+    """Découvre l'ENSEMBLE des sections cadastrales traversées par la
+    polyligne réelle de la rue, par échantillonnage régulier (voir
+    `_PAS_ECHANTILLONNAGE_RUE_M`). Indispensable car l'ancienne version
+    ne cherchait des parcelles sans adresse QUE dans les sections qui
+    avaient déjà au moins une parcelle ADRESSÉE — manquant le début de
+    Route d'Etrez (avant le croisement du n°1560) où les premières
+    parcelles n'avaient aucune adresse connue, dans une section
+    complètement ignorée.
+
+    Renvoie un `set` de codes de section (ex: `"AA"`, `"ZB"`), prêt à
+    être fusionné avec les sections déjà connues des parcelles
+    adressées."""
+    sections: set = set()
+    echantillons = _echantillonner_polyligne(polyligne_reelle, _PAS_ECHANTILLONNAGE_RUE_M)
+    for lon, lat in echantillons:
+        proches = cadastre.get_parcelles_pres_du_point(
+            element.code_insee, lon, lat,
+            commune=element.commune, departement=element.departement,
+            code_postal=element.code_postal, rue=element.rue,
+            marge_m=_MARGE_ECHANTILLONNAGE_M,
+        )
+        for p in proches:
+            sections.add(p.section)
+    return sections
 
 
 # Colonnes "ancres" du bloc de zonage (N/Q/R-équivalents) — jamais
@@ -1830,7 +1948,14 @@ def recalculer_zonage_gpu_du(
 
     n_lignes_modifiees = 0
     for (section, numero), lignes in lignes_par_parcelle.items():
-        parcelles = cadastre.get_parcelle(code_insee, section, numero)
+        try:
+            parcelles = cadastre.get_parcelle(code_insee, section, numero)
+        except Exception as exc:  # noqa: BLE001 — panne réseau ponctuelle sur UNE parcelle ne doit jamais interrompre tout le recalcul (voir docstring)
+            _logger.warning(
+                "Recalcul zonage/GPU : échec cadastre sur la parcelle %s %s (%s) — ignorée, à retenter plus tard.",
+                section, numero, exc,
+            )
+            continue
         if not parcelles or not parcelles[0].geometry:
             _logger.warning(
                 "Recalcul zonage/GPU : parcelle %s %s introuvable au cadastre (%s) — ignorée.",
@@ -1923,7 +2048,14 @@ def recalculer_remnappe_eaip(
 
     n_lignes_modifiees = 0
     for (section, numero), lignes in lignes_par_parcelle.items():
-        parcelles = cadastre.get_parcelle(code_insee, section, numero)
+        try:
+            parcelles = cadastre.get_parcelle(code_insee, section, numero)
+        except Exception as exc:  # noqa: BLE001 — panne réseau ponctuelle sur UNE parcelle ne doit jamais interrompre tout le recalcul (voir docstring)
+            _logger.warning(
+                "Recalcul remontée de nappe : échec cadastre sur la parcelle %s %s (%s) — ignorée, à retenter plus tard.",
+                section, numero, exc,
+            )
+            continue
         if not parcelles or not parcelles[0].geometry:
             _logger.warning(
                 "Recalcul remontée de nappe : parcelle %s %s introuvable au cadastre (%s) — ignorée.",
@@ -1963,6 +2095,176 @@ def recalculer_remnappe_eaip(
 
     _logger.info(
         "Recalcul remontée de nappe (%s) : %d parcelle(s) unique(s), %d ligne(s) mise(s) à jour.",
+        excel_path.name, len(lignes_par_parcelle), n_lignes_modifiees,
+    )
+    return n_lignes_modifiees
+
+
+def completer_lignes_identite_seule(
+    excel_path: Path, code_insee: str, *,
+    cadastre: CadastreService, urbanisme: UrbanismeService, georisques: GeorisquesService,
+    registry: ColumnRegistryService,
+    wfs: Optional[WfsGeorisquesService] = None, wfs_remnappe: Optional[WfsRemnappeService] = None,
+    clpa: Optional[WfsClpaService] = None, steu: Optional[WfsSteuService] = None,
+) -> int:
+    """Complète les lignes "identité seule" (colonnes A→G remplies, tout
+    le reste vide) — celles produites par un script de complétion
+    manuelle du type `ajouter_et_reordonner_parcelles.py` (voir sa
+    docstring) pour des parcelles nouvellement découvertes SANS
+    redécouvrir toute la rue.
+
+    Bug réel trouvé en investigation live (2026-09-01, Bresse Vallons) :
+    `lire_identifiants_deja_ecrits` (utilisée par `traiter_rue`) exclut
+    du travail à faire toute ligne dont Section+Parcelle sont déjà
+    remplis, SANS vérifier si le reste de la ligne l'est aussi — un
+    `traiter_commune` en mode `continuer` (l'"ÉTAPE SUIVANTE" documentée
+    par ce script) ignore donc ces lignes POUR TOUJOURS, elles restent
+    vides indéfiniment. Contrairement à `recalculer_zonage_gpu_du`, cette
+    fonction n'écrit JAMAIS de nouvelle ligne ni ne déplace aucune ligne
+    existante — l'ORDRE côté-par-côté déjà établi par le script de
+    réordonnancement ne doit jamais être perturbé, seul le CONTENU des
+    lignes déjà en place (à la bonne position) est complété.
+
+    Même architecture que `recalculer_zonage_gpu_du`/`recalculer_remnappe_
+    eaip` (regroupement par parcelle unique, sauvegarde après chaque
+    parcelle) mais reprend l'INTÉGRALITÉ du bloc de résolveurs de
+    `traiter_rue` (zonage, Géorisques, GPU détaillé, SCoT, secteur CC,
+    zone humide/littoral, Natura2000, zone urbaine patrimoniale, WFS
+    inondation/remontée de nappe/CLPA/STEU) puisqu'ici RIEN n'est encore
+    calculé pour ces lignes, contrairement aux fonctions de recalcul
+    ciblé qui ne retouchent qu'un sous-ensemble déjà rempli une première
+    fois. Les rôles sans valeur sont forcés à "ERREUR"/"Manuellement"
+    comme un run normal (voir `_forcer_valeurs_manquantes_en_n`), jamais
+    laissés vides à nouveau."""
+    ws_scan = charger_feuille(excel_path)
+    derniere = trouver_premiere_ligne_vide(ws_scan) - 1
+    n_cols = ws_scan.max_column
+    layout = scan_layout(
+        ws_scan, registry, run_id=excel_path.stem, file_path=str(excel_path), commune="", rue="",
+    )
+
+    lignes_par_parcelle: Dict[Tuple[str, str], List[int]] = {}
+    for r in range(FIRST_DATA_ROW, derniere + 1):
+        section = ws_scan.cell(row=r, column=COL_SECTION).value
+        numero = ws_scan.cell(row=r, column=COL_PARCELLE).value
+        if not section or numero is None or str(numero).strip() in ("", "/"):
+            continue
+        a_des_donnees = any(
+            ws_scan.cell(row=r, column=c).value not in (None, "")
+            for c in range(COL_ZONE_CLASSEE, n_cols + 1)
+        )
+        if a_des_donnees:
+            continue
+        cle = (str(section).strip(), str(numero).strip())
+        lignes_par_parcelle.setdefault(cle, []).append(r)
+
+    if not lignes_par_parcelle:
+        _logger.info("Complétion lignes identité seule (%s) : aucune ligne à compléter.", excel_path.name)
+        return 0
+
+    ws = charger_feuille(excel_path)
+
+    n_lignes_modifiees = 0
+    for (section, numero), lignes in lignes_par_parcelle.items():
+        premiere_ligne = lignes[0]
+        commune = str(ws.cell(row=premiere_ligne, column=COL_COMMUNE).value or "")
+        code_postal = str(ws.cell(row=premiere_ligne, column=COL_CODE_POSTAL).value or "")
+        rue = str(ws.cell(row=premiere_ligne, column=COL_RUE).value or "")
+
+        try:
+            candidats = cadastre.get_parcelle(
+                code_insee, section, numero,
+                commune=commune, departement=code_insee[:2], code_postal=code_postal, rue=rue,
+            )
+        except Exception as exc:  # noqa: BLE001 — panne réseau ponctuelle sur UNE parcelle ne doit jamais interrompre tout le recalcul (voir docstring)
+            _logger.warning(
+                "Complétion lignes identité seule : échec cadastre sur la parcelle %s %s (%s) — ignorée, à retenter plus tard.",
+                section, numero, exc,
+            )
+            continue
+        if not candidats or not candidats[0].geometry:
+            _logger.warning(
+                "Complétion lignes identité seule : parcelle %s %s introuvable au cadastre (%s) — ignorée.",
+                section, numero, code_insee,
+            )
+            continue
+        parcelle = candidats[0]
+
+        try:
+            valeurs_zonage, doc_type = _resoudre_resilient(
+                "zonage", parcelle, lambda: resoudre_zonage(parcelle, urbanisme, registry, layout), ({}, None),
+            )
+            valeurs_risques = _resoudre_resilient(
+                "georisques", parcelle, lambda: resoudre_georisques(parcelle, georisques), {},
+            )
+            valeurs_gpu_detaille = _resoudre_resilient(
+                "gpu_detaille", parcelle, lambda: resoudre_gpu_detaille(parcelle, urbanisme, layout), {},
+            )
+            valeurs_scot = _resoudre_resilient(
+                "scot", parcelle, lambda: resoudre_scot(parcelle, urbanisme, layout), {},
+            )
+            valeurs_secteur_cc = _resoudre_resilient(
+                "secteur_cc", parcelle, lambda: resoudre_secteur_cc(parcelle, urbanisme, layout), {},
+            )
+            valeurs_zone_humide = _resoudre_resilient(
+                "zone_humide_ou_littoral", parcelle, lambda: resoudre_zone_humide_ou_littoral(parcelle, urbanisme, layout), {},
+            )
+            valeurs_natura2000 = _resoudre_resilient(
+                "natura2000", parcelle, lambda: resoudre_natura2000(parcelle, urbanisme, layout), {},
+            )
+            valeurs_urbaine_patrimoniale = _resoudre_resilient(
+                "zone_urbaine_patrimoniale", parcelle, lambda: resoudre_zone_urbaine_patrimoniale(parcelle, urbanisme, layout), {},
+            )
+            valeurs_wfs = _resoudre_resilient(
+                "wfs_inondation", parcelle, lambda: resoudre_wfs_inondation(parcelle, wfs), {},
+            ) if wfs is not None else {}
+            valeurs_remnappe = _resoudre_resilient(
+                "wfs_remnappe", parcelle, lambda: resoudre_wfs_remnappe(parcelle, wfs_remnappe), {},
+            ) if wfs_remnappe is not None else {}
+            valeurs_clpa = _resoudre_resilient(
+                "clpa_avalanche", parcelle, lambda: resoudre_clpa_avalanche(parcelle, clpa), {},
+            ) if clpa is not None else {}
+            valeurs_steu = _resoudre_resilient(
+                "stations_epuration", parcelle, lambda: resoudre_stations_epuration(parcelle, steu, layout), {},
+            ) if steu is not None else {}
+        except Exception as exc:  # noqa: BLE001 — une parcelle en échec ne doit jamais arrêter tout le recalcul
+            _logger.warning(
+                "Complétion lignes identité seule : échec sur la parcelle %s %s (%s) — ignorée, à retenter plus tard.",
+                section, numero, exc,
+            )
+            continue
+
+        valeurs = {
+            **valeurs_zonage, **valeurs_risques, **valeurs_gpu_detaille,
+            **valeurs_scot, **valeurs_secteur_cc, **valeurs_zone_humide,
+            **valeurs_natura2000, **valeurs_urbaine_patrimoniale,
+            **valeurs_wfs, **valeurs_remnappe, **valeurs_clpa, **valeurs_steu,
+        }
+        _forcer_valeurs_manquantes_en_n(valeurs, layout, parcelle, config.CELLULES_A_REVISITER_PATH)
+
+        valeurs_fixes: Dict[int, str] = {}
+        if doc_type and doc_type in TYPE_DOCUMENT_VERS_COLONNE:
+            for type_doc, col in TYPE_DOCUMENT_VERS_COLONNE.items():
+                valeurs_fixes[col] = "O" if type_doc == doc_type else "N"
+
+        for r in lignes:
+            for col, valeur in valeurs_fixes.items():
+                ws.cell(row=r, column=col).value = valeur
+            for role_code, valeur in valeurs.items():
+                if role_code == "__zone_classee__":
+                    ws.cell(row=r, column=COL_ZONE_CLASSEE).value = valeur
+                    continue
+                if role_code.startswith("__"):
+                    continue
+                for lettre in layout.lettres_pour_role(role_code):
+                    ws.cell(row=r, column=column_index_from_string(lettre)).value = valeur
+            n_lignes_modifiees += 1
+
+        ws.parent.save(excel_path)
+        ws = charger_feuille(excel_path)
+
+    _logger.info(
+        "Complétion lignes identité seule (%s) : %d parcelle(s) unique(s), %d ligne(s) complétée(s).",
         excel_path.name, len(lignes_par_parcelle), n_lignes_modifiees,
     )
     return n_lignes_modifiees
@@ -2247,6 +2549,7 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
     parser.add_argument(
         "--mode", choices=[
             "traiter_commune", "retenter_erreurs", "recalculer_gpu_zonage", "recalculer_remnappe_eaip",
+            "completer_lignes_identite_seule",
         ], default="traiter_commune",
         help="'traiter_commune' : découvre et traite toutes les rues (retente aussi automatiquement les "
              "cellules ERREUR en fin de run si la commune est allée jusqu'au bout). 'retenter_erreurs' : "
@@ -2257,7 +2560,12 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
              "cellules trackées) — utile après un correctif touchant directement le CALCUL de ces rôles "
              "(voir recalculer_zonage_gpu_du), jamais pour un simple échec réseau ponctuel. "
              "'recalculer_remnappe_eaip' : même principe pour remnappe_eaip/remnappe_masq_affleur (voir "
-             "recalculer_remnappe_eaip), suite au correctif du 2026-08-27 sur WfsRemnappeService.",
+             "recalculer_remnappe_eaip), suite au correctif du 2026-08-27 sur WfsRemnappeService. "
+             "'completer_lignes_identite_seule' : remplit le reste (zonage, H→M, Géorisques, GPU...) des "
+             "lignes 'identité seule' (colonnes A→G déjà présentes, reste vide) laissées par un script de "
+             "complétion manuelle type ajouter_et_reordonner_parcelles.py — un 'continuer' normal ne les "
+             "traite jamais (voir completer_lignes_identite_seule), et cette fonction ne déplace ni "
+             "n'ajoute aucune ligne, contrairement à 'traiter_commune'.",
     )
     parser.add_argument(
         "--traitement", choices=["continuer", "nouveau"], default="continuer",
@@ -2413,6 +2721,17 @@ def main(argv: Optional[List[str]] = None) -> int:
         )
         _logger.info(
             "Résumé final (recalculer_remnappe_eaip, %s) : %d ligne(s) mise(s) à jour.",
+            args.commune, n_modifiees,
+        )
+        return 0
+
+    if args.mode == "completer_lignes_identite_seule":
+        n_modifiees = completer_lignes_identite_seule(
+            excel_path, code_insee, cadastre=cadastre, urbanisme=urbanisme, georisques=georisques,
+            registry=registry, wfs=wfs, wfs_remnappe=wfs_remnappe, clpa=clpa, steu=steu,
+        )
+        _logger.info(
+            "Résumé final (completer_lignes_identite_seule, %s) : %d ligne(s) complétée(s).",
             args.commune, n_modifiees,
         )
         return 0

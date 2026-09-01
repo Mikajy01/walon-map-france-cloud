@@ -26,45 +26,139 @@ from utils.text_normalize import normaliser
 _logger = get_logger("services.voirie_service")
 
 _WFS_BASE = "https://data.geopf.fr/wfs/ows"
-_EPSILON_DEGRES = 1e-7  # tolérance pour considérer 2 points comme identiques
+_EPSILON_DEGRES = 1e-7  # tolérance pour considérer 2 points comme identiques (proximité exacte)
+# Tolérance beaucoup plus large (environ 10 m à 45° de latitude) pour le
+# recollement "glouton" de tronçons séparés par un carrefour ou imprécision
+# de digitalisation — écart réel : Route d'Etrez (Bresse Vallons) était
+# tronquée au croisement (commençait au n°1560 au lieu du vrai début)
+# parce que les 2 parties (avant/après carrefour) n'étaient pas à <1e-7°
+# l'une de l'autre, donc la première (début de la rue) était purement
+# ignorée, et la chaîne démarrait sur le tronçon du milieu.
+_RACCORD_TOLERANCE_DEGRES = 1e-4
+
+
+def _distance_deg(a: Tuple[float, float], b: Tuple[float, float]) -> float:
+    """Distance euclidienne brute en degrés — suffisante pour comparer
+    QUEL extrémité est LA PLUS PROCHE d'une autre (ordre, pas valeur
+    absolue). Évite le coût d'une projection pour une simple comparaison
+    de voisinage sur l'échelle d'une rue (< 1 km)."""
+    return (a[0] - b[0]) ** 2 + (a[1] - b[1]) ** 2
 
 
 def _chainer_parties(parties: List[List[Tuple[float, float]]]) -> List[Tuple[float, float]]:
-    """Chaîne des tronçons de LineString déconnectés en UNE polyligne
-    continue, en accolant bout à bout par proximité d'extrémité. Les
-    tronçons qui ne se raccrochent à rien restent ignorés (voie en
-    plusieurs branches distinctes) — jamais fusionnés au hasard."""
+    """Chaîne des tronçons de LineString (possiblement disjoints au
+    niveau des carrefours) en UNE polyligne continue, avec un choix
+    EXPLICITE de point de départ : on préfère commencer sur un tronçon
+    dont une extrémité n'a AUCUN voisin proche parmi les autres
+    tronçons — c'est donc un vrai BOUT DE LA RUE, et pas un point de
+    raccord intermédiaire/carrefour. Sans ça, le premier tronçon de la
+    liste (ordre arbitraire renvoyé par le WFS) peut être celui du
+    milieu, au croisement — la chaîne démarrait alors au numéro 1560
+    sur Route d'Etrez, au lieu du vrai début de la rue.
+
+    Les tronçons restants sont ensuite accolés BOUT À BOUT par
+    proximité GLoutone (le plus proche voisin, jamais rejeté faute de
+    tolérance trop stricte) : même quand une rue est coupée en plusieurs
+    morceaux indépendants par des carrefours (donc légèrement écartés
+    numériquement), on les enchaîne quand même — on obtient un ordre
+    de parcours global cohérent, indispensable pour que les numéros
+    les plus bas correspondent bien au début du chainage.
+
+    Porté/adapté de `project/utils/geometrie.py::_rechainer_chemins`
+    (même logique déjà validée sur la version Wallonne), avec une
+    tolérance additionnelle de raccord pour les points presque
+    superposés."""
     if not parties:
         return []
+    if len(parties) == 1:
+        return list(parties[0])
 
-    def proche(a: Tuple[float, float], b: Tuple[float, float]) -> bool:
-        return abs(a[0] - b[0]) < _EPSILON_DEGRES and abs(a[1] - b[1]) < _EPSILON_DEGRES
-
-    restantes = [list(p) for p in parties]
-    chaine = restantes.pop(0)
-    progres = True
-    while restantes and progres:
-        progres = False
-        for i, partie in enumerate(restantes):
-            if proche(chaine[-1], partie[0]):
-                chaine.extend(partie[1:])
-            elif proche(chaine[-1], partie[-1]):
-                chaine.extend(list(reversed(partie))[1:])
-            elif proche(chaine[0], partie[-1]):
-                chaine = partie[:-1] + chaine
-            elif proche(chaine[0], partie[0]):
-                chaine = list(reversed(partie))[:-1] + chaine
-            else:
+    def _plus_proche_voisin(idx: int, extr: Tuple[float, float]) -> Optional[float]:
+        meilleure: Optional[float] = None
+        for j, autre in enumerate(parties):
+            if j == idx:
                 continue
-            restantes.pop(i)
-            progres = True
+            for extremite in (autre[0], autre[-1]):
+                d = _distance_deg(extr, extremite)
+                if meilleure is None or d < meilleure:
+                    meilleure = d
+        return meilleure
+
+    depart_idx = 0
+    inverser_depart = False
+    seuil_isolement = _RACCORD_TOLERANCE_DEGRES ** 2
+    for i in range(len(parties)):
+        d_deb = _plus_proche_voisin(i, parties[i][0])
+        d_fin = _plus_proche_voisin(i, parties[i][-1])
+        debut_isole = d_deb is None or d_deb > seuil_isolement
+        fin_isolee = d_fin is None or d_fin > seuil_isolement
+        if debut_isole and not fin_isolee:
+            depart_idx, inverser_depart = i, False
             break
-    if restantes:
-        _logger.warning(
-            "Géométrie de voirie : %d tronçon(s) non connecté(s) au reste, ignoré(s) "
-            "(voie possiblement en plusieurs branches distinctes).", len(restantes),
+        if fin_isolee and not debut_isole:
+            depart_idx, inverser_depart = i, True
+            break
+    else:
+        # Cas 1 : les DEUX extrémités d'un tronçon sont isolées (rue en
+        # impasse totale, aucun voisin sur les deux côtés) — prend ce
+        # tronçon au hasard (l'un de ses bouts servira de début).
+        # Cas 2 : AUCUNE extrémité n'est clairement isolée (tous les
+        # tronçons ont des voisins proches des deux côtés — typiquement
+        # une rue qui démarre/termine SUR un carrefour, comme Route
+        # d'Etrez à Bresse Vallons : l'ancien code prenait le premier
+        # tronçon de la liste WFS, qui était celui du milieu au n°1560,
+        # pas le vrai début). Solution : parmi TOUTES les extrémités de
+        # TOUS les tronçons, prendre celle dont le plus proche voisin
+        # est LE PLUS LOIN — c'est le "bout le plus bout" de la rue,
+        # même si techniquement il a un voisin (le carrefour) à proximité.
+        # Jamais l'arbitraire de l'ordre WFS.
+        candidats: List[Tuple[float, int, bool]] = []  # (distance, idx_troncon, est_debut)
+        for i in range(len(parties)):
+            d_deb = _plus_proche_voisin(i, parties[i][0])
+            d_fin = _plus_proche_voisin(i, parties[i][-1])
+            if d_deb is not None:
+                candidats.append((d_deb, i, True))
+            if d_fin is not None:
+                candidats.append((d_fin, i, False))
+        if candidats:
+            # Prend l'extrémité la PLUS éloignée de son plus proche
+            # voisin : c'est un vrai BOUT de la rue, pas un point de
+            # raccord intermédiaire. Inverse la logique habituelle
+            # puisqu'on cherche le MAX des distances min, pas le MIN.
+            candidats.sort(reverse=True)
+            _, depart_idx, est_debut = candidats[0]
+            inverser_depart = not est_debut
+
+    restants: List[int] = [j for j in range(len(parties)) if j != depart_idx]
+    courant: List[Tuple[float, float]] = (
+        list(reversed(parties[depart_idx])) if inverser_depart else list(parties[depart_idx])
+    )
+    chaines: List[List[Tuple[float, float]]] = [courant]
+
+    while restants:
+        fin_actuelle = chaines[-1][-1]
+        meilleur_pos: Optional[int] = None
+        meilleur_dist: Optional[float] = None
+        meilleur_inverser = False
+        for pos, j in enumerate(restants):
+            d_deb = _distance_deg(fin_actuelle, parties[j][0])
+            if meilleur_dist is None or d_deb < meilleur_dist:
+                meilleur_dist, meilleur_pos, meilleur_inverser = d_deb, pos, False
+            d_fin = _distance_deg(fin_actuelle, parties[j][-1])
+            if meilleur_dist is None or d_fin < meilleur_dist:
+                meilleur_dist, meilleur_pos, meilleur_inverser = d_fin, pos, True
+        j = restants.pop(meilleur_pos)
+        suivant = list(reversed(parties[j])) if meilleur_inverser else list(parties[j])
+        chaines.append(suivant)
+
+    if len(chaines) > 1:
+        _logger.info(
+            "Géométrie de voirie : %d tronçon(s) initialement disjoint(s) "
+            "(carrefours/imprécision) — réordonnés et enchaînés en une seule "
+            "polyligne pour conserver un ordre de parcours cohérent.",
+            len(chaines) - 1,
         )
-    return chaine
+    return [pt for ch in chaines for pt in ch]
 
 
 class VoirieService:
