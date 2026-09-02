@@ -16,7 +16,6 @@ from typing import Dict, Optional, Set, Tuple
 from models.colonne import ColumnLayout
 from models.parcelle import Parcelle
 from services.urbanisme_service import UrbanismeService
-from utils.geometrie import centroide_geometrie
 
 _TYPENAME_DU = "info_lin,info_pct,info_surf,prescription_lin,prescription_pct,prescription_surf"
 _TYPENAME_SUP = "assiette_sup_l,assiette_sup_s,assiette_sup_p"
@@ -227,8 +226,11 @@ def resoudre_zone_urbaine_patrimoniale(
     fiables. À corriger dès qu'un vrai exemple positif est rencontré."""
     if "zone_urbaine_patrimoniale" not in layout.par_role:
         return {}
-    cx, cy = centroide_geometrie(parcelle.geometry)
-    features_zonage = urbanisme.get_zone_urba({"type": "Point", "coordinates": [cx, cy]})
+    # Polygone complet, pas le centroïde seul — même correctif que
+    # `resoudre_zonage` (main.py, 2026-09-02) : une parcelle à cheval
+    # sur une zone U et une zone non-U ne doit pas dépendre de la seule
+    # position du centroïde pour être considérée "urbaine".
+    features_zonage = urbanisme.get_zone_urba(parcelle.geometry)
     features_zonage = urbanisme.dedup_par_version_recente(features_zonage)
     est_urbaine = any(f["properties"].get("typezone") == "U" for f in features_zonage)
     if not est_urbaine:

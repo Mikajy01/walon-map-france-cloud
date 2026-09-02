@@ -35,6 +35,11 @@ on:
         options:
           - continuer
           - nouveau
+      marge_adresse_parcelle:
+        description: "Marge (mètres) pour associer une adresse BAN à sa parcelle cadastrale. Défaut 15 — augmenter si des parcelles bordières réelles restent introuvables (adresse posée en retrait de la voie, voir main.py::decouvrir_parcelles)."
+        required: false
+        type: string
+        default: "15"
 
 # Nécessaire pour committer l'état (Excel + registre) à la fin du run —
 # voir le plan cloud (2026-08-20) : l'Excel EST la source de vérité de
@@ -103,6 +108,7 @@ jobs:
             --rues "${{ inputs.rues }}" \
             --mode "${{ inputs.mode }}" \
             --traitement "${{ inputs.traitement }}" \
+            --marge-adresse-parcelle "${{ inputs.marge_adresse_parcelle }}" \
             --budget-heures 5.5
 
       - name: Signaler un run incomplet ou en erreur

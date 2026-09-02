@@ -79,7 +79,7 @@ from services.wfs_remnappe_service import WfsRemnappeService
 from utils.geometrie import centroide_geometrie, point_dans_geometrie
 from utils.logger import get_logger, setup_logging
 from utils.rate_limiter import RateLimiter
-from utils.text_normalize import normaliser_code_zone
+from utils.text_normalize import normaliser, normaliser_code_zone
 
 _logger = get_logger("main")
 
@@ -430,6 +430,8 @@ def decouvrir_parcelles(
     geocodage: GeocodageService,
     traversal: TraversalService,
     voirie: Optional[VoirieService] = None,
+    *,
+    marge_adresse_parcelle: float = 15.0,
 ) -> List[Tuple[Parcelle, List[AdressePoint]]]:
     """Découvre toutes les parcelles bordant la rue de `element`
     (adressées ET sans adresse), positionnées (côté + ordre de
@@ -453,7 +455,22 @@ def decouvrir_parcelles(
          explicites` — jamais de recherche par nom dans ce cas.
       2. Sinon, si la recherche BAN ne trouve aucune adresse : tente un
          lieu-dit (voir `_parcelles_depuis_lieu_dit`) avant de conclure
-         "introuvable"."""
+         "introuvable".
+
+    `marge_adresse_parcelle` : marge (mètres) de la recherche
+    adresse->parcelle (voir `CadastreService.get_parcelles_pres_du_point`,
+    dont le défaut interne de 8 m reste inchangé pour ses AUTRES appelants
+    — seul CET appel-ci, le plus sensible, expose désormais un défaut
+    plus large). Écart réel trouvé en investigation live (Bresse Vallons,
+    "Chemin des Teppes", 2026-09-02) : les 2 seules adresses connues de
+    la rue étaient à 8-10 m de leur parcelle la plus proche, juste
+    au-dessus de l'ancien défaut de 8 m — aucune association adresse-
+    parcelle n'était donc jamais établie, ce qui faisait échouer le
+    calibrage pair/impair ET empêchait le repli "adresse connue" de
+    sauver quoi que ce soit (aucune parcelle n'avait d'adresse associée),
+    pour un résultat final de 0 parcelle alors que 6 parcelles bordaient
+    réellement la rue (distance réelle ≤ 5 m, vérifiée). Réglable en CLI
+    via `--marge-adresse-parcelle` pour les cas encore plus extrêmes."""
     identifiants_explicites = [
         m.groups() for token in element.rue.split(";")
         if (m := _RE_PARCELLE_EXPLICITE.match(token.strip()))
@@ -553,11 +570,12 @@ def decouvrir_parcelles(
             element.code_insee, point.lon, point.lat,
             commune=element.commune, departement=element.departement,
             code_postal=element.code_postal, rue=element.rue,
+            marge_m=marge_adresse_parcelle,
         )
         if not candidates:
             _logger.warning(
-                "Aucune parcelle cadastrale trouvée près de l'adresse %s %s — adresse ignorée.",
-                point.housenumber, point.street,
+                "Aucune parcelle cadastrale trouvée près de l'adresse %s %s (marge %.0f m) — adresse ignorée.",
+                point.housenumber, point.street, marge_adresse_parcelle,
             )
             continue
         # Priorité au test géométrique EXACT (le point tombe-t-il DANS le
@@ -644,6 +662,7 @@ def decouvrir_parcelles(
             )
 
     positionnees: List[Tuple[Parcelle, PositionParcours]] = []
+    indeterminees: List[Tuple[Parcelle, PositionParcours]] = []
     for parcelle in parcelles.values():
         cx, cy = centroide_geometrie(parcelle.geometry)
         position = positionneur_ordre(cx, cy)
@@ -666,6 +685,47 @@ def decouvrir_parcelles(
                 position = PositionParcours(
                     cote=adresses_associees[0].numero_parite, chainage=0.0, distance_segment=0.0,
                 )
+            elif utilise_polyligne_reelle:
+                # 2e filet de sécurité, plus général — écart réel trouvé
+                # en investigation live (Bresse Vallons, "Chemin des
+                # Teppes", 2026-09-02) : quand AUCUNE parcelle de toute la
+                # rue n'a d'adresse associée (les 2 seules adresses BAN de
+                # cette rue étaient hors de la marge adresse->parcelle,
+                # voir la docstring), le repli ci-dessus ne peut jamais se
+                # déclencher non plus, et 6 parcelles pourtant confirmées
+                # bordières (distance réelle ≤5m, déjà vérifiée plus haut)
+                # étaient purement perdues. Ici, la parcelle a déjà passé
+                # le filtre de distance géométrique — elle borde belle et
+                # bien la rue, seul son CÔTÉ (pair/impair) est inconnu
+                # faute de tout calibrage possible. Gardée avec un côté
+                # "indeterminé", chaînée par la distance déjà calculée
+                # (`positionneur_distance`, fiable même sans calibrage —
+                # voir sa docstring), placée à part et ajoutée en fin de
+                # liste après les 2 côtés triés (jamais mélangée à leur
+                # ordre, qui reste, lui, fiable).
+                position_distance = positionneur_distance(cx, cy)
+                if position_distance is not None:
+                    indeterminees.append((parcelle, position_distance))
+                    # Distance réelle du POLYGONE (celle qui a justifié
+                    # l'inclusion plus haut), pas celle du seul centroïde
+                    # utilisée ci-dessus pour le chaînage — un grand
+                    # terrain irrégulier peut avoir un centroïde à 80 m
+                    # de la rue alors qu'un bord la touche à 5 m (même
+                    # piège documenté dans `_distance_min_polygone_a_
+                    # positionneur`), jamais confondre les deux dans le log.
+                    distance_bord = _distance_min_polygone_a_positionneur(parcelle.geometry, positionneur_distance)
+                    _logger.info(
+                        "Parcelle %s (%s) : bordière confirmée (%.1f m) mais côté indéterminable "
+                        "(aucune adresse sur toute la rue) — ajoutée en fin de liste.",
+                        parcelle.identifiant, element.rue,
+                        distance_bord if distance_bord is not None else position_distance.distance_segment,
+                    )
+                else:
+                    _logger.warning(
+                        "Parcelle %s non positionnable par rapport à la rue '%s' — exclue de l'ordre de parcours.",
+                        parcelle.identifiant, element.rue,
+                    )
+                continue
             else:
                 _logger.warning(
                     "Parcelle %s non positionnable par rapport à la rue '%s' — exclue de l'ordre de parcours.",
@@ -675,6 +735,12 @@ def decouvrir_parcelles(
         positionnees.append((parcelle, position))
 
     ordre_final = traversal.trier(positionnees, ordre_cotes)
+    if indeterminees:
+        indeterminees.sort(key=lambda pc: pc[1].chainage)
+        for parcelle, position in indeterminees:
+            parcelle.cote = "indetermine"
+            parcelle.ordre = position.chainage
+        ordre_final.extend(p for p, _ in indeterminees)
     return [(p, adresses_par_parcelle.get(p.identifiant, [])) for p in ordre_final]
 
 
@@ -925,8 +991,11 @@ def decouvrir_codes_zone_manquants(
     for element in elements:
         parcelles_avec_adresses = decouvrir_parcelles(element, cadastre, geocodage, traversal, voirie)
         for parcelle, _adresses in parcelles_avec_adresses:
-            cx, cy = centroide_geometrie(parcelle.geometry)
-            features = urbanisme.get_zone_urba({"type": "Point", "coordinates": [cx, cy]})
+            # Polygone complet, pas le centroïde seul — même correctif
+            # que `resoudre_zonage`, sinon un code de zone présent
+            # uniquement sur la partie de la parcelle hors du centroïde
+            # ne serait jamais découvert ici.
+            features = urbanisme.get_zone_urba(parcelle.geometry)
             features = urbanisme.dedup_par_version_recente(features)
             for f in features:
                 libelle = f["properties"].get("libelle")
@@ -1015,8 +1084,18 @@ def resoudre_zonage(
     }
     doc_type: Optional[str] = None
 
-    cx, cy = centroide_geometrie(parcelle.geometry)
-    features = urbanisme.get_zone_urba({"type": "Point", "coordinates": [cx, cy]})
+    # Géométrie COMPLÈTE de la parcelle (pas son centroïde seul) — écart
+    # réel trouvé en investigation live (2026-09-02, Bresse Vallons,
+    # parcelle 0B/2116 "Chemin des Ponthus") : la fiche GPU officielle
+    # (geoportail-urbanisme.gouv.fr) la classe A + N + Nh (3 zones, son
+    # polygone chevauche 3 limites de zonage), mais interroger seulement
+    # le centroïde ne retrouvait QUE Nh (le centroïde tombe dans cette
+    # seule zone) — toute parcelle à cheval sur plusieurs zones du PLU
+    # était donc sous-déclarée en colonne G et dans les colonnes de code
+    # individuelles. `get_zone_urba` accepte déjà un polygone (voir sa
+    # docstring), confirmé en direct : interroger `parcelle.geometry`
+    # renvoie bien les 3 features pour ce cas réel.
+    features = urbanisme.get_zone_urba(parcelle.geometry)
     features = urbanisme.dedup_par_version_recente(features)
 
     # Colonne G "Zone Classée" — écart réel trouvé en relisant les 2
@@ -1441,6 +1520,7 @@ def traiter_rue(
     voirie: Optional[VoirieService] = None,
     on_progress: Optional[ProgressCallback] = None,
     deadline: Optional[datetime] = None,
+    marge_adresse_parcelle: float = 15.0,
 ) -> ResultatRue:
     """Traite une rue précise : découvre ses parcelles, exclut celles
     déjà présentes dans l'Excel fourni, résout ce qui est câblé
@@ -1473,7 +1553,10 @@ def traiter_rue(
     resultat = ResultatRue(commune=element.commune, rue=element.rue)
 
     deja_ecrits = lire_identifiants_deja_ecrits(ws, element.code_insee)
-    parcelles_avec_adresses = decouvrir_parcelles(element, cadastre, geocodage, traversal, voirie)
+    parcelles_avec_adresses = decouvrir_parcelles(
+        element, cadastre, geocodage, traversal, voirie,
+        marge_adresse_parcelle=marge_adresse_parcelle,
+    )
     a_traiter = [(p, a) for p, a in parcelles_avec_adresses if p.identifiant not in deja_ecrits]
 
     _logger.info(
@@ -1568,6 +1651,57 @@ def traiter_rue(
     return resultat
 
 
+def verifier_rues(
+    code_insee: str, rues_demandees: List[str], commune_service: CommuneService,
+    *, n_suggestions: int = 5,
+) -> List[Tuple[str, Optional[str], List[str]]]:
+    """Vérifie une liste de noms de rue contre la liste RÉELLE des voies
+    BAN d'une commune (voir `CommuneService.lister_voies`) — jamais de
+    traitement lancé à l'aveugle sur un nom mal orthographié ou du
+    mauvais TYPE de voie. Écart réel trouvé en investigation live
+    (2026-09-01/02, Cessy) : "Allée des Seringats" n'existe pas, la BAN a
+    "Impasse des Seringats" ; "Route de Chenaz" n'existe pas, la BAN a
+    "Chemin de Chenaz" — pas des fautes de frappe, le mauvais TYPE de
+    voie, invisible à l'oeil sur une liste papier/Excel. Construit pour
+    remplacer la vérification manuelle "cette rue existe-t-elle ?" faite
+    à la main tout du long de cette session (recherche BAN + comparaison
+    normalisée), pour que l'utilisateur puisse vérifier lui-même une
+    liste entière d'un coup plutôt que rue par rue.
+
+    Renvoie, pour CHAQUE rue demandée (dans l'ordre donné), un triplet :
+      `(nom_demande, correspondance_exacte_ou_None, [suggestions_proches])`
+    - correspondance exacte (accents/casse/espaces ignorés, voir
+      `utils.text_normalize.normaliser`) : 2e élément = le nom EXACT tel
+      qu'il existe dans la BAN (à utiliser tel quel pour le traitement),
+      3e élément vide.
+    - pas de correspondance exacte : 2e élément `None`, 3e élément =
+      les `n_suggestions` voies de la commune les plus proches
+      (`rapidfuzz`, déjà une dépendance du projet) — jamais deviné
+      laquelle est la bonne, à l'utilisateur de choisir.
+
+    Scorer `token_set_ratio` (pas `WRatio`, le défaut usuel) : comparé
+    en direct sur les 3 vrais écarts trouvés cette session — `WRatio`
+    plaçait "Chemin de Chenaz" hors du top 5 pour la recherche "Route de
+    Chenaz" (le mot "Route"/"Chemin" en tête écrase le score malgré le
+    reste identique), alors que `token_set_ratio` (comparaison par
+    ensemble de mots, insensible à l'ordre et au préfixe) le classe 3e —
+    bien plus utile pour ce cas précis, "même nom, mauvais type de voie"."""
+    from rapidfuzz import fuzz, process
+
+    voies = commune_service.lister_voies(code_insee)
+    voies_normalisees = {normaliser(v): v for v in voies}
+
+    resultats: List[Tuple[str, Optional[str], List[str]]] = []
+    for demandee in rues_demandees:
+        correspondance = voies_normalisees.get(normaliser(demandee))
+        if correspondance is not None:
+            resultats.append((demandee, correspondance, []))
+            continue
+        extraits = process.extract(demandee, voies, scorer=fuzz.token_set_ratio, limit=n_suggestions)
+        resultats.append((demandee, None, [nom for nom, _score, _idx in extraits]))
+    return resultats
+
+
 def chemin_etat_commune(state_dir: Path, code_insee: str, commune: str) -> Path:
     """Chemin de l'Excel d'état pour UNE commune (voir le plan cloud,
     2026-08-20) : un fichier par commune sous `config.STATE_DIR`,
@@ -1591,6 +1725,7 @@ def traiter_commune_complete(
     steu: Optional[WfsSteuService] = None,
     voirie: Optional[VoirieService] = None, on_progress: Optional[ProgressCallback] = None,
     rues_a_traiter: Optional[List[str]] = None,
+    marge_adresse_parcelle: float = 15.0,
 ) -> ResultatLot:
     """Traite les rues d'une commune. Deux modes (décision explicite de
     l'utilisateur, 2026-08-21 : le travail réel fournit presque toujours
@@ -1653,6 +1788,7 @@ def traiter_commune_complete(
             geocodage=geocodage, traversal=traversal, registry=registry,
             wfs=wfs, wfs_remnappe=wfs_remnappe, clpa=clpa, steu=steu, voirie=voirie,
             on_progress=on_progress, deadline=deadline,
+            marge_adresse_parcelle=marge_adresse_parcelle,
         )
         lot.resultats_par_rue.append(resultat)
         ws = charger_feuille(excel_path)
@@ -2584,6 +2720,14 @@ def parse_args(argv: Optional[List[str]] = None) -> argparse.Namespace:
         help="Budget de temps interne avant arrêt propre (marge de sécurité sous les 6h dures de GitHub "
              "Actions, voir le plan cloud). Valeur volontairement basse en test pour vérifier l'arrêt propre.",
     )
+    parser.add_argument(
+        "--marge-adresse-parcelle", type=float, default=15.0,
+        help="Marge (mètres) pour associer une adresse BAN à sa parcelle cadastrale (voir "
+             "decouvrir_parcelles). Écart réel trouvé en investigation live (Bresse Vallons, 'Chemin des "
+             "Teppes', 2026-09-02) : l'ancien défaut de 8 m ratait des adresses à 8-10 m de leur parcelle, "
+             "faisant échouer tout le calibrage pair/impair et perdant des parcelles pourtant réellement "
+             "bordières. À augmenter encore pour une rue à l'adressage particulièrement en retrait.",
+    )
     parser.add_argument("--debug", action="store_true")
     return parser.parse_args(argv)
 
@@ -2796,6 +2940,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         geocodage=geocodage, traversal=traversal, registry=registry,
         commune_service=commune_service, wfs=wfs, wfs_remnappe=wfs_remnappe, clpa=clpa, steu=steu, voirie=voirie,
         rues_a_traiter=rues, on_progress=on_progress,
+        marge_adresse_parcelle=args.marge_adresse_parcelle,
     )
     lot.colonnes_creees = codes_crees
     lot.colonnes_creees_detail = colonnes_creees_events
