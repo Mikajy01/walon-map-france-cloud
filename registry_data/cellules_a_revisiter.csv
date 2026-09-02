@@ -29000,12 +29000,7 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-09-02T14:51:48+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1250,LT,eolien_poste_livraison_instruction,Postes de livraison appartenant à un parc en instruction
 2026-09-02T14:51:48+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1250,MC,erosion_berges,Erosion des berges
 2026-09-02T14:51:48+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1250,EM,mise_en_compatibilite,Mises en compatibilité
-2026-09-02T14:51:48+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1250,HJ,perimetre_scot_arrete,Périmètre de SCOT arrêté
 2026-09-02T14:51:48+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1250,JP,remnappe_masq_bdlisa,Remontée de nappes (Entités hydrogéologiques imperméables à l'affleurement)
-2026-09-02T14:51:48+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1250,HK,schema_coherence_territoriale_non_publie,Schéma de cohérence territorial (non publié)
-2026-09-02T14:51:48+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1250,HL,schema_coherence_territoriale_publie,Schéma de cohérence territorial (publié)
-2026-09-02T14:51:48+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1250,U,secteur_non_ouvert_construction,Constructions non autorisées
-2026-09-02T14:51:48+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1250,T,secteur_reserve_activites,Secteur réservé aux activités
 2026-09-02T14:55:26+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1758,LF,eolien_appartenant_parc_attente_construction,Eoliennes appartenant à un parc en attente de construction
 2026-09-02T14:55:26+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1758,LP,eolien_appartenant_parc_attente_construction,Eoliennes appartenant à un parc en attente de construction
 2026-09-02T14:55:26+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1758,LI,eolien_appartenant_parc_cessation,Eoliennes appartenant à un parc en cessation d'activité
@@ -29033,12 +29028,7 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-09-02T14:55:26+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1758,LT,eolien_poste_livraison_instruction,Postes de livraison appartenant à un parc en instruction
 2026-09-02T14:55:26+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1758,MC,erosion_berges,Erosion des berges
 2026-09-02T14:55:26+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1758,EM,mise_en_compatibilite,Mises en compatibilité
-2026-09-02T14:55:26+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1758,HJ,perimetre_scot_arrete,Périmètre de SCOT arrêté
 2026-09-02T14:55:26+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1758,JP,remnappe_masq_bdlisa,Remontée de nappes (Entités hydrogéologiques imperméables à l'affleurement)
-2026-09-02T14:55:26+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1758,HK,schema_coherence_territoriale_non_publie,Schéma de cohérence territorial (non publié)
-2026-09-02T14:55:26+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1758,HL,schema_coherence_territoriale_publie,Schéma de cohérence territorial (publié)
-2026-09-02T14:55:26+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1758,U,secteur_non_ouvert_construction,Constructions non autorisées
-2026-09-02T14:55:26+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1758,T,secteur_reserve_activites,Secteur réservé aux activités
 2026-09-02T14:59:22+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1759,LF,eolien_appartenant_parc_attente_construction,Eoliennes appartenant à un parc en attente de construction
 2026-09-02T14:59:22+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1759,LP,eolien_appartenant_parc_attente_construction,Eoliennes appartenant à un parc en attente de construction
 2026-09-02T14:59:22+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1759,LI,eolien_appartenant_parc_cessation,Eoliennes appartenant à un parc en cessation d'activité
@@ -29066,12 +29056,7 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-09-02T14:59:22+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1759,LT,eolien_poste_livraison_instruction,Postes de livraison appartenant à un parc en instruction
 2026-09-02T14:59:22+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1759,MC,erosion_berges,Erosion des berges
 2026-09-02T14:59:22+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1759,EM,mise_en_compatibilite,Mises en compatibilité
-2026-09-02T14:59:22+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1759,HJ,perimetre_scot_arrete,Périmètre de SCOT arrêté
 2026-09-02T14:59:22+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1759,JP,remnappe_masq_bdlisa,Remontée de nappes (Entités hydrogéologiques imperméables à l'affleurement)
-2026-09-02T14:59:22+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1759,HK,schema_coherence_territoriale_non_publie,Schéma de cohérence territorial (non publié)
-2026-09-02T14:59:22+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1759,HL,schema_coherence_territoriale_publie,Schéma de cohérence territorial (publié)
-2026-09-02T14:59:22+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1759,U,secteur_non_ouvert_construction,Constructions non autorisées
-2026-09-02T14:59:22+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1759,T,secteur_reserve_activites,Secteur réservé aux activités
 2026-09-02T15:03:21+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0228,LF,eolien_appartenant_parc_attente_construction,Eoliennes appartenant à un parc en attente de construction
 2026-09-02T15:03:21+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0228,LP,eolien_appartenant_parc_attente_construction,Eoliennes appartenant à un parc en attente de construction
 2026-09-02T15:03:21+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0228,LI,eolien_appartenant_parc_cessation,Eoliennes appartenant à un parc en cessation d'activité
@@ -29099,12 +29084,7 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-09-02T15:03:21+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0228,LT,eolien_poste_livraison_instruction,Postes de livraison appartenant à un parc en instruction
 2026-09-02T15:03:21+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0228,MC,erosion_berges,Erosion des berges
 2026-09-02T15:03:21+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0228,EM,mise_en_compatibilite,Mises en compatibilité
-2026-09-02T15:03:21+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0228,HJ,perimetre_scot_arrete,Périmètre de SCOT arrêté
 2026-09-02T15:03:21+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0228,JP,remnappe_masq_bdlisa,Remontée de nappes (Entités hydrogéologiques imperméables à l'affleurement)
-2026-09-02T15:03:21+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0228,HK,schema_coherence_territoriale_non_publie,Schéma de cohérence territorial (non publié)
-2026-09-02T15:03:21+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0228,HL,schema_coherence_territoriale_publie,Schéma de cohérence territorial (publié)
-2026-09-02T15:03:21+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0228,U,secteur_non_ouvert_construction,Constructions non autorisées
-2026-09-02T15:03:21+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0228,T,secteur_reserve_activites,Secteur réservé aux activités
 2026-09-02T15:05:18+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0227,LF,eolien_appartenant_parc_attente_construction,Eoliennes appartenant à un parc en attente de construction
 2026-09-02T15:05:18+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0227,LP,eolien_appartenant_parc_attente_construction,Eoliennes appartenant à un parc en attente de construction
 2026-09-02T15:05:18+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0227,LI,eolien_appartenant_parc_cessation,Eoliennes appartenant à un parc en cessation d'activité
@@ -29160,12 +29140,7 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-09-02T15:09:32+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0226,LT,eolien_poste_livraison_instruction,Postes de livraison appartenant à un parc en instruction
 2026-09-02T15:09:32+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0226,MC,erosion_berges,Erosion des berges
 2026-09-02T15:09:33+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0226,EM,mise_en_compatibilite,Mises en compatibilité
-2026-09-02T15:09:33+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0226,HJ,perimetre_scot_arrete,Périmètre de SCOT arrêté
 2026-09-02T15:09:33+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0226,JP,remnappe_masq_bdlisa,Remontée de nappes (Entités hydrogéologiques imperméables à l'affleurement)
-2026-09-02T15:09:33+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0226,HK,schema_coherence_territoriale_non_publie,Schéma de cohérence territorial (non publié)
-2026-09-02T15:09:33+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0226,HL,schema_coherence_territoriale_publie,Schéma de cohérence territorial (publié)
-2026-09-02T15:09:33+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0226,U,secteur_non_ouvert_construction,Constructions non autorisées
-2026-09-02T15:09:33+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0226,T,secteur_reserve_activites,Secteur réservé aux activités
 2026-09-02T15:13:38+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1384,LF,eolien_appartenant_parc_attente_construction,Eoliennes appartenant à un parc en attente de construction
 2026-09-02T15:13:38+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1384,LP,eolien_appartenant_parc_attente_construction,Eoliennes appartenant à un parc en attente de construction
 2026-09-02T15:13:38+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1384,LI,eolien_appartenant_parc_cessation,Eoliennes appartenant à un parc en cessation d'activité
@@ -29193,12 +29168,7 @@ date,commune,code_insee,rue,section,numero,colonne,role_code,en_tete
 2026-09-02T15:13:38+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1384,LT,eolien_poste_livraison_instruction,Postes de livraison appartenant à un parc en instruction
 2026-09-02T15:13:38+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1384,MC,erosion_berges,Erosion des berges
 2026-09-02T15:13:38+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1384,EM,mise_en_compatibilite,Mises en compatibilité
-2026-09-02T15:13:38+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1384,HJ,perimetre_scot_arrete,Périmètre de SCOT arrêté
 2026-09-02T15:13:38+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1384,JP,remnappe_masq_bdlisa,Remontée de nappes (Entités hydrogéologiques imperméables à l'affleurement)
-2026-09-02T15:13:38+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1384,HK,schema_coherence_territoriale_non_publie,Schéma de cohérence territorial (non publié)
-2026-09-02T15:13:38+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1384,HL,schema_coherence_territoriale_publie,Schéma de cohérence territorial (publié)
-2026-09-02T15:13:38+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1384,U,secteur_non_ouvert_construction,Constructions non autorisées
-2026-09-02T15:13:38+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,1384,T,secteur_reserve_activites,Secteur réservé aux activités
 2026-09-02T15:15:51+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0219,LF,eolien_appartenant_parc_attente_construction,Eoliennes appartenant à un parc en attente de construction
 2026-09-02T15:15:51+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0219,LP,eolien_appartenant_parc_attente_construction,Eoliennes appartenant à un parc en attente de construction
 2026-09-02T15:15:51+00:00,Buellas,01065,Chemin du Petit Corgenon,0B,0219,LI,eolien_appartenant_parc_cessation,Eoliennes appartenant à un parc en cessation d'activité

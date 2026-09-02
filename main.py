@@ -2513,6 +2513,129 @@ def reessayer_cellules_georisques(
     return n_repare
 
 
+_ROLES_SCOT_SECTEUR_CC = {
+    "schema_coherence_territoriale_publie", "schema_coherence_territoriale_non_publie",
+    "perimetre_scot_arrete", "secteur_ouvert_construction", "secteur_reserve_activites",
+    "secteur_non_ouvert_construction",
+}
+
+
+def reessayer_cellules_scot_secteur_cc(
+    excel_path: Path, chemin_revisite: Path, *,
+    cadastre: CadastreService, urbanisme: UrbanismeService, registry: ColumnRegistryService,
+) -> int:
+    """Même motif que `reessayer_cellules_georisques`, pour les rôles
+    `resoudre_scot`/`resoudre_secteur_cc` (SCOT + secteurs de carte
+    communale) — écart réel trouvé en investigation live (Buellas,
+    2026-09-02) : ni `reessayer_cellules_wfs` (REGLES_WFS), ni
+    `reessayer_cellules_gpu_du` (gpu_du_*/gpu_sup_*), ni `reessayer_
+    cellules_georisques` (REGLES_GEORISQUES) ne couvrent cette
+    catégorie — 30 cellules restaient "ERREUR" à vie sur ce fichier,
+    quel que soit le nombre de "Retraiter les erreurs" relancés,
+    aucun bug côté serveur, juste aucun chemin de récupération
+    automatique câblé pour ces 2 résolveurs précis.
+
+    Contrairement aux autres retries, `resoudre_scot`/`resoudre_
+    secteur_cc` ont besoin d'un `layout` (rôles réellement présents
+    dans CE fichier) — voir `recalculer_zonage_gpu_du` pour le même
+    besoin, même motif de scan séparé (scan_layout épuise les flux
+    PNG des icônes, `ws_scan` est jetable, jamais resauvegardé).
+
+    Renvoie le nombre de cellules réparées."""
+    if not chemin_revisite.exists():
+        return 0
+
+    with chemin_revisite.open(newline="", encoding="utf-8") as f:
+        lignes = list(csv.DictReader(f))
+    a_retenter_brut = [l for l in lignes if l["role_code"] in _ROLES_SCOT_SECTEUR_CC]
+    autres = [l for l in lignes if l["role_code"] not in _ROLES_SCOT_SECTEUR_CC]
+    if not a_retenter_brut:
+        return 0
+
+    ws_scan = charger_feuille(excel_path)
+    derniere = trouver_premiere_ligne_vide(ws_scan) - 1
+    layout = scan_layout(
+        ws_scan, registry, run_id=excel_path.stem, file_path=str(excel_path), commune="", rue="",
+    )
+    parcelles_du_fichier = set()
+    for r in range(FIRST_DATA_ROW, derniere + 1):
+        section = ws_scan.cell(row=r, column=COL_SECTION).value
+        numero = ws_scan.cell(row=r, column=COL_PARCELLE).value
+        if section is not None and numero is not None:
+            parcelles_du_fichier.add((str(section).strip(), str(numero).strip()))
+
+    def _dans_ce_fichier(l: dict) -> bool:
+        return (l["section"].strip(), l["numero"].strip()) in parcelles_du_fichier
+
+    a_retenter = [l for l in a_retenter_brut if _dans_ce_fichier(l)]
+    hors_fichier = [l for l in a_retenter_brut if not _dans_ce_fichier(l)]
+    if not a_retenter:
+        _logger.info(
+            "Reessai des cellules SCOT/secteur CC : aucune des %d ligne(s) trackée(s) n'appartient à "
+            "ce fichier précis (%s), rien à retenter ici.",
+            len(a_retenter_brut), excel_path.name,
+        )
+        return 0
+
+    parcelles_uniques = {(l["code_insee"], l["section"], l["numero"]) for l in a_retenter}
+    nouvelles_valeurs: Dict[Tuple[str, str, str], Dict[str, str]] = {}
+    for code_insee, section, numero in parcelles_uniques:
+        candidats = cadastre.get_parcelle(code_insee, section, numero)
+        if not candidats or not candidats[0].geometry:
+            continue
+        valeurs: Dict[str, str] = {}
+        valeurs.update(_resoudre_resilient(
+            "scot", candidats[0], lambda: resoudre_scot(candidats[0], urbanisme, layout), {},
+        ))
+        valeurs.update(_resoudre_resilient(
+            "secteur_cc", candidats[0], lambda: resoudre_secteur_cc(candidats[0], urbanisme, layout), {},
+        ))
+        if valeurs:
+            nouvelles_valeurs[(code_insee, section, numero)] = valeurs
+
+    if not nouvelles_valeurs:
+        _logger.info("Reessai des cellules SCOT/secteur CC : toujours aucune réponse exploitable, rien réparé.")
+        return 0
+
+    ws = charger_feuille(excel_path)
+    n_repare = 0
+    lignes_restantes = list(autres) + hors_fichier
+    for l in a_retenter:
+        cle = (l["code_insee"], l["section"], l["numero"])
+        valeurs_trouvees = nouvelles_valeurs.get(cle, {})
+        valeur = valeurs_trouvees.get(l["role_code"])
+        if valeur is None:
+            lignes_restantes.append(l)
+            continue
+        col = column_index_from_string(l["colonne"])
+        ecrit = False
+        for r in range(FIRST_DATA_ROW, derniere + 1):
+            if (
+                str(ws.cell(row=r, column=COL_SECTION).value).strip() == l["section"].strip()
+                and str(ws.cell(row=r, column=COL_PARCELLE).value).strip() == l["numero"].strip()
+            ):
+                ws.cell(row=r, column=col).value = valeur
+                n_repare += 1
+                ecrit = True
+        if not ecrit:
+            lignes_restantes.append(l)
+
+    with chemin_revisite.open("w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=[
+            "date", "commune", "code_insee", "rue", "section", "numero",
+            "colonne", "role_code", "en_tete",
+        ])
+        writer.writeheader()
+        writer.writerows(lignes_restantes)
+
+    ws.parent.save(excel_path)
+    _logger.info(
+        "Reessai des cellules SCOT/secteur CC (%s) : %d cellule(s) réparée(s), %d reste(nt) trackée(s) au total.",
+        excel_path.name, n_repare, len(lignes_restantes),
+    )
+    return n_repare
+
+
 def reessayer_cellules_gpu_du(
     excel_path: Path, chemin_revisite: Path, *,
     cadastre: CadastreService, urbanisme: UrbanismeService, registry: ColumnRegistryService,
@@ -2834,18 +2957,21 @@ def main(argv: Optional[List[str]] = None) -> int:
         n_repare_remnappe = reessayer_cellules_remnappe(
             excel_path, config.CELLULES_A_REVISITER_PATH, cadastre=cadastre, wfs_remnappe=wfs_remnappe, registry=registry,
         )
-        # Rechargement OBLIGATOIRE : les quatre retries sauvegardent en
+        n_repare_scot = reessayer_cellules_scot_secteur_cc(
+            excel_path, config.CELLULES_A_REVISITER_PATH, cadastre=cadastre, urbanisme=urbanisme, registry=registry,
+        )
+        # Rechargement OBLIGATOIRE : les cinq retries sauvegardent en
         # interne, `ws` (chargé avant elles) est déjà périmé.
         ws = charger_feuille(excel_path)
         n_erreur_restant, n_manuel_restant = compter_cellules_forcees_fichier(ws)
         _logger.info(
             "Résumé final (retenter_erreurs, %s) :\n"
             "%d cellule(s) WFS + %d cellule(s) GPU + %d cellule(s) Géorisques + %d cellule(s) "
-            "remontée de nappe réparée(s) lors de ce run.\n"
+            "remontée de nappe + %d cellule(s) SCOT/secteur CC réparée(s) lors de ce run.\n"
             "%d cellule(s) \"ERREUR\" restante(s) dans le fichier (récupérables plus tard).\n"
             "%d cellule(s) \"Manuellement\" restante(s) (jamais récupérables automatiquement).",
             args.commune, n_repare_wfs, n_repare_gpu, n_repare_georisques, n_repare_remnappe,
-            n_erreur_restant, n_manuel_restant,
+            n_repare_scot, n_erreur_restant, n_manuel_restant,
         )
         return 0
 
