@@ -123,8 +123,28 @@ class CadastreService:
         """Toutes les parcelles brutes (features GeoJSON, pas encore de
         `Parcelle`) d'une section — utile pour la découverte le long
         d'une rue quand on connaît déjà la/les sections concernées (voir
-        services/traversal_service.py), évite un appel par numéro."""
+        services/traversal_service.py), évite un appel par numéro.
+
+        Pagine via `_start`/`_limit` (confirmé en direct : APIcarto les
+        supporte tous les deux) jusqu'à épuisement — écart réel trouvé
+        en investigation live (Buellas, 2026-09-02, section 0B) : un
+        seul appel `_limit=1000` tronquait SILENCIEUSEMENT une section
+        de 1166 parcelles réelles, sans aucune erreur ni avertissement.
+        Les 166 parcelles manquantes (dont plusieurs bordières
+        confirmées d'"Impasse des Tulipes", jamais adressées donc
+        jamais trouvées par l'autre voie de découverte) étaient donc
+        invisibles pour TOUTE rue de cette section, pas seulement
+        celle-ci — n'importe quelle commune avec une section de plus de
+        1000 parcelles était affectée de la même façon, silencieusement."""
         url = f"{config.APICARTO_BASE}/cadastre/parcelle"
-        params = {"code_insee": code_insee, "section": section, "_limit": limit}
-        data = self._http.get_json(url, params, service_key="cadastre")
-        return data.get("features", [])
+        toutes: List[dict] = []
+        start = 0
+        while True:
+            params = {"code_insee": code_insee, "section": section, "_limit": limit, "_start": start}
+            data = self._http.get_json(url, params, service_key="cadastre")
+            page = data.get("features", [])
+            toutes.extend(page)
+            if len(page) < limit:
+                break
+            start += limit
+        return toutes
