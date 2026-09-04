@@ -104,9 +104,24 @@ _DISTANCE_MAX_BORDURE_M = 40.0
 #   - 0138 (bordière confirmée) : 3,0 m (demi-largeur + accotement)
 #   - 1260 (PAS bordière, confirmée séparée par une AUTRE route/D10) :
 #     6,0 m — trop proche du seuil précédent (6 m) pour être exclue avec
-#     confiance, d'où le resserrement à 5 m.
+#     confiance, d'où le resserrement initial à 5 m.
 #   - 1407 (PAS bordière confirmée) : 10,0 m
-_DISTANCE_MAX_BORDURE_POLYGONE_M = 5.0
+#
+# Élargi à 8 m (2026-09-04, décision explicite de l'utilisateur) suite à
+# un écart réel trouvé sur "Rue de la Dombes" (Chalamont, D904 — route
+# départementale, donc chaussée+accotement mécaniquement plus large
+# qu'une rue résidentielle) : 4 parcelles visiblement bordières sur une
+# capture d'écran (497, 499, 501, 502 — entre 5,1 et 6,7 m) étaient
+# exclues par l'ancien seuil de 5 m, alors que leurs voisines immédiates
+# (503, 510, 3,5-4,4 m) étaient trouvées. Tension assumée avec le cas
+# 1260 ci-dessus (6,0 m, confirmé PAS bordière sur une route différente,
+# probablement plus étroite) : aucune largeur de chaussée BDTOPO fiable
+# n'est disponible pour distinguer les deux cas route par route (`voie_
+# nommee.largeur_de_chaussee` vide pour Rue de la Dombes, confirmé en
+# direct) — décision explicite de privilégier la récupération de vraies
+# parcelles bordières sur des routes larges, au prix d'un risque accru
+# de faux positif sur les cas à la limite comme 1260.
+_DISTANCE_MAX_BORDURE_POLYGONE_M = 8.0
 
 # Pas (en mètres) d'échantillonnage le long de la polyligne réelle de la
 # rue pour découvrir TOUTES les sections cadastrales qu'elle traverse —
