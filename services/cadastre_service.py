@@ -135,16 +135,44 @@ class CadastreService:
         jamais trouvées par l'autre voie de découverte) étaient donc
         invisibles pour TOUTE rue de cette section, pas seulement
         celle-ci — n'importe quelle commune avec une section de plus de
-        1000 parcelles était affectée de la même façon, silencieusement."""
+        1000 parcelles était affectée de la même façon, silencieusement.
+
+        Validation supplémentaire (2026-09-07, Challex, "Route de
+        Pougny") : même AVEC la pagination, un appel isolé peut
+        renvoyer une page tronquée de façon transitoire (35 parcelles
+        renvoyées puis 135 au réessai suivant, sans aucune erreur HTTP)
+        — chaque réponse APIcarto porte un champ `totalFeatures` fiable
+        (confirmé en direct, présent y compris sur une page à 1 seul
+        élément) ; le total accumulé est comparé à ce champ, et la
+        pagination COMPLÈTE est relancée (jusqu'à 3 tentatives) en cas
+        d'écart — jamais de triplement systématique du nombre de
+        requêtes (coûteux sur une grosse section), seulement un nouvel
+        essai quand une incohérence est réellement détectée."""
         url = f"{config.APICARTO_BASE}/cadastre/parcelle"
-        toutes: List[dict] = []
-        start = 0
-        while True:
-            params = {"code_insee": code_insee, "section": section, "_limit": limit, "_start": start}
-            data = self._http.get_json(url, params, service_key="cadastre")
-            page = data.get("features", [])
-            toutes.extend(page)
-            if len(page) < limit:
-                break
-            start += limit
+        for tentative in range(1, 4):
+            toutes: List[dict] = []
+            start = 0
+            total_attendu: Optional[int] = None
+            while True:
+                params = {"code_insee": code_insee, "section": section, "_limit": limit, "_start": start}
+                data = self._http.get_json(url, params, service_key="cadastre")
+                page = data.get("features", [])
+                toutes.extend(page)
+                total_attendu = data.get("totalFeatures", total_attendu)
+                if len(page) < limit:
+                    break
+                start += limit
+            if total_attendu is None or len(toutes) == total_attendu:
+                return toutes
+            _logger.warning(
+                "get_parcelles_section(%s, %s) : pagination incohérente (tentative %d/3) — "
+                "%d parcelle(s) accumulée(s) vs %d annoncée(s) par l'API (totalFeatures) — "
+                "nouvel essai complet.",
+                code_insee, section, tentative, len(toutes), total_attendu,
+            )
+        _logger.error(
+            "get_parcelles_section(%s, %s) : pagination toujours incohérente après 3 tentatives — "
+            "renvoi du dernier résultat obtenu (%d parcelle(s)), potentiellement incomplet.",
+            code_insee, section, len(toutes),
+        )
         return toutes
