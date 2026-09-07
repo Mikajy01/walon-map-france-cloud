@@ -20,13 +20,14 @@ on:
         required: false
         type: string
       mode:
-        description: "traiter_commune : découvre et traite toutes les rues (retente aussi les cellules ERREUR en fin de run si complet). retenter_erreurs : ne retente QUE les cellules ERREUR déjà trackées (WFS Géorisques + bloc H→HV + REGLES_GEORISQUES : argiles, PPR, radon, sismicité...), jamais les cellules Manuellement."
+        description: "traiter_commune : découvre et traite toutes les rues (retente aussi les cellules ERREUR en fin de run si complet). retenter_erreurs : ne retente QUE les cellules ERREUR déjà trackées (WFS Géorisques + bloc H→HV + REGLES_GEORISQUES : argiles, PPR, radon, sismicité...), jamais les cellules Manuellement. completer_lignes_identite_seule : remplit tout le reste (zonage, H→M, Géorisques, GPU...) des lignes où SEULES les colonnes Commune/CP/Rue/Section/Parcelle ont été saisies à la main (Numéro d'adresse peut rester vide) — aucune découverte de rue, ne déplace ni n'ajoute aucune ligne."
         required: true
         type: choice
         default: traiter_commune
         options:
           - traiter_commune
           - retenter_erreurs
+          - completer_lignes_identite_seule
       traitement:
         description: "continuer (sûr, défaut) reprend l'état existant. nouveau réinitialise le fichier de cette commune depuis le gabarit officiel — DESTRUCTIF."
         required: true
