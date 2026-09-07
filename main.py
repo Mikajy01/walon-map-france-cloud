@@ -498,6 +498,24 @@ def decouvrir_parcelles(
         repli = _parcelles_depuis_lieu_dit(element, cadastre, voirie)
         if repli is not None:
             return repli
+        # Repli GÉOMÉTRIE SEULE (2026-09-07) : écart réel trouvé sur
+        # Challex ("Route de Pougny", "Chemin des Carres", "Pré
+        # Rachet" — routes rurales jamais adressées) : le vrai tracé
+        # BDTOPO existe (`voirie.get_polyligne_voie`) même sans
+        # aucune adresse BAN ni lieu-dit ; abandonner ici perdait des
+        # parcelles réellement bordières que la seule géométrie
+        # suffit à trouver. Voir `_decouvrir_parcelles_sans_adresse`.
+        polyligne_repli = voirie.get_polyligne_voie(element.code_insee, element.rue) if voirie is not None else None
+        if polyligne_repli is not None:
+            resultat_geometrie = _decouvrir_parcelles_sans_adresse(element, cadastre, traversal, polyligne_repli)
+            if resultat_geometrie:
+                _logger.info(
+                    "Rue '%s' (%s) : aucune adresse BAN mais géométrie BDTOPO réelle trouvée — "
+                    "%d parcelle(s) bordière(s) découverte(s) par la seule géométrie (côté "
+                    "positif/négatif, jamais pair/impair sans adresse pour calibrer).",
+                    element.rue, element.commune, len(resultat_geometrie),
+                )
+                return resultat_geometrie
         _logger.warning(
             "Aucune adresse BAN trouvée pour '%s' (%s) — rue introuvable ou vraiment sans adresse, "
             "impossible de construire un ordre de parcours.", element.rue, element.commune,
@@ -838,6 +856,87 @@ def _decouvrir_sections_le_long_rue(
         for p in proches:
             sections.add(p.section)
     return sections
+
+
+def _decouvrir_parcelles_sans_adresse(
+    element: ElementTravail, cadastre: CadastreService, traversal: TraversalService,
+    polyligne_reelle: List[Tuple[float, float]],
+) -> List[Tuple[Parcelle, List[AdressePoint]]]:
+    """Découvre les parcelles bordières d'une rue SANS AUCUNE adresse BAN
+    (ni lieu-dit) — écart réel trouvé en investigation live (Challex,
+    2026-09-07, "Route de Pougny"/"Chemin des Carres"/"Pré Rachet") :
+    `decouvrir_parcelles` abandonnait purement et simplement dès que
+    `geocodage.adresses_pour_rue` renvoyait 0 résultat, alors qu'un vrai
+    tracé BDTOPO (`voirie.get_polyligne_voie`) existait bel et bien pour
+    ces 3 rues (routes rurales/agricoles, jamais adressées) — la
+    géométrie était disponible, seul le code abandonnait trop tôt.
+
+    Décision explicite de l'utilisateur (2026-09-07) : le côté ne doit
+    JAMAIS être "indéterminé" — toujours déduit de la POSITION réelle de
+    la parcelle par rapport à la rue, jamais d'une adresse. Utilise donc
+    directement le signe du produit vectoriel déjà calculé par
+    `TraversalService.positionner_sur_polyligne_reelle` (voir sa
+    docstring : "côté gauche/droit du sens de parcours de la polyligne
+    ... pas encore calibré pair/impair") comme clé de côté à part
+    entière — "positif"/"negatif", jamais "pair"/"impair" (aucune
+    adresse pour calibrer lequel est lequel), mais un signe STABLE et
+    géométriquement réel, suffisant pour un vrai tri côté par côté
+    (un côté entier en chaînage croissant, puis l'autre en décroissant
+    — même principe que `TraversalService.trier`, reconstruit ici à la
+    main puisque `trier` attend un `PositionParcours` calibré pair/
+    impair, pas ces 2 côtés géométriques bruts)."""
+    sections = _decouvrir_sections_le_long_rue(polyligne_reelle, element, cadastre)
+    if not sections:
+        return []
+
+    positionneur_distance = _positionneur_distance_polyligne_reelle(polyligne_reelle, traversal)
+    lat_ref = polyligne_reelle[0][1]
+
+    candidats: List[Tuple[Parcelle, float, float]] = []  # (parcelle, chainage, cross)
+    vues: set = set()
+    for section in sections:
+        for feature in cadastre.get_parcelles_section(element.code_insee, section):
+            numero = feature["properties"]["numero"]
+            identifiant = f"{element.code_insee}|{section}|{numero}"
+            if identifiant in vues:
+                continue
+            vues.add(identifiant)
+            distance_reelle = _distance_min_polygone_a_positionneur(feature["geometry"], positionneur_distance)
+            if distance_reelle is None or distance_reelle > _DISTANCE_MAX_BORDURE_POLYGONE_M:
+                continue
+            cx, cy = centroide_geometrie(feature["geometry"])
+            proj = traversal.positionner_sur_polyligne_reelle(cx, cy, polyligne_reelle, lat_ref)
+            if proj is None:
+                continue
+            chainage, _dist_perp, cross = proj
+            parcelle = Parcelle(
+                code_insee=element.code_insee, section=section, numero=numero,
+                commune=element.commune, departement=element.departement,
+                code_postal=element.code_postal, rue=element.rue,
+                geometry=feature["geometry"],
+            )
+            candidats.append((parcelle, chainage, cross))
+
+    if not candidats:
+        return []
+
+    positifs = sorted((c for c in candidats if c[2] >= 0), key=lambda c: c[1])
+    negatifs = sorted((c for c in candidats if c[2] < 0), key=lambda c: c[1], reverse=True)
+    # Le côté dont le premier point (chaînage le plus bas) démarre le
+    # plus près du début de la rue ouvre le parcours — même logique que
+    # `TraversalService.ordre_cotes`, sans numéro de voirie ici pour
+    # décider, seulement le chaînage.
+    premier_chainage_positif = positifs[0][1] if positifs else float("inf")
+    premier_chainage_negatif = candidats and min((c[1] for c in candidats if c[2] < 0), default=float("inf"))
+    ordre = [positifs, negatifs] if premier_chainage_positif <= premier_chainage_negatif else [negatifs, positifs]
+
+    resultat: List[Tuple[Parcelle, List[AdressePoint]]] = []
+    for groupe in ordre:
+        for parcelle, chainage, cross in groupe:
+            parcelle.cote = "positif" if cross >= 0 else "negatif"
+            parcelle.ordre = chainage
+            resultat.append((parcelle, []))
+    return resultat
 
 
 # Colonnes "ancres" du bloc de zonage (N/Q/R-équivalents) — jamais
