@@ -32,6 +32,7 @@ TROIS catégories bien distinctes de "pas de valeur", à ne jamais confondre :
 from __future__ import annotations
 
 import argparse
+import contextvars
 import csv
 import re
 import shutil
@@ -1303,6 +1304,34 @@ def resoudre_zonage(
     return valeurs, doc_type
 
 
+class _BudgetDepasseError(Exception):
+    """Levée par `_resoudre_resilient` quand le budget de temps (voir
+    `_DEADLINE_ACTUEL`) est dépassé — jamais une vraie erreur réseau,
+    juste un signal de contrôle pour interrompre proprement la boucle
+    par-parcelle EN COURS, capté par son appelant (`traiter_rue`,
+    `completer_lignes_identite_seule`)."""
+
+
+# Budget de temps de la boucle par-parcelle EN COURS (voir `traiter_
+# rue`/`completer_lignes_identite_seule`) — porté par un `ContextVar`
+# plutôt qu'un paramètre supplémentaire sur `_resoudre_resilient` (33
+# points d'appel à travers ce fichier, voir investigation live du
+# 2026-09-08) : écart réel trouvé sur un run GitHub Actions resté actif
+# bien après le budget interne de 5,5h — la vérification n'existait
+# QU'au début de chaque RUE/PARCELLE (voir `traiter_commune_complete`/
+# `traiter_rue`), donc une seule rue enchaînant beaucoup d'appels
+# réseau lents (chaque rôle a ses propres tentatives avec délai
+# croissant, voir `utils/retry.py`) pouvait laisser filer le budget
+# pendant TOUTE sa durée sans jamais être revérifié, jusqu'à risquer la
+# limite dure de GitHub Actions (355 min, tue le job entier, aucun
+# commit possible — voir le workflow). Vérifié maintenant AVANT CHAQUE
+# rôle individuel (~15-20 par parcelle), réduisant le pire cas de
+# dépassement à un seul appel réseau plutôt qu'une parcelle entière.
+_DEADLINE_ACTUEL: "contextvars.ContextVar[Optional[datetime]]" = contextvars.ContextVar(
+    "_DEADLINE_ACTUEL", default=None,
+)
+
+
 def _resoudre_resilient(nom_regle: str, parcelle: Parcelle, fn: Callable[[], object], valeur_secours: object) -> object:
     """Exécute un résolveur `resoudre_*` avec un filet de sécurité réseau
     — écart réel trouvé en investigation live (GitHub Actions, panne
@@ -1318,7 +1347,14 @@ def _resoudre_resilient(nom_regle: str, parcelle: Parcelle, fn: Callable[[], obj
     Catch volontairement RESTREINT aux erreurs réseau/API connues
     (`requests.exceptions.RequestException`, `ApiServiceError`) — jamais
     une exception de programmation (ex `TypeError`), qui doit continuer
-    à faire planter le run : un bug reste un bug, jamais masqué."""
+    à faire planter le run : un bug reste un bug, jamais masqué.
+
+    Vérifie AUSSI `_DEADLINE_ACTUEL` avant chaque appel (voir sa
+    docstring) — lève `_BudgetDepasseError`, jamais absorbée ici
+    (contrôle, pas une erreur réseau), remonte jusqu'à l'appelant."""
+    deadline = _DEADLINE_ACTUEL.get()
+    if deadline is not None and datetime.now(timezone.utc) >= deadline:
+        raise _BudgetDepasseError()
     try:
         return fn()
     except (requests.exceptions.RequestException, ApiServiceError) as exc:
@@ -1678,88 +1714,114 @@ def traiter_rue(
         element.rue, element.commune, len(parcelles_avec_adresses), len(deja_ecrits), len(a_traiter),
     )
 
-    ligne_courante = trouver_premiere_ligne_vide(ws)
-    for i, (parcelle, adresses) in enumerate(a_traiter):
-        if deadline is not None and datetime.now(timezone.utc) >= deadline:
-            _logger.warning(
-                "Budget de temps atteint avant la parcelle %s/%s de '%s' — arrêt propre, "
-                "%d parcelle(s) restante(s) sur cette rue, reprise nécessaire.",
-                i + 1, len(a_traiter), element.rue, len(a_traiter) - i,
+    # Porte `deadline` via `_DEADLINE_ACTUEL` (voir sa docstring) —
+    # `_resoudre_resilient` vérifie maintenant le budget AVANT CHAQUE
+    # rôle individuel, pas seulement entre deux parcelles. `finally`
+    # remet toujours l'ancienne valeur, même sur une sortie anticipée
+    # (`break`/exception) — jamais laisser une deadline d'un appel
+    # fuiter vers un appelant qui n'en a pas fourni.
+    token_deadline = _DEADLINE_ACTUEL.set(deadline)
+    try:
+        ligne_courante = trouver_premiere_ligne_vide(ws)
+        for i, (parcelle, adresses) in enumerate(a_traiter):
+            if deadline is not None and datetime.now(timezone.utc) >= deadline:
+                _logger.warning(
+                    "Budget de temps atteint avant la parcelle %s/%s de '%s' — arrêt propre, "
+                    "%d parcelle(s) restante(s) sur cette rue, reprise nécessaire.",
+                    i + 1, len(a_traiter), element.rue, len(a_traiter) - i,
+                )
+                resultat.arrete_par_budget = True
+                break
+            if on_progress:
+                on_progress(f"Traitement {element.rue}", i + 1, len(a_traiter))
+
+            try:
+                # Chaque résolveur passe par `_resoudre_resilient` — voir sa
+                # docstring (panne réseau prolongée sur UNE règle ne doit jamais
+                # coûter que CETTE règle, jamais tout le run ni les autres
+                # valeurs déjà obtenues pour cette même parcelle).
+                valeurs_zonage, doc_type = _resoudre_resilient(
+                    "zonage", parcelle, lambda: resoudre_zonage(parcelle, urbanisme, registry, layout), ({}, None),
+                )
+                valeurs_risques = _resoudre_resilient(
+                    "georisques", parcelle, lambda: resoudre_georisques(parcelle, georisques), {},
+                )
+                valeurs_gpu_detaille = _resoudre_resilient(
+                    "gpu_detaille", parcelle, lambda: resoudre_gpu_detaille(parcelle, urbanisme, layout), {},
+                )
+                valeurs_scot = _resoudre_resilient(
+                    "scot", parcelle, lambda: resoudre_scot(parcelle, urbanisme, layout), {},
+                )
+                valeurs_secteur_cc = _resoudre_resilient(
+                    "secteur_cc", parcelle, lambda: resoudre_secteur_cc(parcelle, urbanisme, layout), {},
+                )
+                valeurs_zone_humide = _resoudre_resilient(
+                    "zone_humide_ou_littoral", parcelle, lambda: resoudre_zone_humide_ou_littoral(parcelle, urbanisme, layout), {},
+                )
+                valeurs_natura2000 = _resoudre_resilient(
+                    "natura2000", parcelle, lambda: resoudre_natura2000(parcelle, urbanisme, layout), {},
+                )
+                valeurs_urbaine_patrimoniale = _resoudre_resilient(
+                    "zone_urbaine_patrimoniale", parcelle, lambda: resoudre_zone_urbaine_patrimoniale(parcelle, urbanisme, layout), {},
+                )
+                valeurs_wfs = _resoudre_resilient(
+                    "wfs_inondation", parcelle, lambda: resoudre_wfs_inondation(parcelle, wfs), {},
+                ) if wfs is not None else {}
+                valeurs_remnappe = _resoudre_resilient(
+                    "wfs_remnappe", parcelle, lambda: resoudre_wfs_remnappe(parcelle, wfs_remnappe), {},
+                ) if wfs_remnappe is not None else {}
+                valeurs_clpa = _resoudre_resilient(
+                    "clpa_avalanche", parcelle, lambda: resoudre_clpa_avalanche(parcelle, clpa), {},
+                ) if clpa is not None else {}
+                valeurs_steu = _resoudre_resilient(
+                    "stations_epuration", parcelle, lambda: resoudre_stations_epuration(parcelle, steu, layout), {},
+                ) if steu is not None else {}
+            except _BudgetDepasseError:
+                # Budget dépassé EN PLEIN CALCUL d'une parcelle — jamais
+                # écrire une ligne à moitié calculée (même invariant que
+                # le check ci-dessus, juste détecté plus tôt) : la
+                # parcelle en cours n'a simplement jamais commencé pour
+                # le prochain run "continuer".
+                _logger.warning(
+                    "Budget de temps atteint EN COURS de calcul de la parcelle %s/%s de '%s' "
+                    "(résolution d'un rôle) — arrêt propre, %d parcelle(s) restante(s), "
+                    "reprise nécessaire.",
+                    i + 1, len(a_traiter), element.rue, len(a_traiter) - i,
+                )
+                resultat.arrete_par_budget = True
+                break
+
+            valeurs = {
+                **valeurs_zonage, **valeurs_risques, **valeurs_gpu_detaille,
+                **valeurs_scot, **valeurs_secteur_cc, **valeurs_zone_humide,
+                **valeurs_natura2000, **valeurs_urbaine_patrimoniale,
+                **valeurs_wfs, **valeurs_remnappe, **valeurs_clpa, **valeurs_steu,
+            }
+            n_manuel, n_erreur = _forcer_valeurs_manquantes_en_n(
+                valeurs, layout, parcelle, config.CELLULES_A_REVISITER_PATH,
             )
-            resultat.arrete_par_budget = True
-            break
-        if on_progress:
-            on_progress(f"Traitement {element.rue}", i + 1, len(a_traiter))
+            resultat.cellules_manuelles += n_manuel
+            resultat.cellules_erreur += n_erreur
 
-        # Chaque résolveur passe par `_resoudre_resilient` — voir sa
-        # docstring (panne réseau prolongée sur UNE règle ne doit jamais
-        # coûter que CETTE règle, jamais tout le run ni les autres
-        # valeurs déjà obtenues pour cette même parcelle).
-        valeurs_zonage, doc_type = _resoudre_resilient(
-            "zonage", parcelle, lambda: resoudre_zonage(parcelle, urbanisme, registry, layout), ({}, None),
-        )
-        valeurs_risques = _resoudre_resilient(
-            "georisques", parcelle, lambda: resoudre_georisques(parcelle, georisques), {},
-        )
-        valeurs_gpu_detaille = _resoudre_resilient(
-            "gpu_detaille", parcelle, lambda: resoudre_gpu_detaille(parcelle, urbanisme, layout), {},
-        )
-        valeurs_scot = _resoudre_resilient(
-            "scot", parcelle, lambda: resoudre_scot(parcelle, urbanisme, layout), {},
-        )
-        valeurs_secteur_cc = _resoudre_resilient(
-            "secteur_cc", parcelle, lambda: resoudre_secteur_cc(parcelle, urbanisme, layout), {},
-        )
-        valeurs_zone_humide = _resoudre_resilient(
-            "zone_humide_ou_littoral", parcelle, lambda: resoudre_zone_humide_ou_littoral(parcelle, urbanisme, layout), {},
-        )
-        valeurs_natura2000 = _resoudre_resilient(
-            "natura2000", parcelle, lambda: resoudre_natura2000(parcelle, urbanisme, layout), {},
-        )
-        valeurs_urbaine_patrimoniale = _resoudre_resilient(
-            "zone_urbaine_patrimoniale", parcelle, lambda: resoudre_zone_urbaine_patrimoniale(parcelle, urbanisme, layout), {},
-        )
-        valeurs_wfs = _resoudre_resilient(
-            "wfs_inondation", parcelle, lambda: resoudre_wfs_inondation(parcelle, wfs), {},
-        ) if wfs is not None else {}
-        valeurs_remnappe = _resoudre_resilient(
-            "wfs_remnappe", parcelle, lambda: resoudre_wfs_remnappe(parcelle, wfs_remnappe), {},
-        ) if wfs_remnappe is not None else {}
-        valeurs_clpa = _resoudre_resilient(
-            "clpa_avalanche", parcelle, lambda: resoudre_clpa_avalanche(parcelle, clpa), {},
-        ) if clpa is not None else {}
-        valeurs_steu = _resoudre_resilient(
-            "stations_epuration", parcelle, lambda: resoudre_stations_epuration(parcelle, steu, layout), {},
-        ) if steu is not None else {}
-        valeurs = {
-            **valeurs_zonage, **valeurs_risques, **valeurs_gpu_detaille,
-            **valeurs_scot, **valeurs_secteur_cc, **valeurs_zone_humide,
-            **valeurs_natura2000, **valeurs_urbaine_patrimoniale,
-            **valeurs_wfs, **valeurs_remnappe, **valeurs_clpa, **valeurs_steu,
-        }
-        n_manuel, n_erreur = _forcer_valeurs_manquantes_en_n(
-            valeurs, layout, parcelle, config.CELLULES_A_REVISITER_PATH,
-        )
-        resultat.cellules_manuelles += n_manuel
-        resultat.cellules_erreur += n_erreur
+            lignes = construire_lignes(parcelle, adresses, valeurs)
+            for ligne in lignes:
+                valeurs_fixes = {}
+                if doc_type and doc_type in TYPE_DOCUMENT_VERS_COLONNE:
+                    for type_doc, col in TYPE_DOCUMENT_VERS_COLONNE.items():
+                        valeurs_fixes[col] = "O" if type_doc == doc_type else "N"
+                write_ligne(ws, ligne_courante, ligne, layout, valeurs_fixes)
+                ligne_courante += 1
+                resultat.lignes_ecrites += 1
+            resultat.parcelles_traitees += 1
 
-        lignes = construire_lignes(parcelle, adresses, valeurs)
-        for ligne in lignes:
-            valeurs_fixes = {}
-            if doc_type and doc_type in TYPE_DOCUMENT_VERS_COLONNE:
-                for type_doc, col in TYPE_DOCUMENT_VERS_COLONNE.items():
-                    valeurs_fixes[col] = "O" if type_doc == doc_type else "N"
-            write_ligne(ws, ligne_courante, ligne, layout, valeurs_fixes)
-            ligne_courante += 1
-            resultat.lignes_ecrites += 1
-        resultat.parcelles_traitees += 1
-
-        # Durabilité par PARCELLE (voir la docstring) — rechargement
-        # OBLIGATOIRE juste après : un classeur à images intégrées ne se
-        # sauvegarde qu'une fois par chargement (limite openpyxl déjà
-        # rencontrée ailleurs dans ce module).
-        ws.parent.save(excel_path)
-        ws = charger_feuille(excel_path)
+            # Durabilité par PARCELLE (voir la docstring) — rechargement
+            # OBLIGATOIRE juste après : un classeur à images intégrées ne se
+            # sauvegarde qu'une fois par chargement (limite openpyxl déjà
+            # rencontrée ailleurs dans ce module).
+            ws.parent.save(excel_path)
+            ws = charger_feuille(excel_path)
+    finally:
+        _DEADLINE_ACTUEL.reset(token_deadline)
 
     resultat.colonnes_non_resolues = [r.header_text for r in layout.non_resolues()]
     return resultat
@@ -2461,6 +2523,14 @@ def completer_lignes_identite_seule(
 
     ws = charger_feuille(excel_path)
 
+    # Porte `deadline` via `_DEADLINE_ACTUEL` (voir sa docstring) — pas
+    # de try/finally ici : chaque itération est déjà entièrement
+    # contenue par ses propres try/except (cadastre, résolveurs), donc
+    # la boucle atteint toujours le `return` normal en dessous (par
+    # épuisement ou par `break`), jamais une sortie non gérée qui
+    # laisserait la deadline fuiter vers un appelant suivant.
+    _DEADLINE_ACTUEL.set(deadline)
+
     n_lignes_modifiees = 0
     for idx_parcelle, ((section, numero), lignes) in enumerate(lignes_par_parcelle.items()):
         if deadline is not None and datetime.now(timezone.utc) >= deadline:
@@ -2534,6 +2604,21 @@ def completer_lignes_identite_seule(
             valeurs_steu = _resoudre_resilient(
                 "stations_epuration", parcelle, lambda: resoudre_stations_epuration(parcelle, steu, layout), {},
             ) if steu is not None else {}
+        except _BudgetDepasseError:
+            # Capté AVANT le `except Exception` générique ci-dessous —
+            # sinon un budget dépassé serait absorbé comme un simple
+            # échec de parcelle et la boucle continuerait en boucle sur
+            # TOUTES les parcelles restantes (chacune expirant
+            # immédiatement), au lieu de s'arrêter proprement tout de
+            # suite. Voir `_DEADLINE_ACTUEL` pour le contexte complet.
+            _logger.warning(
+                "Complétion lignes identité seule (%s) : budget de temps atteint EN COURS de "
+                "calcul de la parcelle %d/%d (%s %s) (résolution d'un rôle) — arrêt propre, "
+                "%d ligne(s) complétée(s) jusqu'ici. Relancer le même mode pour reprendre.",
+                excel_path.name, idx_parcelle + 1, len(lignes_par_parcelle), section, numero,
+                n_lignes_modifiees,
+            )
+            break
         except Exception as exc:  # noqa: BLE001 — une parcelle en échec ne doit jamais arrêter tout le recalcul
             _logger.warning(
                 "Complétion lignes identité seule : échec sur la parcelle %s %s (%s) — ignorée, à retenter plus tard.",
@@ -2570,6 +2655,7 @@ def completer_lignes_identite_seule(
         ws.parent.save(excel_path)
         ws = charger_feuille(excel_path)
 
+    _DEADLINE_ACTUEL.set(None)
     _logger.info(
         "Complétion lignes identité seule (%s) : %d parcelle(s) unique(s), %d ligne(s) complétée(s).",
         excel_path.name, len(lignes_par_parcelle), n_lignes_modifiees,
