@@ -2376,6 +2376,7 @@ def completer_lignes_identite_seule(
     registry: ColumnRegistryService,
     wfs: Optional[WfsGeorisquesService] = None, wfs_remnappe: Optional[WfsRemnappeService] = None,
     clpa: Optional[WfsClpaService] = None, steu: Optional[WfsSteuService] = None,
+    deadline: Optional[datetime] = None,
 ) -> int:
     """Complète les lignes "identité seule" (colonnes A→G remplies, tout
     le reste vide) — celles produites par un script de complétion
@@ -2405,7 +2406,22 @@ def completer_lignes_identite_seule(
     ciblé qui ne retouchent qu'un sous-ensemble déjà rempli une première
     fois. Les rôles sans valeur sont forcés à "ERREUR"/"Manuellement"
     comme un run normal (voir `_forcer_valeurs_manquantes_en_n`), jamais
-    laissés vides à nouveau."""
+    laissés vides à nouveau.
+
+    `deadline` (optionnel, timezone-aware) : contrairement à `traiter_
+    rue`/`traiter_commune_complete`, cette fonction n'avait JUSQU'ICI
+    aucun budget de temps — écart réel trouvé en investigation live
+    (2026-09-08, question explicite de l'utilisateur avant de lancer un
+    run GitHub Actions dessus) : sur une commune avec beaucoup de
+    lignes identité-seule, le job aurait pu dépasser la limite dure de
+    GitHub Actions (355 min, voir le workflow) et être tué EN PLEIN
+    `wb.save()`, exactement l'incident de corruption déjà rencontré sur
+    Buellas (2026-09-02, fichier tronqué à 2 Ko, restauré depuis
+    backup). Vérifié au DÉBUT de chaque itération de la boucle par-
+    parcelle (jamais en plein calcul), même principe que `traiter_rue` :
+    la fonction est naturellement reprenable (une ligne encore vide le
+    reste jusqu'au prochain run, aucun suivi séparé nécessaire), donc un
+    simple arrêt propre suffit, pas de gestion de "rues restantes"."""
     ws_scan = charger_feuille(excel_path)
     derniere = trouver_premiere_ligne_vide(ws_scan) - 1
     n_cols = ws_scan.max_column
@@ -2435,7 +2451,17 @@ def completer_lignes_identite_seule(
     ws = charger_feuille(excel_path)
 
     n_lignes_modifiees = 0
-    for (section, numero), lignes in lignes_par_parcelle.items():
+    for idx_parcelle, ((section, numero), lignes) in enumerate(lignes_par_parcelle.items()):
+        if deadline is not None and datetime.now(timezone.utc) >= deadline:
+            _logger.warning(
+                "Complétion lignes identité seule (%s) : budget de temps atteint avant la "
+                "parcelle %d/%d (%s %s) — arrêt propre, %d ligne(s) complétée(s) jusqu'ici. "
+                "Relancer le même mode pour reprendre (naturellement reprenable, aucune ligne "
+                "déjà complétée n'est retraitée).",
+                excel_path.name, idx_parcelle + 1, len(lignes_par_parcelle), section, numero,
+                n_lignes_modifiees,
+            )
+            break
         premiere_ligne = lignes[0]
         commune = str(ws.cell(row=premiere_ligne, column=COL_COMMUNE).value or "")
         code_postal = str(ws.cell(row=premiere_ligne, column=COL_CODE_POSTAL).value or "")
@@ -3130,9 +3156,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         return 0
 
     if args.mode == "completer_lignes_identite_seule":
+        deadline_completer = datetime.now(timezone.utc) + timedelta(hours=args.budget_heures)
         n_modifiees = completer_lignes_identite_seule(
             excel_path, code_insee, cadastre=cadastre, urbanisme=urbanisme, georisques=georisques,
             registry=registry, wfs=wfs, wfs_remnappe=wfs_remnappe, clpa=clpa, steu=steu,
+            deadline=deadline_completer,
         )
         _logger.info(
             "Résumé final (completer_lignes_identite_seule, %s) : %d ligne(s) complétée(s).",
