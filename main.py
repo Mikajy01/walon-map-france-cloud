@@ -1896,14 +1896,34 @@ def traiter_commune_complete(
             pays="France", commune=commune, departement=departement,
             rue=rue, code_postal=code_postal, code_insee=code_insee,
         )
-        resultat = traiter_rue(
-            element, ws, layout, excel_path=excel_path,
-            cadastre=cadastre, urbanisme=urbanisme, georisques=georisques,
-            geocodage=geocodage, traversal=traversal, registry=registry,
-            wfs=wfs, wfs_remnappe=wfs_remnappe, clpa=clpa, steu=steu, voirie=voirie,
-            on_progress=on_progress, deadline=deadline,
-            marge_adresse_parcelle=marge_adresse_parcelle,
-        )
+        try:
+            resultat = traiter_rue(
+                element, ws, layout, excel_path=excel_path,
+                cadastre=cadastre, urbanisme=urbanisme, georisques=georisques,
+                geocodage=geocodage, traversal=traversal, registry=registry,
+                wfs=wfs, wfs_remnappe=wfs_remnappe, clpa=clpa, steu=steu, voirie=voirie,
+                on_progress=on_progress, deadline=deadline,
+                marge_adresse_parcelle=marge_adresse_parcelle,
+            )
+        except (requests.exceptions.RequestException, ApiServiceError) as exc:
+            # Filet de sécurité PAR RUE — écart réel trouvé en
+            # investigation live (Dagneux, 2026-09-08) : sans ça, une
+            # seule panne réseau/API pendant la DÉCOUVERTE d'une rue
+            # (pas encore protégée parcelle par parcelle par
+            # `_resoudre_resilient`, qui ne couvre que la RÉSOLUTION des
+            # rôles) tuait tout le job GitHub Actions, perdant les rues
+            # suivantes — confirmé : les 5 rues "manquantes" marchaient
+            # toutes en retestant juste après (panne transitoire, pas un
+            # vrai bug). Catch volontairement restreint aux erreurs
+            # réseau/API connues, jamais une exception de programmation.
+            _logger.warning(
+                "Commune '%s' : échec réseau/API sur la rue '%s' (%d/%d) (%s) — rue sautée, "
+                "le run continue sur la suivante (à retenter via un nouveau run 'continuer').",
+                commune, rue, idx + 1, len(rues), exc,
+            )
+            lot.rues_en_echec.append(rue)
+            ws = charger_feuille(excel_path)
+            continue
         lot.resultats_par_rue.append(resultat)
         ws = charger_feuille(excel_path)
         if resultat.arrete_par_budget:
@@ -3227,7 +3247,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     # pour le workflow GitHub Actions (voir le plan : jamais silencieux),
     # sans empêcher le commit/push de l'état déjà sauvegardé (le workflow
     # committe indépendamment du code de sortie de cette commande).
-    return 75 if lot.incomplet else 0
+    return 75 if (lot.incomplet or lot.rues_en_echec) else 0
 
 
 if __name__ == "__main__":

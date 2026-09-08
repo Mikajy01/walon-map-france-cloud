@@ -94,6 +94,19 @@ class ResultatLot:
     # 'continuer'"), jamais silencieux.
     incomplet: bool = False
     rues_restantes: List[str] = field(default_factory=list)
+    # Rues dont le traitement a levé une exception réseau/API non
+    # récupérée par `_resoudre_resilient` (ex: panne prolongée au-delà
+    # des 5 tentatives de `http_retry`, pendant la découverte elle-même
+    # plutôt que pendant la résolution d'un rôle) — écart réel trouvé en
+    # investigation live (Dagneux, 2026-09-08) : `traiter_commune_
+    # complete` n'avait AUCUN filet de sécurité par rue, une seule
+    # exception tuait tout le run GitHub Actions, perdant le traitement
+    # des rues suivantes alors qu'elles auraient très bien fonctionné
+    # (confirmé : les 5 rues "manquantes" marchaient toutes en retestant
+    # juste après). Chaque rue en échec est maintenant journalisée puis
+    # SAUTÉE (jamais silencieuse), le run continue sur la rue suivante —
+    # à retenter via un nouveau run "continuer" ciblant `--rues`.
+    rues_en_echec: List[str] = field(default_factory=list)
 
     @property
     def total_lignes_ecrites(self) -> int:
@@ -177,5 +190,12 @@ class ResultatLot:
                 f"{len(self.rues_restantes)} rue(s) encore non traitée(s) : "
                 + ", ".join(self.rues_restantes)
                 + " — relancer le workflow en mode 'continuer' pour reprendre."
+            )
+        if self.rues_en_echec:
+            lignes.append(
+                f"{len(self.rues_en_echec)} rue(s) SAUTÉE(S) suite à une panne réseau/API pendant "
+                "leur découverte (jamais pendant la résolution d'un rôle, déjà protégée) : "
+                + ", ".join(self.rues_en_echec)
+                + " — relancer le workflow en mode 'continuer' pour les retenter."
             )
         return "\n".join(lignes)
