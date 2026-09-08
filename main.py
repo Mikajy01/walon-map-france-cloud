@@ -2044,6 +2044,18 @@ def reessayer_cellules_wfs(
             # concrètement rien écrit nulle part.
             lignes_restantes.append(l)
 
+    # Excel sauvegardé AVANT le fichier de suivi — écart réel trouvé en
+    # investigation live (Challex, 2026-09-08) : l'ordre inverse (CSV
+    # d'abord) faisait perdre le suivi de milliers de cellules quand
+    # `ws.parent.save` échouait ENSUITE (fichier Excel ouvert dans un
+    # tableur au moment du run, `PermissionError`) — le CSV réécrit
+    # retirait déjà ces cellules du suivi (considérées "réparées"),
+    # alors que leur vraie valeur n'avait JAMAIS atteint l'Excel,
+    # restées "ERREUR" pour toujours, invisibles pour un futur
+    # "Retraiter les erreurs". Sauvegarder l'Excel D'ABORD garantit
+    # qu'un échec laisse le CSV intact (rien perdu, à retenter tel
+    # quel), jamais l'inverse.
+    ws.parent.save(excel_path)
     with chemin_revisite.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=[
             "date", "commune", "code_insee", "rue", "section", "numero",
@@ -2051,8 +2063,6 @@ def reessayer_cellules_wfs(
         ])
         writer.writeheader()
         writer.writerows(lignes_restantes)
-
-    ws.parent.save(excel_path)
     _logger.info(
         "Reessai des cellules WFS (%s) : %d cellule(s) réparée(s), %d reste(nt) trackée(s) au total.",
         excel_path.name, n_repare, len(lignes_restantes),
@@ -2148,6 +2158,9 @@ def reessayer_cellules_remnappe(
         if not ecrit:
             lignes_restantes.append(l)
 
+    # Excel sauvegardé AVANT le fichier de suivi — voir la même
+    # correction/docstring dans `reessayer_cellules_wfs`.
+    ws.parent.save(excel_path)
     with chemin_revisite.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=[
             "date", "commune", "code_insee", "rue", "section", "numero",
@@ -2155,8 +2168,6 @@ def reessayer_cellules_remnappe(
         ])
         writer.writeheader()
         writer.writerows(lignes_restantes)
-
-    ws.parent.save(excel_path)
     _logger.info(
         "Reessai des cellules remontée de nappe (%s) : %d cellule(s) réparée(s), %d reste(nt) trackée(s) au total.",
         excel_path.name, n_repare, len(lignes_restantes),
@@ -2657,6 +2668,9 @@ def reessayer_cellules_georisques(
         if not ecrit:
             lignes_restantes.append(l)
 
+    # Excel sauvegardé AVANT le fichier de suivi — voir la même
+    # correction/docstring dans `reessayer_cellules_wfs`.
+    ws.parent.save(excel_path)
     with chemin_revisite.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=[
             "date", "commune", "code_insee", "rue", "section", "numero",
@@ -2664,8 +2678,6 @@ def reessayer_cellules_georisques(
         ])
         writer.writeheader()
         writer.writerows(lignes_restantes)
-
-    ws.parent.save(excel_path)
     _logger.info(
         "Reessai des cellules Géorisques (%s) : %d cellule(s) réparée(s), %d reste(nt) trackée(s) au total.",
         excel_path.name, n_repare, len(lignes_restantes),
@@ -2780,6 +2792,9 @@ def reessayer_cellules_scot_secteur_cc(
         if not ecrit:
             lignes_restantes.append(l)
 
+    # Excel sauvegardé AVANT le fichier de suivi — voir la même
+    # correction/docstring dans `reessayer_cellules_wfs`.
+    ws.parent.save(excel_path)
     with chemin_revisite.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=[
             "date", "commune", "code_insee", "rue", "section", "numero",
@@ -2787,8 +2802,6 @@ def reessayer_cellules_scot_secteur_cc(
         ])
         writer.writeheader()
         writer.writerows(lignes_restantes)
-
-    ws.parent.save(excel_path)
     _logger.info(
         "Reessai des cellules SCOT/secteur CC (%s) : %d cellule(s) réparée(s), %d reste(nt) trackée(s) au total.",
         excel_path.name, n_repare, len(lignes_restantes),
@@ -2895,6 +2908,9 @@ def reessayer_cellules_gpu_du(
         if not ecrit:
             lignes_restantes.append(l)
 
+    # Excel sauvegardé AVANT le fichier de suivi — voir la même
+    # correction/docstring dans `reessayer_cellules_wfs`.
+    ws.parent.save(excel_path)
     with chemin_revisite.open("w", newline="", encoding="utf-8") as f:
         writer = csv.DictWriter(f, fieldnames=[
             "date", "commune", "code_insee", "rue", "section", "numero",
@@ -2902,8 +2918,6 @@ def reessayer_cellules_gpu_du(
         ])
         writer.writeheader()
         writer.writerows(lignes_restantes)
-
-    ws.parent.save(excel_path)
     _logger.info(
         "Reessai des cellules GPU (bloc H→HV, %s) : %d cellule(s) réparée(s), %d reste(nt) trackée(s) au total.",
         excel_path.name, n_repare, len(lignes_restantes),
