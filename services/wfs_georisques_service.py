@@ -53,7 +53,21 @@ _RE_NUMBER_RETURNED = re.compile(r'numberReturned="(\d+)"')
 # couche connue pour exister) a renvoyé un 404 lors d'un run réel, puis
 # un 200 avec réponse valide quelques minutes plus tard — donc un panne
 # transitoire côté serveur WFS Géorisques, pas une ressource absente.
-_TENTATIVES_404 = 3
+#
+# Réduit à 1 tentative (2026-09-09, décision explicite de l'utilisateur,
+# investigation live sur Dagneux) : le coût du délai (2 pauses de 3s ×
+# jusqu'à 14-15 couches par parcelle, jusqu'à ~2-3 min perdues PAR
+# PARCELLE) devient énorme si le serveur traverse une panne PROLONGÉE
+# plutôt qu'un simple blip — confirmé comme la cause principale d'un
+# run resté actif bien au-delà du budget de temps (~150-180 parcelles,
+# 5-9h rien que sur cette attente). Puisque "Retraiter les erreurs"
+# tourne de toute façon systématiquement après chaque commune (retry
+# automatique de fin de run, voir `traiter_commune_complete`) ET peut
+# être relancé manuellement à tout moment, retenter LOCALEMENT ici
+# n'apporte plus rien qu'un vrai retraitement séparé ne couvre déjà,
+# au prix d'un ralentissement potentiellement énorme — échec rapide
+# préféré, laisser le mécanisme de retry dédié s'en charger.
+_TENTATIVES_404 = 1
 _DELAI_ENTRE_TENTATIVES_S = 3.0
 
 
